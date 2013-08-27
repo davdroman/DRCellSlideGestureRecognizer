@@ -10,4 +10,6 @@
 
 @interface MainViewController : UIViewController
 
+@property (strong, nonatomic) UINavigationBar * navigationBar;
+
 @end
