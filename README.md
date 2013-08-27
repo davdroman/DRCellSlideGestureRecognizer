@@ -1,7 +1,7 @@
 PDGesturedTableView
 ===================
 
-This UITableView subclass provides some great functions, as apps as Clear or Mailbox do.
+This UITableView subclass provides some great functions, as Clear or Mailbox do.
 
 ## Features
 
@@ -24,6 +24,8 @@ Instead of implementing `UITableViewDelegate`, you must implement `PDGesturedTab
 	}
 
 ### Instantiation
+
+
 
 ## Wish list
 

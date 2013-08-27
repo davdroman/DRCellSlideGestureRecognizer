@@ -1,0 +1,293 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		758D207317CD54D2002241ED /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758D207217CD54D2002241ED /* UIKit.framework */; };
+		758D207517CD54D2002241ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758D207417CD54D2002241ED /* Foundation.framework */; };
+		758D207717CD54D2002241ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758D207617CD54D2002241ED /* CoreGraphics.framework */; };
+		758D207D17CD54D2002241ED /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 758D207B17CD54D2002241ED /* InfoPlist.strings */; };
+		758D207F17CD54D2002241ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 758D207E17CD54D2002241ED /* main.m */; };
+		758D208317CD54D2002241ED /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 758D208217CD54D2002241ED /* AppDelegate.m */; };
+		758D208517CD54D2002241ED /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D208417CD54D2002241ED /* Default.png */; };
+		758D208717CD54D2002241ED /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D208617CD54D2002241ED /* Default@2x.png */; };
+		758D208917CD54D2002241ED /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D208817CD54D2002241ED /* Default-568h@2x.png */; };
+		758D209117CD54F8002241ED /* PDGesturedTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 758D209017CD54F8002241ED /* PDGesturedTableView.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		758D206F17CD54D2002241ED /* PDGesturedTableView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PDGesturedTableView.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		758D207217CD54D2002241ED /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		758D207417CD54D2002241ED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		758D207617CD54D2002241ED /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		758D207A17CD54D2002241ED /* PDGesturedTableView-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PDGesturedTableView-Info.plist"; sourceTree = "<group>"; };
+		758D207C17CD54D2002241ED /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		758D207E17CD54D2002241ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		758D208017CD54D2002241ED /* PDGesturedTableView-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PDGesturedTableView-Prefix.pch"; sourceTree = "<group>"; };
+		758D208117CD54D2002241ED /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		758D208217CD54D2002241ED /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		758D208417CD54D2002241ED /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		758D208617CD54D2002241ED /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		758D208817CD54D2002241ED /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		758D208F17CD54F8002241ED /* PDGesturedTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDGesturedTableView.h; sourceTree = "<group>"; };
+		758D209017CD54F8002241ED /* PDGesturedTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDGesturedTableView.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		758D206C17CD54D2002241ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				758D207317CD54D2002241ED /* UIKit.framework in Frameworks */,
+				758D207517CD54D2002241ED /* Foundation.framework in Frameworks */,
+				758D207717CD54D2002241ED /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		758D206617CD54D2002241ED = {
+			isa = PBXGroup;
+			children = (
+				758D207817CD54D2002241ED /* PDGesturedTableView */,
+				758D207117CD54D2002241ED /* Frameworks */,
+				758D207017CD54D2002241ED /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		758D207017CD54D2002241ED /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				758D206F17CD54D2002241ED /* PDGesturedTableView.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		758D207117CD54D2002241ED /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				758D207217CD54D2002241ED /* UIKit.framework */,
+				758D207417CD54D2002241ED /* Foundation.framework */,
+				758D207617CD54D2002241ED /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		758D207817CD54D2002241ED /* PDGesturedTableView */ = {
+			isa = PBXGroup;
+			children = (
+				758D208117CD54D2002241ED /* AppDelegate.h */,
+				758D208217CD54D2002241ED /* AppDelegate.m */,
+				758D208F17CD54F8002241ED /* PDGesturedTableView.h */,
+				758D209017CD54F8002241ED /* PDGesturedTableView.m */,
+				758D207917CD54D2002241ED /* Supporting Files */,
+			);
+			path = PDGesturedTableView;
+			sourceTree = "<group>";
+		};
+		758D207917CD54D2002241ED /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				758D207A17CD54D2002241ED /* PDGesturedTableView-Info.plist */,
+				758D207B17CD54D2002241ED /* InfoPlist.strings */,
+				758D207E17CD54D2002241ED /* main.m */,
+				758D208017CD54D2002241ED /* PDGesturedTableView-Prefix.pch */,
+				758D208417CD54D2002241ED /* Default.png */,
+				758D208617CD54D2002241ED /* Default@2x.png */,
+				758D208817CD54D2002241ED /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		758D206E17CD54D2002241ED /* PDGesturedTableView */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 758D208C17CD54D2002241ED /* Build configuration list for PBXNativeTarget "PDGesturedTableView" */;
+			buildPhases = (
+				758D206B17CD54D2002241ED /* Sources */,
+				758D206C17CD54D2002241ED /* Frameworks */,
+				758D206D17CD54D2002241ED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PDGesturedTableView;
+			productName = PDGesturedTableView;
+			productReference = 758D206F17CD54D2002241ED /* PDGesturedTableView.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		758D206717CD54D2002241ED /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "David Román Aguirre";
+			};
+			buildConfigurationList = 758D206A17CD54D2002241ED /* Build configuration list for PBXProject "PDGesturedTableView" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 758D206617CD54D2002241ED;
+			productRefGroup = 758D207017CD54D2002241ED /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				758D206E17CD54D2002241ED /* PDGesturedTableView */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		758D206D17CD54D2002241ED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				758D207D17CD54D2002241ED /* InfoPlist.strings in Resources */,
+				758D208517CD54D2002241ED /* Default.png in Resources */,
+				758D208717CD54D2002241ED /* Default@2x.png in Resources */,
+				758D208917CD54D2002241ED /* Default-568h@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		758D206B17CD54D2002241ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				758D207F17CD54D2002241ED /* main.m in Sources */,
+				758D208317CD54D2002241ED /* AppDelegate.m in Sources */,
+				758D209117CD54F8002241ED /* PDGesturedTableView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		758D207B17CD54D2002241ED /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				758D207C17CD54D2002241ED /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		758D208A17CD54D2002241ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		758D208B17CD54D2002241ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		758D208D17CD54D2002241ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PDGesturedTableView/PDGesturedTableView-Prefix.pch";
+				INFOPLIST_FILE = "PDGesturedTableView/PDGesturedTableView-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		758D208E17CD54D2002241ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PDGesturedTableView/PDGesturedTableView-Prefix.pch";
+				INFOPLIST_FILE = "PDGesturedTableView/PDGesturedTableView-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		758D206A17CD54D2002241ED /* Build configuration list for PBXProject "PDGesturedTableView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				758D208A17CD54D2002241ED /* Debug */,
+				758D208B17CD54D2002241ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		758D208C17CD54D2002241ED /* Build configuration list for PBXNativeTarget "PDGesturedTableView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				758D208D17CD54D2002241ED /* Debug */,
+				758D208E17CD54D2002241ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 758D206717CD54D2002241ED /* Project object */;
+}
