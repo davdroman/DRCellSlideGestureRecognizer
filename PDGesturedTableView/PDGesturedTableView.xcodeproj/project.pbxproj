@@ -17,6 +17,7 @@
 		758D208717CD54D2002241ED /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D208617CD54D2002241ED /* Default@2x.png */; };
 		758D208917CD54D2002241ED /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D208817CD54D2002241ED /* Default-568h@2x.png */; };
 		758D209117CD54F8002241ED /* PDGesturedTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 758D209017CD54F8002241ED /* PDGesturedTableView.m */; };
+		758D209417CD559E002241ED /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 758D209317CD559E002241ED /* MainViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,8 @@
 		758D208817CD54D2002241ED /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		758D208F17CD54F8002241ED /* PDGesturedTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDGesturedTableView.h; sourceTree = "<group>"; };
 		758D209017CD54F8002241ED /* PDGesturedTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDGesturedTableView.m; sourceTree = "<group>"; };
+		758D209217CD559E002241ED /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		758D209317CD559E002241ED /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +86,8 @@
 			children = (
 				758D208117CD54D2002241ED /* AppDelegate.h */,
 				758D208217CD54D2002241ED /* AppDelegate.m */,
+				758D209217CD559E002241ED /* MainViewController.h */,
+				758D209317CD559E002241ED /* MainViewController.m */,
 				758D208F17CD54F8002241ED /* PDGesturedTableView.h */,
 				758D209017CD54F8002241ED /* PDGesturedTableView.m */,
 				758D207917CD54D2002241ED /* Supporting Files */,
@@ -172,6 +177,7 @@
 				758D207F17CD54D2002241ED /* main.m in Sources */,
 				758D208317CD54D2002241ED /* AppDelegate.m in Sources */,
 				758D209117CD54F8002241ED /* PDGesturedTableView.m in Sources */,
+				758D209417CD559E002241ED /* MainViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
