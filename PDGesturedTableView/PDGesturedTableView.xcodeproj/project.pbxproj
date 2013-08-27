@@ -18,6 +18,10 @@
 		758D208917CD54D2002241ED /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D208817CD54D2002241ED /* Default-568h@2x.png */; };
 		758D209117CD54F8002241ED /* PDGesturedTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 758D209017CD54F8002241ED /* PDGesturedTableView.m */; };
 		758D209417CD559E002241ED /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 758D209317CD559E002241ED /* MainViewController.m */; };
+		758D209717CD5FE5002241ED /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D209517CD5FE5002241ED /* circle.png */; };
+		758D209817CD5FE5002241ED /* circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D209617CD5FE5002241ED /* circle@2x.png */; };
+		758D209B17CD6001002241ED /* circle_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D209917CD6000002241ED /* circle_highlighted.png */; };
+		758D209C17CD6001002241ED /* circle_highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D209A17CD6000002241ED /* circle_highlighted@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +42,10 @@
 		758D209017CD54F8002241ED /* PDGesturedTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDGesturedTableView.m; sourceTree = "<group>"; };
 		758D209217CD559E002241ED /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		758D209317CD559E002241ED /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		758D209517CD5FE5002241ED /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
+		758D209617CD5FE5002241ED /* circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle@2x.png"; sourceTree = "<group>"; };
+		758D209917CD6000002241ED /* circle_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle_highlighted.png; sourceTree = "<group>"; };
+		758D209A17CD6000002241ED /* circle_highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle_highlighted@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +98,10 @@
 				758D209317CD559E002241ED /* MainViewController.m */,
 				758D208F17CD54F8002241ED /* PDGesturedTableView.h */,
 				758D209017CD54F8002241ED /* PDGesturedTableView.m */,
+				758D209517CD5FE5002241ED /* circle.png */,
+				758D209617CD5FE5002241ED /* circle@2x.png */,
+				758D209917CD6000002241ED /* circle_highlighted.png */,
+				758D209A17CD6000002241ED /* circle_highlighted@2x.png */,
 				758D207917CD54D2002241ED /* Supporting Files */,
 			);
 			path = PDGesturedTableView;
@@ -164,6 +176,10 @@
 				758D208517CD54D2002241ED /* Default.png in Resources */,
 				758D208717CD54D2002241ED /* Default@2x.png in Resources */,
 				758D208917CD54D2002241ED /* Default-568h@2x.png in Resources */,
+				758D209717CD5FE5002241ED /* circle.png in Resources */,
+				758D209817CD5FE5002241ED /* circle@2x.png in Resources */,
+				758D209B17CD6001002241ED /* circle_highlighted.png in Resources */,
+				758D209C17CD6001002241ED /* circle_highlighted@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

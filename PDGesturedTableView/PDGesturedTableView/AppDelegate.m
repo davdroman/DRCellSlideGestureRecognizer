@@ -13,10 +13,13 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
     MainViewController * mainViewController = [MainViewController new];
     
     [self.window setRootViewController:mainViewController];
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
