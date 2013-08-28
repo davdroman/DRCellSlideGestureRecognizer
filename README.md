@@ -33,4 +33,4 @@ Instead of implementing `UITableViewDelegate`, you must implement `PDGesturedTab
 
 ## LICENSE
 
-It has no license.
+You can use it for whatever you want, however you want. I just would love to know if you're using it in any project of yours.
