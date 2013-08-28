@@ -30,3 +30,7 @@ Instead of implementing `UITableViewDelegate`, you must implement `PDGesturedTab
 ## Wish list
 
 - Be able to move cells with a long press and pan gesture.
+
+## LICENSE
+
+It has no license.

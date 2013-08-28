@@ -1,20 +1,18 @@
 //
-//  MainViewController.m
+//  ConfigurationViewController.m
 //  PDGesturedTableView
 //
-//  Created by David Román Aguirre on 27/08/13.
+//  Created by David Román Aguirre on 28/08/13.
 //  Copyright (c) 2013 David Román Aguirre. All rights reserved.
 //
 
-#import "MainViewController.h"
-
 #import "ConfigurationViewController.h"
 
-@implementation MainViewController
+@implementation ConfigurationViewController
 
 - (id)init {
     if (self = [super init]) {
-        self.strings = [NSMutableArray new];
+        self.options = [NSArray new];
         
         self.navigationBar = [UINavigationBar new];
         self.gesturedTableView = [PDGesturedTableView new];
@@ -28,7 +26,7 @@
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
-    self.strings = [[@"lorem ipsum dolor sit amet consectetur adipiscing elit cras gravida quam eu adipiscing elementum" componentsSeparatedByString:@" "] mutableCopy];
+    self.options = @[@{@"title": @"", @"key": @""}];
     
     [self.navigationBar setFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     
@@ -62,29 +60,23 @@
 }
 
 - (void)presentConfigurationViewController {
-    ConfigurationViewController * configurationViewController = [ConfigurationViewController new];
-    [configurationViewController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-    [self presentViewController:configurationViewController animated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (NSString *)gesturedTableView:(PDGesturedTableView *)gesturedTableView stringForTitleTextViewForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return self.strings[indexPath.row];
+    return self.options[indexPath.row];
 }
 
 - (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView didSlideLeftCell:(PDGesturedTableViewCell *)cell {
     NSInteger row = [gesturedTableView indexPathForCell:cell].row;
     
-    [cell dismissWithCompletion:^{
-        [self.strings removeObjectAtIndex:row];
-    }];
+    [cell replace];
 }
 
 - (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView didSlideRightCell:(PDGesturedTableViewCell *)cell {
     NSInteger row = [gesturedTableView indexPathForCell:cell].row;
     
-    [cell dismissWithCompletion:^{
-        [self.strings removeObjectAtIndex:row];
-    }];
+    [cell replace];
 }
 
 - (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView gesturedTableViewCell:(PDGesturedTableViewCell *)gesturedTableViewCell titleTextViewDidEndEditing:(UITextView *)titleTextView {
@@ -92,7 +84,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.strings count];
+    return [self.options count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -104,7 +96,7 @@
     
     PDGesturedTableViewCell * cell = [[PDGesturedTableViewCell alloc] initForGesturedTableView:self.gesturedTableView leftSlidingSideView:leftSlidingSideView rightSlidingSideView:rightSlidingSideView reuseIdentifier:cellIdentifier];
     
-    [cell.titleTextView setText:self.strings[indexPath.row]];
+    [cell.titleTextView setText:self.options[indexPath.row]];
     
     return cell;
 }

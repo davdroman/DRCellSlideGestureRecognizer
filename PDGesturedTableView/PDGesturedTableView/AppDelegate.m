@@ -13,6 +13,10 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    NSDictionary * defaultsDictionary = @{@"": @YES};
+    
+    [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsDictionary];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     MainViewController * mainViewController = [MainViewController new];
