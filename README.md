@@ -1,7 +1,7 @@
 PDGesturedTableView
 ===================
 
-<img src="https://dl.dropboxusercontent.com/u/25520122/images/github-pdgesturedtableview-1.png" />
+![PDGesturedTableView running on 2 iPhones](https://dl.dropboxusercontent.com/u/25520122/images/github-pdgesturedtableview-1.png)
 
 This UITableView subclass provides some great **gesture-based functions** to ordinary UITableView, similar to Clear's or Mailbox's.
 
