@@ -13,7 +13,7 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    NSDictionary * defaultsDictionary = @{@"": @YES};
+    NSDictionary * defaultsDictionary = @{@"option1": @YES, @"option2": @YES, @"option3": @YES, @"option4": @NO, @"option5": @NO};
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsDictionary];
     

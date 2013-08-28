@@ -31,23 +31,16 @@
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
-    // self.options = @[@{@"title": @"", @"key": @""}];
+    for (NSInteger i = 0; i < 5; i++) {
+        self.options = [self.options arrayByAddingObject:@{@"title": [NSString stringWithFormat:@"Option %i", i+1], @"key": [NSString stringWithFormat:@"option%i", i+1]}];
+    }
     
     [self.navigationBar setFrame:CGRectMake(0, 0, self.view.frame.size.width, kNavigationBarHeight)];
     
     UINavigationItem * item = [UINavigationItem new];
     [item setTitle:@"Configuration Example"];
     
-    UIImage * switcherIconImage = [UIImage imageNamed:@"switcherIcon.png"];
-    
-    UIButton * switcherButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [switcherButton setFrame:CGRectMake(0, 0, switcherIconImage.size.width+20, self.navigationBar.frame.size.height)];
-    [switcherButton addTarget:self action:@selector(dismissConfigurationViewController) forControlEvents:UIControlEventTouchUpInside];
-    [switcherButton setShowsTouchWhenHighlighted:YES];
-    [switcherButton setContentMode:UIViewContentModeCenter];
-    [switcherButton setImage:switcherIconImage forState:UIControlStateNormal];
-    
-    item.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:switcherButton];
+    item.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(dismissConfigurationViewController)];
     
     [self.navigationBar setItems:@[item]];
     
@@ -59,6 +52,7 @@
     [self.gesturedTableView setSecondaryDelegate:self];
     [self.gesturedTableView setDataSource:self];
     [self.gesturedTableView.titleTextViewModel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
+    [self.gesturedTableView setSeparatorColor:[UIColor colorWithWhite:0.6 alpha:1]];
     
     [self.view insertSubview:self.gesturedTableView belowSubview:self.navigationBar];
 }
@@ -68,17 +62,29 @@
 }
 
 - (NSString *)gesturedTableView:(PDGesturedTableView *)gesturedTableView stringForTitleTextViewForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return self.options[indexPath.row];
+    return self.options[indexPath.row][@"title"];
+}
+
+- (void)changeCellColors:(PDGesturedTableViewCell *)cell {
+    [cell.contentView setBackgroundColor:([cell.contentView.backgroundColor isEqual:[UIColor colorWithRed:0.2 green:0.8 blue:0.2 alpha:1]] ? [UIColor whiteColor] : [UIColor colorWithRed:0.2 green:0.8 blue:0.2 alpha:1])];
+    [cell.titleTextView setTextColor:([cell.titleTextView.textColor isEqual:[UIColor whiteColor]] ? [UIColor blackColor] : [UIColor whiteColor])];
+}
+
+- (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView cellDidReachLeftHighlightLimit:(PDGesturedTableViewCell *)cell {
+    [self changeCellColors:cell];
+}
+
+- (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView cellDidReachLeftNoHighlightLimit:(PDGesturedTableViewCell *)cell {
+    [self changeCellColors:cell];
 }
 
 - (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView didSlideLeftCell:(PDGesturedTableViewCell *)cell {
     NSInteger row = [gesturedTableView indexPathForCell:cell].row;
     
-    [cell replace];
-}
-
-- (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView didSlideRightCell:(PDGesturedTableViewCell *)cell {
-    NSInteger row = [gesturedTableView indexPathForCell:cell].row;
+    NSString * optionKey = [[NSString alloc] initWithFormat:@"option%i", row+1];
+    BOOL optionEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:optionKey];
+    
+    [[NSUserDefaults standardUserDefaults] setBool:!optionEnabled forKey:optionKey];
     
     [cell replace];
 }
@@ -94,13 +100,18 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString * cellIdentifier = @"Cell Identifier";
     
-    PDGesturedTableViewCellSlidingSideView * leftSlidingSideView = [[PDGesturedTableViewCellSlidingSideView alloc] initWithIcon:[UIImage imageNamed:@"circle.png"] highlightIcon:[UIImage imageNamed:@"circle_highlighted.png"] width:60 highlightColor:[UIColor colorWithRed:0.2 green:0.8 blue:0.2 alpha:1]];
+    PDGesturedTableViewCellSlidingSideView * leftSlidingSideView = [[PDGesturedTableViewCellSlidingSideView alloc] initWithIcon:[UIImage imageNamed:@"circle.png"] highlightIcon:nil width:60 highlightColor:[UIColor clearColor]];
     
-    PDGesturedTableViewCellSlidingSideView * rightSlidingSideView = [[PDGesturedTableViewCellSlidingSideView alloc] initWithIcon:[UIImage imageNamed:@"square.png"] highlightIcon:[UIImage imageNamed:@"square_highlighted.png"] width:60 highlightColor:[UIColor redColor]];
+    PDGesturedTableViewCell * cell = [[PDGesturedTableViewCell alloc] initForGesturedTableView:self.gesturedTableView leftSlidingSideView:leftSlidingSideView rightSlidingSideView:nil reuseIdentifier:cellIdentifier];
     
-    PDGesturedTableViewCell * cell = [[PDGesturedTableViewCell alloc] initForGesturedTableView:self.gesturedTableView leftSlidingSideView:leftSlidingSideView rightSlidingSideView:rightSlidingSideView reuseIdentifier:cellIdentifier];
+    [cell.titleTextView setText:self.options[indexPath.row][@"title"]];
+    BOOL optionEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:self.options[indexPath.row][@"key"]];
     
-    [cell.titleTextView setText:self.options[indexPath.row]];
+    if (optionEnabled) {
+        [cell.contentView setBackgroundColor:[UIColor colorWithRed:0.2 green:0.8 blue:0.2 alpha:1]];
+        [cell.titleTextView setTextColor:[UIColor whiteColor]];
+    }
+    [cell.titleTextView setEditable:NO];
     
     return cell;
 }

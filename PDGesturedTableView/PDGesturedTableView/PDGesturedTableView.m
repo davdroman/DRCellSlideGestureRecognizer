@@ -163,14 +163,14 @@
         } else if (self.rightSlidingSideView == nil && horizontalTranslation < 0 && self.frame.origin.x <= 0) {
             [self setFrame:CGRectMake(0, self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
         } else {
-            [self.leftSlidingSideView setActive:self.frame.origin.x > self.leftSlidingSideView.frame.size.width];
-            [self.rightSlidingSideView setActive:self.frame.size.width - (self.frame.origin.x + self.frame.size.width) > self.rightSlidingSideView.frame.size.width];
-            
             CGFloat weight = 1;
             
-            if (self.leftSlidingSideView.active) {
+            BOOL leftSideReached = self.frame.origin.x > self.leftSlidingSideView.frame.size.width;
+            BOOL rightSideReached = self.frame.size.width - (self.frame.origin.x + self.frame.size.width) > self.rightSlidingSideView.frame.size.width;
+            
+            if (leftSideReached) {
                 weight = 1/(self.frame.origin.x-self.leftSlidingSideView.frame.size.width);
-            } else if (self.rightSlidingSideView.active) {
+            } else if (rightSideReached) {
                 weight = 1/((self.frame.size.width - (self.frame.origin.x + self.frame.size.width)) - self.rightSlidingSideView.frame.size.width);
             }
             
@@ -179,32 +179,36 @@
             [self setFrame:CGRectMake(self.frame.origin.x + horizontalTranslation * weight, self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
             
             if (self.frame.origin.x > 0) {
-                if ([self.leftSlidingSideView active] && horizontalTranslation > 0) {
+                if (![self.leftSlidingSideView active] && leftSideReached) {
                     [self.slidingSideViewsBaseView setBackgroundColor:self.leftSlidingSideView.highlightColor];
                     [self.leftSlidingSideView.iconImageView setHighlighted:YES];
                     if ([self.gesturedTableView.secondaryDelegate respondsToSelector:@selector(gesturedTableView:cellDidReachLeftHighlightLimit:)]) {
                         [self.gesturedTableView.secondaryDelegate gesturedTableView:self.gesturedTableView cellDidReachLeftHighlightLimit:self];
                     }
-                } else if (![self.leftSlidingSideView active] && horizontalTranslation < 0) {
+                    [self.leftSlidingSideView setActive:YES];
+                } else if ([self.leftSlidingSideView active] && !leftSideReached) {
                     [self.slidingSideViewsBaseView setBackgroundColor:[UIColor clearColor]];
                     [self.leftSlidingSideView.iconImageView setHighlighted:NO];
                     if ([self.gesturedTableView.secondaryDelegate respondsToSelector:@selector(gesturedTableView:cellDidReachLeftNoHighlightLimit:)]) {
                         [self.gesturedTableView.secondaryDelegate gesturedTableView:self.gesturedTableView cellDidReachLeftNoHighlightLimit:self];
                     }
+                    [self.leftSlidingSideView setActive:NO];
                 }
             } else {
-                if ([self.rightSlidingSideView active] && horizontalTranslation < 0) {
+                if (![self.rightSlidingSideView active] && rightSideReached) {
                     [self.slidingSideViewsBaseView setBackgroundColor:self.rightSlidingSideView.highlightColor];
                     [self.rightSlidingSideView.iconImageView setHighlighted:YES];
                     if ([self.gesturedTableView.secondaryDelegate respondsToSelector:@selector(gesturedTableView:cellDidReachRightHighlightLimit:)]) {
                         [self.gesturedTableView.secondaryDelegate gesturedTableView:self.gesturedTableView cellDidReachRightHighlightLimit:self];
                     }
-                } else if (![self.rightSlidingSideView active] && horizontalTranslation > 0) {
+                    [self.rightSlidingSideView setActive:YES];
+                } else if ([self.rightSlidingSideView active] && !rightSideReached) {
                     [self.slidingSideViewsBaseView setBackgroundColor:[UIColor clearColor]];
                     [self.rightSlidingSideView.iconImageView setHighlighted:NO];
                     if ([self.gesturedTableView.secondaryDelegate respondsToSelector:@selector(gesturedTableView:cellDidReachRightNoHighlightLimit:)]) {
                         [self.gesturedTableView.secondaryDelegate gesturedTableView:self.gesturedTableView cellDidReachRightNoHighlightLimit:self];
                     }
+                    [self.rightSlidingSideView setActive:NO];
                 }
             }
             
@@ -244,6 +248,8 @@
         [self.rightSlidingSideView.iconImageView setHighlighted:NO];
         [self.slidingSideViewsBaseView removeFromSuperview];
         [self.slidingSideViewsBaseView setAlpha:1];
+        [self.leftSlidingSideView setActive:NO];
+        [self.rightSlidingSideView setActive:NO];
     }];
 }
 
