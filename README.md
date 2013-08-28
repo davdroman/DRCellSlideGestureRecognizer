@@ -1,5 +1,5 @@
-PDGesturedTableView
-===================
+PDGesturedTableView | iOS 7 Compatible
+======================================
 
 This UITableView subclass provides some great **gesture-based functions** to ordinary UITableView, similar to Clear's or Mailbox's.
 
