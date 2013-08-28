@@ -8,6 +8,11 @@
 
 #import "PDGesturedTableView.h"
 
+#define kContentSizeType contentSize
+
+// Uncomment for iOS 7 compatibility
+// #define kContentSizeType intrinsicContentSize
+
 #pragma mark Interfaces Extensions
 
 @interface PDGesturedTableViewCellTitleTextView ()
@@ -51,6 +56,7 @@
         [self setScrollEnabled:NO];
         [self setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20]];
         [self setSpellCheckingType:UITextSpellCheckingTypeNo];
+        [self setBackgroundColor:[UIColor blueColor]];
     }
     
     return self;
@@ -63,7 +69,7 @@
 }
 
 - (void)recalculateFrame {
-    [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.contentSize.height)];
+    [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.kContentSizeType.height)];
 }
 
 @end
@@ -136,6 +142,7 @@
     if (slidePanGestureRecognizer.state == UIGestureRecognizerStateBegan) {
         [self.slidingSideViewsBaseView setFrame:CGRectMake(0, self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
         [self.gesturedTableView insertSubview:self.slidingSideViewsBaseView belowSubview:self];
+        [self.gesturedTableView sendSubviewToBack:self.slidingSideViewsBaseView];
         
         if (self.leftSlidingSideView != nil) {
             [self.leftSlidingSideView setFrame:CGRectMake(0, 0, self.leftSlidingSideView.frame.size.width, self.slidingSideViewsBaseView.frame.size.height)];
@@ -309,7 +316,7 @@
         self.titleTextViewMargin = 10;
         
         self.titleTextViewModel = [PDGesturedTableViewCellTitleTextView new];
-        [self.titleTextViewModel setFrame:CGRectMake(self.titleTextViewMargin, self.titleTextViewMargin, 0, 0)];
+        [self.titleTextViewModel setFrame:CGRectMake(self.titleTextViewMargin, self.titleTextViewMargin+100, 50, 50)];
         [self.titleTextViewModel setHidden:YES];
         
         [self addSubview:self.titleTextViewModel];
@@ -339,7 +346,7 @@
 - (CGFloat)heightForTextViewContainingString:(NSString *)string {
     [self.titleTextViewModel setText:string];
     
-    return self.titleTextViewModel.contentSize.height;
+    return self.titleTextViewModel.kContentSizeType.height;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -352,7 +359,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.updating == YES && [self.currentUpdatingRowIndexPath isEqual:indexPath]) {
-        return self.currentUpdatingTitleTextView.contentSize.height+self.titleTextViewMargin*2;
+        return self.currentUpdatingTitleTextView.kContentSizeType.height+self.titleTextViewMargin*2;
     }
     
     NSString * string = [self.secondaryDelegate gesturedTableView:self stringForTitleTextViewForRowAtIndexPath:indexPath];

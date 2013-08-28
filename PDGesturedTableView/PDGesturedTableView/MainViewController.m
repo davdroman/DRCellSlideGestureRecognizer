@@ -10,6 +10,11 @@
 
 #import "ConfigurationViewController.h"
 
+#define kNavigationBarHeight 44
+
+// Uncomment for iOS 7 compatibility
+// #define kNavigationBarHeight 64
+
 @implementation MainViewController
 
 - (id)init {
@@ -30,7 +35,7 @@
     
     self.strings = [[@"lorem ipsum dolor sit amet consectetur adipiscing elit cras gravida quam eu adipiscing elementum" componentsSeparatedByString:@" "] mutableCopy];
     
-    [self.navigationBar setFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    [self.navigationBar setFrame:CGRectMake(0, 0, self.view.frame.size.width, kNavigationBarHeight)];
     
     UINavigationItem * item = [UINavigationItem new];
     [item setTitle:@"PDGesturedTableView"];
@@ -45,7 +50,6 @@
     [switcherButton setImage:switcherIconImage forState:UIControlStateNormal];
     
     item.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:switcherButton];
-    [item.leftBarButtonItem setAction:@selector(presentConfigurationViewController)];
     
     [self.navigationBar setItems:@[item]];
     

@@ -8,6 +8,11 @@
 
 #import "ConfigurationViewController.h"
 
+#define kNavigationBarHeight 44
+
+// Uncomment for iOS 7 compatibility
+// #define kNavigationBarHeight 64
+
 @implementation ConfigurationViewController
 
 - (id)init {
@@ -26,24 +31,23 @@
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
-    self.options = @[@{@"title": @"", @"key": @""}];
+    // self.options = @[@{@"title": @"", @"key": @""}];
     
-    [self.navigationBar setFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    [self.navigationBar setFrame:CGRectMake(0, 0, self.view.frame.size.width, kNavigationBarHeight)];
     
     UINavigationItem * item = [UINavigationItem new];
-    [item setTitle:@"PDGesturedTableView"];
+    [item setTitle:@"Configuration Example"];
     
     UIImage * switcherIconImage = [UIImage imageNamed:@"switcherIcon.png"];
     
     UIButton * switcherButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [switcherButton setFrame:CGRectMake(0, 0, switcherIconImage.size.width+20, self.navigationBar.frame.size.height)];
-    [switcherButton addTarget:self action:@selector(presentConfigurationViewController) forControlEvents:UIControlEventTouchUpInside];
+    [switcherButton addTarget:self action:@selector(dismissConfigurationViewController) forControlEvents:UIControlEventTouchUpInside];
     [switcherButton setShowsTouchWhenHighlighted:YES];
     [switcherButton setContentMode:UIViewContentModeCenter];
     [switcherButton setImage:switcherIconImage forState:UIControlStateNormal];
     
     item.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:switcherButton];
-    [item.leftBarButtonItem setAction:@selector(presentConfigurationViewController)];
     
     [self.navigationBar setItems:@[item]];
     
@@ -59,7 +63,7 @@
     [self.view insertSubview:self.gesturedTableView belowSubview:self.navigationBar];
 }
 
-- (void)presentConfigurationViewController {
+- (void)dismissConfigurationViewController {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

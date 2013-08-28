@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>E4694DAF-A191-4E57-A5C8-CA0EF78F5C18</string>
+	<key>IDESourceControlProjectName</key>
+	<string>PDGesturedTableView</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>78B1C68D-0F36-4DBD-B7C7-BFA8D6AEDB61</key>
+		<string>https://github.com/Dromaguirre/PDGesturedTableView.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>PDGesturedTableView/PDGesturedTableView.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>78B1C68D-0F36-4DBD-B7C7-BFA8D6AEDB61</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/Dromaguirre/PDGesturedTableView.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>78B1C68D-0F36-4DBD-B7C7-BFA8D6AEDB61</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>78B1C68D-0F36-4DBD-B7C7-BFA8D6AEDB61</string>
+			<key>IDESourceControlWCCName</key>
+			<string>PDGesturedTableView</string>
+		</dict>
+	</array>
+</dict>
+</plist>
