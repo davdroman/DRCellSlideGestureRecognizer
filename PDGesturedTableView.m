@@ -93,9 +93,11 @@
         self.gesturedTableView = gesturedTableView;
         
         self.titleTextView = [PDGesturedTableViewCellTitleTextView new];
-        [self.titleTextView setFrame:self.gesturedTableView.titleTextViewModel.frame];
-        [self.titleTextView setBackgroundColor:[UIColor clearColor]];
+        [self.titleTextView setFrame:CGRectMake(self.gesturedTableView.titleTextViewMargin, self.gesturedTableView.titleTextViewMargin, self.gesturedTableView.frame.size.width - self.gesturedTableView.titleTextViewMargin*2, 0)];
         [self.titleTextView setDelegate:self];
+        [self.titleTextView setBackgroundColor:[UIColor clearColor]];
+        [self.titleTextView setFont:self.gesturedTableView.titleTextViewModel.font];
+        [self.titleTextView setTextColor:self.gesturedTableView.titleTextViewModel.textColor];
         
         self.slidingSideViewsBaseView = [UIView new];
         self.leftSlidingSideView = leftSlidingSideView;
