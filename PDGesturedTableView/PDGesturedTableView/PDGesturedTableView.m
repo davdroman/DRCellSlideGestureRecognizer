@@ -56,7 +56,6 @@
         [self setScrollEnabled:NO];
         [self setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20]];
         [self setSpellCheckingType:UITextSpellCheckingTypeNo];
-        [self setBackgroundColor:[UIColor blueColor]];
     }
     
     return self;
@@ -253,7 +252,7 @@
     }];
 }
 
-- (void)moveCellToHorizontalPosition:(CGFloat)horizontalPosition completion:(void (^)(void))completion {
+- (void)moveCellToHorizontalPosition:(CGFloat)horizontalPosition completion:(void (^)(NSArray * deletedIndexPaths))completion {
     [self.gesturedTableView.indexPathsToDismiss addObject:[self.gesturedTableView indexPathForCell:self]];
     
     [UIView animateWithDuration:0.4 animations:^{
@@ -263,8 +262,8 @@
             [self.slidingSideViewsBaseView setAlpha:0];
         } completion:^(BOOL finished) {
             [self setHidden:YES];
-            if (completion) completion();
             if ([[self.gesturedTableView indexPathForCell:self] isEqual:[self.gesturedTableView.indexPathsToDismiss lastObject]]) {
+                if (completion) completion(self.gesturedTableView.indexPathsToDismiss);
                 [self.gesturedTableView deleteRowsAtIndexPaths:self.gesturedTableView.indexPathsToDismiss withRowAnimation:UITableViewRowAnimationNone];
                 [self.gesturedTableView.indexPathsToDismiss removeAllObjects];
             }
@@ -273,7 +272,7 @@
     }];
 }
 
-- (void)dismissWithCompletion:(void (^)(void))completion {
+- (void)dismissWithCompletion:(void (^)(NSArray * deletedIndexPaths))completion {
     if (self.frame.origin.x > 0) {
         [self moveCellToHorizontalPosition:self.frame.size.width completion:completion];
     } else {
@@ -294,8 +293,12 @@
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
+    self.gesturedTableView.updating = YES;
+    [UIView setAnimationsEnabled:NO];
     [self.gesturedTableView beginUpdates];
     [self.gesturedTableView endUpdates];
+    [UIView setAnimationsEnabled:YES];
+    self.gesturedTableView.updating = NO;
     [self.titleTextView recalculateFrame];
 }
 
@@ -322,7 +325,7 @@
         self.titleTextViewMargin = 10;
         
         self.titleTextViewModel = [PDGesturedTableViewCellTitleTextView new];
-        [self.titleTextViewModel setFrame:CGRectMake(self.titleTextViewMargin, self.titleTextViewMargin+100, 50, 50)];
+        [self.titleTextViewModel setFrame:CGRectMake(self.titleTextViewMargin, self.titleTextViewMargin, 0, 0)];
         [self.titleTextViewModel setHidden:YES];
         
         [self addSubview:self.titleTextViewModel];
@@ -337,17 +340,13 @@
     [self.titleTextViewModel setFrame:CGRectMake(self.titleTextViewMargin, self.titleTextViewMargin, self.frame.size.width-self.titleTextViewMargin*2, 0)];
 }
 
-- (void)beginUpdates {
-    self.updating = YES;
-    [UIView setAnimationsEnabled:NO];
-    [super beginUpdates];
+/* - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 0.00000001f;
 }
 
-- (void)endUpdates {
-    [super endUpdates];
-    [UIView setAnimationsEnabled:YES];
-    self.updating = NO;
-}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [UIView new];
+} */
 
 - (CGFloat)heightForTextViewContainingString:(NSString *)string {
     [self.titleTextViewModel setText:string];

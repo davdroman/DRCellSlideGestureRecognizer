@@ -58,7 +58,7 @@
 @property (strong, nonatomic) PDGesturedTableViewCellSlidingSideView * rightSlidingSideView;
 
 - (void)replace;
-- (void)dismissWithCompletion:(void (^)(void))completion;
+- (void)dismissWithCompletion:(void (^)(NSArray * deletedIndexPaths))completion;
 
 @end
 
