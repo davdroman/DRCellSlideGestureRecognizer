@@ -1,28 +1,24 @@
-PDGesturedTableView | iOS 7 Compatible
-======================================
+PDGesturedTableView
+===================
 
-This UITableView subclass provides some great **gesture-based functions** to ordinary UITableView, similar to Clear's or Mailbox's.
+Amazing Mailbox-like UITableView subclass.
 
 ![PDGesturedTableView running on 2 iPhones](https://dl.dropboxusercontent.com/u/25520122/images/github-pdgesturedtableview-1.png)
 
-Check out the **example app**. You'll see it's not hard at all to implement this powerful control.
+~~Check out the **example app**. You'll see it's not hard at all to implement this powerful control.~~
+
+New example app coming soon.
 
 ## Features
 
-- **Cell titles edition** just by tapping on them.
-- **Cell automatic autoresizing** as user types text.
+- Let the user **slide cells** to perform different actions at **right and left**.
+- Super easy **customization**.
 - A **left and right margin** can be set to let the user swipe between different table views.
-- Let the user **slide cells** to perform different actions.
-- And **many more** to come :)
-
-## Notes
-
-- Instead of implementing `UITableViewDelegate`, you must implement `PDGesturedTableViewSecondaryDelegate`. If you don't do that, it won't work properly.
+- **Block-driven**. No silly delegates :)
 
 ## Wish list
 
 - Be able to **move cells** with a long press and pan gesture.
-- Extract the **text views** editing part and implement it as a **complement**.
 
 ## LICENSE
 
