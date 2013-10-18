@@ -16,7 +16,8 @@ Check out the **example app**. You'll see implementing this powerful control isn
 
 ## Wish list
 
-- Be able to **move cells** with a long press and pan gesture.
+- **Multiple actions** in a single slide depending on the lenght the user slided (as Mailbox's does).
+- **Move cells** with a long press and pan gesture.
 
 ## LICENSE
 
