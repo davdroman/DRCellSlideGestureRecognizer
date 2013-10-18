@@ -14,10 +14,10 @@
 
 @interface PDGesturedTableViewCellSlidingSideView : UIView
 
-- (id)initWithIcon:(UIImage *)icon highlightIcon:(UIImage *)highlightIcon width:(CGFloat)width highlightColor:(UIColor *)highlightColor;
+- (id)initWithIcon:(UIImage *)icon highlightedIcon:(UIImage *)highlightedIcon width:(CGFloat)width highlightedColor:(UIColor *)highlightedColor;
 
 @property (strong, nonatomic) UIImageView * iconImageView;
-@property (strong, nonatomic) UIColor * highlightColor;
+@property (strong, nonatomic) UIColor * highlightedColor;
 
 @end
 

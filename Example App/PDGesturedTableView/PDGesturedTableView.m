@@ -33,11 +33,11 @@
 
 @implementation PDGesturedTableViewCellSlidingSideView
 
-- (id)initWithIcon:(UIImage *)icon highlightIcon:(UIImage *)highlightIcon width:(CGFloat)width highlightColor:(UIColor *)highlightColor {
+- (id)initWithIcon:(UIImage *)icon highlightedIcon:(UIImage *)highlightedIcon width:(CGFloat)width highlightedColor:(UIColor *)highlightedColor {
     if (self = [super initWithFrame:CGRectMake(0, 0, width, 0)]) {
-        self.highlightColor = highlightColor;
+        self.highlightedColor = highlightedColor;
         
-        self.iconImageView = [[UIImageView alloc] initWithImage:icon highlightedImage:highlightIcon];
+        self.iconImageView = [[UIImageView alloc] initWithImage:icon highlightedImage:highlightedIcon];
         
         [self addSubview:self.iconImageView];
     }
@@ -127,7 +127,7 @@
             
             if (self.frame.origin.x > 0) {
                 if (![self.leftSlidingSideView active] && leftSideReached) {
-                    [self.slidingSideViewsBaseView setBackgroundColor:self.leftSlidingSideView.highlightColor];
+                    [self.slidingSideViewsBaseView setBackgroundColor:self.leftSlidingSideView.highlightedColor];
                     [self.leftSlidingSideView.iconImageView setHighlighted:YES];
                     if (self.gesturedTableView.cellDidReachLeftHighlightLimit) self.gesturedTableView.cellDidReachLeftHighlightLimit(self);
                     [self.leftSlidingSideView setActive:YES];
@@ -139,7 +139,7 @@
                 }
             } else {
                 if (![self.rightSlidingSideView active] && rightSideReached) {
-                    [self.slidingSideViewsBaseView setBackgroundColor:self.rightSlidingSideView.highlightColor];
+                    [self.slidingSideViewsBaseView setBackgroundColor:self.rightSlidingSideView.highlightedColor];
                     [self.rightSlidingSideView.iconImageView setHighlighted:YES];
                     if (self.gesturedTableView.cellDidReachRightHighlightLimit) self.gesturedTableView.cellDidReachRightHighlightLimit(self);
                     [self.rightSlidingSideView setActive:YES];
@@ -200,9 +200,12 @@
             NSIndexPath * indexPath = [self.gesturedTableView indexPathForCell:self];
             completion(indexPath);
             [self.gesturedTableView setDeleting:YES];
-            [self.gesturedTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
+            [self.gesturedTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             [self.gesturedTableView setDeleting:NO];
+            [self removeFromSuperview];
+            [self setFrame:CGRectMake(0, self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
             [self.slidingSideViewsBaseView removeFromSuperview];
+            [self.slidingSideViewsBaseView setAlpha:1];
         }];
     }];
 }
@@ -212,6 +215,7 @@
 }
 
 - (void)setFrame:(CGRect)frame {
+    [self.slidingSideViewsBaseView setFrame:CGRectMake(self.slidingSideViewsBaseView.frame.origin.x, frame.origin.y, self.slidingSideViewsBaseView.frame.size.width, self.slidingSideViewsBaseView.frame.size.height)];
     [super setFrame:(self.gesturedTableView.deleting ? CGRectMake(self.frame.origin.x, frame.origin.y, frame.size.width, frame.size.height) : frame)];
 }
 
