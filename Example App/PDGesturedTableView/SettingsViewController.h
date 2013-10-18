@@ -1,5 +1,5 @@
 //
-//  ConfigurationViewController.h
+//  SettingsViewController.h
 //  PDGesturedTableView
 //
 //  Created by David Román Aguirre on 28/08/13.
@@ -10,7 +10,9 @@
 
 #import "PDGesturedTableView.h"
 
-@interface ConfigurationViewController : UIViewController <PDGesturedTableViewSecondaryDelegate, UITableViewDataSource>
+@interface SettingsViewController : UIViewController <UITableViewDataSource> {
+    UIColor * greenColor;
+}
 
 @property (strong, nonatomic) NSArray * options;
 

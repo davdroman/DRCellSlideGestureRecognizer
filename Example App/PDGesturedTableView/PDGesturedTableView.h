@@ -9,35 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @class PDGesturedTableView;
-@class PDGesturedTableViewCell;
-
-#pragma mark Protocols
-
-@protocol PDGesturedTableViewSecondaryDelegate <NSObject>
-
-@required
-- (NSString *)gesturedTableView:(PDGesturedTableView *)gesturedTableView stringForTitleTextViewForRowAtIndexPath:(NSIndexPath *)indexPath;
-
-- (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView didSlideLeftCell:(PDGesturedTableViewCell *)cell;
-- (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView didSlideRightCell:(PDGesturedTableViewCell *)cell;
-
-@optional
-- (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView gesturedTableViewCell:(PDGesturedTableViewCell *)gesturedTableViewCell titleTextViewDidBeginEditing:(UITextView *)titleTextView;
-- (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView gesturedTableViewCell:(PDGesturedTableViewCell *)gesturedTableViewCell titleTextViewDidEndEditing:(UITextView *)titleTextView;
-
-- (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView cellDidReachLeftHighlightLimit:(PDGesturedTableViewCell *)cell;
-- (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView cellDidReachLeftNoHighlightLimit:(PDGesturedTableViewCell *)cell;
-
-- (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView cellDidReachRightHighlightLimit:(PDGesturedTableViewCell *)cell;
-- (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView cellDidReachRightNoHighlightLimit:(PDGesturedTableViewCell *)cell;
-
-@end
 
 #pragma mark Interfaces
-
-@interface PDGesturedTableViewCellTitleTextView : UITextView
-
-@end
 
 @interface PDGesturedTableViewCellSlidingSideView : UIView
 
@@ -50,25 +23,28 @@
 
 @interface PDGesturedTableViewCell : UITableViewCell <UITextViewDelegate, UIGestureRecognizerDelegate>
 
-- (id)initForGesturedTableView:(PDGesturedTableView *)gesturedTableView leftSlidingSideView:(PDGesturedTableViewCellSlidingSideView *)leftSlidingSideView rightSlidingSideView:(PDGesturedTableViewCellSlidingSideView *)rightSlidingSideView reuseIdentifier:(NSString *)reuseIdentifier;
-
-@property (strong, nonatomic) PDGesturedTableViewCellTitleTextView * titleTextView;
+- (id)initForGesturedTableView:(PDGesturedTableView *)gesturedTableView style:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 
 @property (strong, nonatomic) PDGesturedTableViewCellSlidingSideView * leftSlidingSideView;
 @property (strong, nonatomic) PDGesturedTableViewCellSlidingSideView * rightSlidingSideView;
 
 - (void)replace;
-- (void)dismissWithCompletion:(void (^)(NSArray * deletedIndexPaths))completion;
+- (void)dismissWithCompletion:(void (^)(NSIndexPath * indexPath))completion;
 
 @end
 
-@interface PDGesturedTableView : UITableView <UITableViewDelegate>
+@interface PDGesturedTableView : UITableView
 
-@property (strong, nonatomic) id <PDGesturedTableViewSecondaryDelegate> secondaryDelegate;
+@property (copy, nonatomic) void (^didTriggerLeftSideBlock)(PDGesturedTableViewCell * cell);
+@property (copy, nonatomic) void (^didTriggerRightSideBlock)(PDGesturedTableViewCell * cell);
+@property (copy, nonatomic) void (^cellDidReachLeftHighlightLimit)(PDGesturedTableViewCell * cell);
+@property (copy, nonatomic) void (^cellDidReachLeftNoHighlightLimit)(PDGesturedTableViewCell * cell);
+@property (copy, nonatomic) void (^cellDidReachRightHighlightLimit)(PDGesturedTableViewCell * cell);
+@property (copy, nonatomic) void (^cellDidReachRightNoHighlightLimit)(PDGesturedTableViewCell * cell);
 
-// @property (strong, nonatomic) UIView * backgroundView;
+@property (nonatomic) CGFloat edgeSlidingMargin;
 
-@property (strong, nonatomic) UITextView * titleTextViewModel;
-@property (nonatomic) CGFloat titleTextViewMargin;
+@property (strong, nonatomic) UIView * backgroundView;
+@property (nonatomic) BOOL enabled;
 
 @end

@@ -8,12 +8,7 @@
 
 #import "MainViewController.h"
 
-#import "ConfigurationViewController.h"
-
-#define kNavigationBarHeight 44
-
-// Uncomment for iOS 7 compatibility
-// #define kNavigationBarHeight 64
+#import "SettingsViewController.h"
 
 @implementation MainViewController
 
@@ -31,84 +26,85 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self.view.layer setCornerRadius:4.5];
+    [self.view.layer setMasksToBounds:YES];
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     self.strings = [[@"lorem ipsum dolor sit amet consectetur adipiscing elit cras gravida quam eu adipiscing elementum" componentsSeparatedByString:@" "] mutableCopy];
     
-    [self.navigationBar setFrame:CGRectMake(0, 0, self.view.frame.size.width, kNavigationBarHeight)];
+    [self.navigationBar setFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
     
     UINavigationItem * item = [UINavigationItem new];
     [item setTitle:@"PDGesturedTableView"];
     
-    UIImage * switcherIconImage = [UIImage imageNamed:@"switcherIcon.png"];
+    UIImage * settingsIconImage = [UIImage imageNamed:@"settingsIcon.png"];
     
-    UIButton * switcherButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [switcherButton setFrame:CGRectMake(0, 0, switcherIconImage.size.width+20, self.navigationBar.frame.size.height)];
-    [switcherButton addTarget:self action:@selector(presentConfigurationViewController) forControlEvents:UIControlEventTouchUpInside];
-    [switcherButton setShowsTouchWhenHighlighted:YES];
-    [switcherButton setContentMode:UIViewContentModeCenter];
-    [switcherButton setImage:switcherIconImage forState:UIControlStateNormal];
+    UIButton * settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [settingsButton setFrame:CGRectMake(0, 0, settingsIconImage.size.width, 44)];
+    [settingsButton addTarget:self action:@selector(presentSettingsViewController) forControlEvents:UIControlEventTouchUpInside];
+    [settingsButton setContentMode:UIViewContentModeCenter];
+    [settingsButton setImage:settingsIconImage forState:UIControlStateNormal];
     
-    item.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:switcherButton];
+    item.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
     
     [self.navigationBar setItems:@[item]];
     
     [self.view addSubview:self.navigationBar];
     
-    CGFloat navigationBarVerticalPosition = self.navigationBar.frame.origin.y + self.navigationBar.frame.size.height;
-    
-    [self.gesturedTableView setFrame:CGRectMake(0, navigationBarVerticalPosition, self.view.frame.size.width, self.view.frame.size.height - navigationBarVerticalPosition)];
-    [self.gesturedTableView setSecondaryDelegate:self];
+    [self.gesturedTableView setFrame:CGRectMake(0, self.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.navigationBar.frame.size.height)];
+    [self.gesturedTableView setBackgroundColor:[UIColor colorWithWhite:0.96 alpha:1]];
     [self.gesturedTableView setDataSource:self];
-    [self.gesturedTableView.titleTextViewModel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
+    [self.gesturedTableView setRowHeight:60];
+    
+    __unsafe_unretained typeof(self) _self = self;
+    
+    [self.gesturedTableView setDidTriggerLeftSideBlock:^(PDGesturedTableViewCell * cell) {
+        [cell dismissWithCompletion:^(NSIndexPath *indexPath) {
+            [_self.strings removeObjectAtIndex:indexPath.row];
+        }];
+    }];
+    
+    [self.gesturedTableView setDidTriggerRightSideBlock:^(PDGesturedTableViewCell * cell) {
+        [cell dismissWithCompletion:^(NSIndexPath *indexPath) {
+            [_self.strings removeObjectAtIndex:indexPath.row];
+        }];
+    }];
     
     [self.view insertSubview:self.gesturedTableView belowSubview:self.navigationBar];
 }
 
-- (void)presentConfigurationViewController {
-    ConfigurationViewController * configurationViewController = [ConfigurationViewController new];
-    [configurationViewController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-    [self presentViewController:configurationViewController animated:YES completion:nil];
+- (void)presentSettingsViewController {
+    SettingsViewController * settingsViewController = [SettingsViewController new];
+    [settingsViewController setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+    [self presentViewController:settingsViewController animated:YES completion:nil];
 }
 
-- (NSString *)gesturedTableView:(PDGesturedTableView *)gesturedTableView stringForTitleTextViewForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return self.strings[indexPath.row];
-}
-
-- (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView didSlideLeftCell:(PDGesturedTableViewCell *)cell {
-    NSInteger row = [gesturedTableView indexPathForCell:cell].row;
-    
-    [cell dismissWithCompletion:^{
-        [self.strings removeObjectAtIndex:row];
-    }];
-}
-
-- (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView didSlideRightCell:(PDGesturedTableViewCell *)cell {
-    NSInteger row = [gesturedTableView indexPathForCell:cell].row;
-    
-    [cell dismissWithCompletion:^{
-        [self.strings removeObjectAtIndex:row];
-    }];
-}
-
-- (void)gesturedTableView:(PDGesturedTableView *)gesturedTableView gesturedTableViewCell:(PDGesturedTableViewCell *)gesturedTableViewCell titleTextViewDidEndEditing:(UITextView *)titleTextView {
-    [titleTextView resignFirstResponder];
-}
+#pragma mark UITableViewDataSource Methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.strings count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(PDGesturedTableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString * cellIdentifier = @"Cell Identifier";
     
-    PDGesturedTableViewCellSlidingSideView * leftSlidingSideView = [[PDGesturedTableViewCellSlidingSideView alloc] initWithIcon:[UIImage imageNamed:@"circle.png"] highlightIcon:[UIImage imageNamed:@"circle_highlighted.png"] width:60 highlightColor:[UIColor colorWithRed:0.2 green:0.8 blue:0.2 alpha:1]];
+    PDGesturedTableViewCell * cell = (PDGesturedTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    PDGesturedTableViewCellSlidingSideView * rightSlidingSideView = [[PDGesturedTableViewCellSlidingSideView alloc] initWithIcon:[UIImage imageNamed:@"square.png"] highlightIcon:[UIImage imageNamed:@"square_highlighted.png"] width:60 highlightColor:[UIColor redColor]];
+    if (cell == nil) {
+        cell = [[PDGesturedTableViewCell alloc] initForGesturedTableView:tableView style:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        
+        PDGesturedTableViewCellSlidingSideView * leftSlidingSideView = [[PDGesturedTableViewCellSlidingSideView alloc] initWithIcon:[UIImage imageNamed:@"circle.png"] highlightIcon:[UIImage imageNamed:@"circle_highlighted.png"] width:60 highlightColor:[UIColor colorWithRed:0.2 green:0.8 blue:0.2 alpha:1]];
+        
+        [cell setLeftSlidingSideView:leftSlidingSideView];
+        
+        PDGesturedTableViewCellSlidingSideView * rightSlidingSideView = [[PDGesturedTableViewCellSlidingSideView alloc] initWithIcon:[UIImage imageNamed:@"square.png"] highlightIcon:[UIImage imageNamed:@"square_highlighted.png"] width:60 highlightColor:[UIColor redColor]];
+        
+        [cell setRightSlidingSideView:rightSlidingSideView];
+        
+        [cell.textLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
+    }
     
-    PDGesturedTableViewCell * cell = [[PDGesturedTableViewCell alloc] initForGesturedTableView:self.gesturedTableView leftSlidingSideView:leftSlidingSideView rightSlidingSideView:rightSlidingSideView reuseIdentifier:cellIdentifier];
-    
-    [cell.titleTextView setText:self.strings[indexPath.row]];
+    [cell.textLabel setText:self.strings[indexPath.row]];
     
     return cell;
 }

@@ -10,7 +10,7 @@
 
 #import "PDGesturedTableView.h"
 
-@interface MainViewController : UIViewController <PDGesturedTableViewSecondaryDelegate, UITableViewDataSource>
+@interface MainViewController : UIViewController <UITableViewDataSource>
 
 @property (strong, nonatomic) NSMutableArray * strings;
 

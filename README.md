@@ -3,11 +3,9 @@ PDGesturedTableView
 
 Amazing Mailbox-like UITableView subclass.
 
-![PDGesturedTableView running on 2 iPhones](https://dl.dropboxusercontent.com/u/25520122/images/github-pdgesturedtableview-1.png)
+![Example app running on 2 iPhones](https://dl.dropboxusercontent.com/u/25520122/images/github-pdgesturedtableview-1.png)
 
-~~Check out the **example app**. You'll see it's not hard at all to implement this powerful control.~~
-
-New example app coming soon.
+Check out the **example app**. You'll see implementing this powerful control isn't hard at all.
 
 ## Features
 
