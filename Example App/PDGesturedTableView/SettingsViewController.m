@@ -106,7 +106,15 @@
 - (UITableViewCell *)tableView:(PDGesturedTableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString * cellIdentifier = @"Cell Identifier";
     
-    PDGesturedTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    PDGesturedTableViewCell * cell = [[PDGesturedTableViewCell alloc] initForGesturedTableView:tableView style:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    
+    PDGesturedTableViewCellSlidingSideView * leftSlidingSideView = [[PDGesturedTableViewCellSlidingSideView alloc] initWithIcon:[UIImage imageNamed:@"circle.png"] highlightIcon:nil width:60 highlightColor:[UIColor clearColor]];
+    
+    [cell setLeftSlidingSideView:leftSlidingSideView];
+    
+    // This block of code below doesn't work properly yet. Working on that.
+    
+    /* PDGesturedTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if (cell == nil) {
         cell = [[PDGesturedTableViewCell alloc] initForGesturedTableView:tableView style:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
@@ -114,7 +122,7 @@
         PDGesturedTableViewCellSlidingSideView * leftSlidingSideView = [[PDGesturedTableViewCellSlidingSideView alloc] initWithIcon:[UIImage imageNamed:@"circle.png"] highlightIcon:nil width:60 highlightColor:[UIColor clearColor]];
         
         [cell setLeftSlidingSideView:leftSlidingSideView];
-    }
+    } */
     
     [cell.textLabel setText:self.options[indexPath.row][@"title"]];
     BOOL optionEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:self.options[indexPath.row][@"key"]];

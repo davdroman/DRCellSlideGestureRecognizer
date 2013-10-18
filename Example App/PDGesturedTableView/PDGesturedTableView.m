@@ -225,7 +225,6 @@
         [self setSeparatorInset:UIEdgeInsetsZero];
         [self setTableFooterView:[UIView new]];
         
-        [self setEdgeSlidingMargin:35];
         [self setEnabled:YES];
     }
     

@@ -55,6 +55,7 @@
     [self.gesturedTableView setBackgroundColor:[UIColor colorWithWhite:0.96 alpha:1]];
     [self.gesturedTableView setDataSource:self];
     [self.gesturedTableView setRowHeight:60];
+
     
     __unsafe_unretained typeof(self) _self = self;
     
@@ -88,7 +89,21 @@
 - (UITableViewCell *)tableView:(PDGesturedTableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString * cellIdentifier = @"Cell Identifier";
     
-    PDGesturedTableViewCell * cell = (PDGesturedTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    PDGesturedTableViewCell * cell = [[PDGesturedTableViewCell alloc] initForGesturedTableView:tableView style:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    
+    PDGesturedTableViewCellSlidingSideView * leftSlidingSideView = [[PDGesturedTableViewCellSlidingSideView alloc] initWithIcon:[UIImage imageNamed:@"circle.png"] highlightIcon:[UIImage imageNamed:@"circle_highlighted.png"] width:60 highlightColor:[UIColor colorWithRed:0.2 green:0.8 blue:0.2 alpha:1]];
+    
+    [cell setLeftSlidingSideView:leftSlidingSideView];
+    
+    PDGesturedTableViewCellSlidingSideView * rightSlidingSideView = [[PDGesturedTableViewCellSlidingSideView alloc] initWithIcon:[UIImage imageNamed:@"square.png"] highlightIcon:[UIImage imageNamed:@"square_highlighted.png"] width:60 highlightColor:[UIColor redColor]];
+    
+    [cell setRightSlidingSideView:rightSlidingSideView];
+    
+    [cell.textLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
+    
+    // This block of code below doesn't work properly yet. Working on that.
+    
+    /* PDGesturedTableViewCell * cell = (PDGesturedTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if (cell == nil) {
         cell = [[PDGesturedTableViewCell alloc] initForGesturedTableView:tableView style:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
@@ -102,7 +117,7 @@
         [cell setRightSlidingSideView:rightSlidingSideView];
         
         [cell.textLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
-    }
+    } */
     
     [cell.textLabel setText:self.strings[indexPath.row]];
     
