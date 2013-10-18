@@ -23,7 +23,7 @@
 
 @interface PDGesturedTableViewCell : UITableViewCell <UITextViewDelegate, UIGestureRecognizerDelegate>
 
-- (id)initForGesturedTableView:(PDGesturedTableView *)gesturedTableView leftSlidingSideView:(PDGesturedTableViewCellSlidingSideView *)leftSlidingSideView rightSlidingSideView:(PDGesturedTableViewCellSlidingSideView *)rightSlidingSideView reuseIdentifier:(NSString *)reuseIdentifier;
+- (id)initForGesturedTableView:(PDGesturedTableView *)gesturedTableView style:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 
 @property (strong, nonatomic) PDGesturedTableViewCellSlidingSideView * leftSlidingSideView;
 @property (strong, nonatomic) PDGesturedTableViewCellSlidingSideView * rightSlidingSideView;

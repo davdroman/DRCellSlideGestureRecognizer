@@ -49,17 +49,11 @@
 
 @implementation PDGesturedTableViewCell
 
-- (void)setFrame:(CGRect)frame {
-    [super setFrame:(self.gesturedTableView.deleting ? CGRectMake(self.frame.origin.x, frame.origin.y, frame.size.width, frame.size.height) : frame)];
-}
-
-- (id)initForGesturedTableView:(PDGesturedTableView *)gesturedTableView leftSlidingSideView:(PDGesturedTableViewCellSlidingSideView *)leftSlidingSideView rightSlidingSideView:(PDGesturedTableViewCellSlidingSideView *)rightSlidingSideView reuseIdentifier:(NSString *)reuseIdentifier {
+- (id)initForGesturedTableView:(PDGesturedTableView *)gesturedTableView style:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         self.gesturedTableView = gesturedTableView;
         
         self.slidingSideViewsBaseView = [UIView new];
-        self.leftSlidingSideView = leftSlidingSideView;
-        self.rightSlidingSideView = rightSlidingSideView;
         
         UIPanGestureRecognizer * slidePanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(slideCell:)];
         [slidePanGestureRecognizer setDelegate:self];
@@ -217,6 +211,10 @@
     [self moveCellToHorizontalPosition:(self.frame.origin.x > 0 ? self.frame.size.width : -self.frame.size.width) completion:completion];
 }
 
+- (void)setFrame:(CGRect)frame {
+    [super setFrame:(self.gesturedTableView.deleting ? CGRectMake(self.frame.origin.x, frame.origin.y, frame.size.width, frame.size.height) : frame)];
+}
+
 @end
 
 @implementation PDGesturedTableView
@@ -225,11 +223,9 @@
     if (self = [super init]) {
         [self setAllowsSelection:NO];
         [self setSeparatorInset:UIEdgeInsetsZero];
-        
-        [self setEdgeSlidingMargin:35];
-        [self setEnabled:YES];
-        
         [self setTableFooterView:[UIView new]];
+        
+        [self setEnabled:YES];
     }
     
     return self;
