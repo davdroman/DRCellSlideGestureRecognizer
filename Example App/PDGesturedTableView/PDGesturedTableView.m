@@ -204,6 +204,7 @@
         if (currentSlidingFraction) {
             [self.slidingView setBackgroundColor:currentSlidingFraction.color];
             [self.slidingView setIcon:currentSlidingFraction.icon];
+            [self.slidingView setIconsAlpha:self.frame.origin.x > 0 ? 1 : -1];
         } else {
             PDGesturedTableViewCellSlidingFraction * firstSlidingFraction = [currentSlidingFractions lastObject];
             
