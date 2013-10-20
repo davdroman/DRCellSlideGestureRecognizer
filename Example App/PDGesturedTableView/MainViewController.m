@@ -55,21 +55,6 @@
     [self.gesturedTableView setBackgroundColor:[UIColor colorWithWhite:0.96 alpha:1]];
     [self.gesturedTableView setDataSource:self];
     [self.gesturedTableView setRowHeight:60];
-
-    
-    __unsafe_unretained typeof(self) _self = self;
-    
-    [self.gesturedTableView setDidTriggerLeftSideBlock:^(PDGesturedTableViewCell * cell) {
-        [cell dismissWithCompletion:^(NSIndexPath *indexPath) {
-            [_self.strings removeObjectAtIndex:indexPath.row];
-        }];
-    }];
-    
-    [self.gesturedTableView setDidTriggerRightSideBlock:^(PDGesturedTableViewCell * cell) {
-        [cell dismissWithCompletion:^(NSIndexPath *indexPath) {
-            [_self.strings removeObjectAtIndex:indexPath.row];
-        }];
-    }];
     
     [self.view insertSubview:self.gesturedTableView belowSubview:self.navigationBar];
 }
@@ -92,15 +77,49 @@
     PDGesturedTableViewCell * cell = (PDGesturedTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if (cell == nil) {
+        __unsafe_unretained typeof(self) _self = self;
+        
         cell = [[PDGesturedTableViewCell alloc] initForGesturedTableView:tableView style:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         
-        PDGesturedTableViewCellSlidingSideView * leftSlidingSideView = [[PDGesturedTableViewCellSlidingSideView alloc] initWithIcon:[UIImage imageNamed:@"circle.png"] highlightedIcon:[UIImage imageNamed:@"circle_highlighted.png"] width:60 highlightedColor:[UIColor colorWithRed:0.2 green:0.8 blue:0.2 alpha:1]];
+        PDGesturedTableViewCellSlidingFraction * greenSlidingFraction = [PDGesturedTableViewCellSlidingFraction slidingFractionWithIcon:[UIImage imageNamed:@"circle.png"] color:[UIColor colorWithRed:0.2 green:0.8 blue:0.2 alpha:1] activationFraction:0.25];
         
-        [cell setLeftSlidingSideView:leftSlidingSideView];
+        [greenSlidingFraction setDidReleaseBlock:^(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell) {
+            [cell dismissWithCompletion:^(NSIndexPath *indexPath) {
+                [_self.strings removeObjectAtIndex:indexPath.row];
+            }];
+        }];
         
-        PDGesturedTableViewCellSlidingSideView * rightSlidingSideView = [[PDGesturedTableViewCellSlidingSideView alloc] initWithIcon:[UIImage imageNamed:@"square.png"] highlightedIcon:[UIImage imageNamed:@"square_highlighted.png"] width:60 highlightedColor:[UIColor redColor]];
+        [cell addSlidingFraction:greenSlidingFraction];
         
-        [cell setRightSlidingSideView:rightSlidingSideView];
+        PDGesturedTableViewCellSlidingFraction * redSlidingFraction = [PDGesturedTableViewCellSlidingFraction slidingFractionWithIcon:[UIImage imageNamed:@"square.png"] color:[UIColor redColor] activationFraction:0.75];
+        
+        [redSlidingFraction setDidReleaseBlock:^(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell) {
+            [cell dismissWithCompletion:^(NSIndexPath *indexPath) {
+                [_self.strings removeObjectAtIndex:indexPath.row];
+            }];
+        }];
+        
+        [cell addSlidingFraction:redSlidingFraction];
+        
+        PDGesturedTableViewCellSlidingFraction * yellowSlidingFraction = [PDGesturedTableViewCellSlidingFraction slidingFractionWithIcon:[UIImage imageNamed:@"circle.png"] color:[UIColor colorWithRed:239.0/255.0 green:222.0/255 blue:24.0/255 alpha:1] activationFraction:-0.25];
+        
+        [yellowSlidingFraction setDidReleaseBlock:^(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell) {
+            [cell dismissWithCompletion:^(NSIndexPath *indexPath) {
+                [self.strings removeObjectAtIndex:indexPath.row];
+            }];
+        }];
+        
+        [cell addSlidingFraction:yellowSlidingFraction];
+        
+        PDGesturedTableViewCellSlidingFraction * brownSlidingFraction = [PDGesturedTableViewCellSlidingFraction slidingFractionWithIcon:[UIImage imageNamed:@"square.png"] color:[UIColor brownColor] activationFraction:-0.75];
+        
+        [brownSlidingFraction setDidReleaseBlock:^(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell) {
+            [cell dismissWithCompletion:^(NSIndexPath *indexPath) {
+                [self.strings removeObjectAtIndex:indexPath.row];
+            }];
+        }];
+        
+        [cell addSlidingFraction:brownSlidingFraction];
         
         [cell.textLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
     }

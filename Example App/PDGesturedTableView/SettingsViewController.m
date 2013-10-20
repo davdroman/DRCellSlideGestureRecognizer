@@ -48,27 +48,6 @@
     [self.gesturedTableView setSeparatorColor:[UIColor colorWithWhite:0.85 alpha:1]];
     [self.gesturedTableView setRowHeight:60];
     
-    __unsafe_unretained typeof(self) _self = self;
-    
-    [self.gesturedTableView setDidTriggerLeftSideBlock:^(PDGesturedTableViewCell *cell) {
-        NSInteger row = [_self.gesturedTableView indexPathForCell:cell].row;
-        
-        NSString * optionKey = [[NSString alloc] initWithFormat:@"option%i", row+1];
-        BOOL optionEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:optionKey];
-        
-        [[NSUserDefaults standardUserDefaults] setBool:!optionEnabled forKey:optionKey];
-        
-        [cell replace];
-    }];
-    
-    [self.gesturedTableView setCellDidReachLeftHighlightLimit:^(PDGesturedTableViewCell *cell) {
-        [_self changeCellColors:cell];
-    }];
-    
-    [self.gesturedTableView setCellDidReachLeftNoHighlightLimit:^(PDGesturedTableViewCell *cell) {
-        [_self changeCellColors:cell];
-    }];
-    
     [self.view insertSubview:self.gesturedTableView belowSubview:self.navigationBar];
 }
 
@@ -109,11 +88,33 @@
     PDGesturedTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if (cell == nil) {
+        __unsafe_unretained typeof(self) _self = self;
+        
         cell = [[PDGesturedTableViewCell alloc] initForGesturedTableView:tableView style:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        [cell setBouncesAtLastSlidingFraction:YES];
         
-        PDGesturedTableViewCellSlidingSideView * leftSlidingSideView = [[PDGesturedTableViewCellSlidingSideView alloc] initWithIcon:[UIImage imageNamed:@"circle.png"] highlightedIcon:nil width:60 highlightedColor:[UIColor clearColor]];
+        PDGesturedTableViewCellSlidingFraction * checkSlidingFraction = [PDGesturedTableViewCellSlidingFraction slidingFractionWithIcon:[UIImage imageNamed:@"circle.png"] color:[UIColor clearColor] activationFraction:0.25];
         
-        [cell setLeftSlidingSideView:leftSlidingSideView];
+        [checkSlidingFraction setDidActivateBlock:^(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell) {
+            [_self changeCellColors:cell];
+        }];
+        
+        [checkSlidingFraction setDidDeactivateBlock:^(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell) {
+            [_self changeCellColors:cell];
+        }];
+        
+        [checkSlidingFraction setDidReleaseBlock:^(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell) {
+            NSInteger row = [_self.gesturedTableView indexPathForCell:cell].row;
+            
+            NSString * optionKey = [[NSString alloc] initWithFormat:@"option%i", row+1];
+            BOOL optionEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:optionKey];
+            
+            [[NSUserDefaults standardUserDefaults] setBool:!optionEnabled forKey:optionKey];
+            
+            [cell replace];
+        }];
+        
+        [cell addSlidingFraction:checkSlidingFraction];
     }
     
     [cell.textLabel setText:self.options[indexPath.row][@"title"]];

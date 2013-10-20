@@ -10,6 +10,10 @@
 		75178F2E1811AF820057781B /* PDGesturedTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75178F2D1811AF820057781B /* PDGesturedTableView.m */; };
 		75178F411811CCC00057781B /* settingsIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 75178F3F1811CCC00057781B /* settingsIcon.png */; };
 		75178F421811CCC00057781B /* settingsIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75178F401811CCC00057781B /* settingsIcon@2x.png */; };
+		75178F491814492B0057781B /* square.png in Resources */ = {isa = PBXBuildFile; fileRef = 75178F451814492B0057781B /* square.png */; };
+		75178F4A1814492B0057781B /* square@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75178F461814492B0057781B /* square@2x.png */; };
+		75178F4B1814492B0057781B /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 75178F471814492B0057781B /* circle.png */; };
+		75178F4C1814492B0057781B /* circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75178F481814492B0057781B /* circle@2x.png */; };
 		758D207317CD54D2002241ED /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758D207217CD54D2002241ED /* UIKit.framework */; };
 		758D207517CD54D2002241ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758D207417CD54D2002241ED /* Foundation.framework */; };
 		758D207717CD54D2002241ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758D207617CD54D2002241ED /* CoreGraphics.framework */; };
@@ -20,14 +24,6 @@
 		758D208717CD54D2002241ED /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D208617CD54D2002241ED /* Default@2x.png */; };
 		758D208917CD54D2002241ED /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D208817CD54D2002241ED /* Default-568h@2x.png */; };
 		758D209417CD559E002241ED /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 758D209317CD559E002241ED /* MainViewController.m */; };
-		758D209717CD5FE5002241ED /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D209517CD5FE5002241ED /* circle.png */; };
-		758D209817CD5FE5002241ED /* circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D209617CD5FE5002241ED /* circle@2x.png */; };
-		758D209B17CD6001002241ED /* circle_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D209917CD6000002241ED /* circle_highlighted.png */; };
-		758D209C17CD6001002241ED /* circle_highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D209A17CD6000002241ED /* circle_highlighted@2x.png */; };
-		758D209F17CD64FC002241ED /* square.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D209D17CD64FC002241ED /* square.png */; };
-		758D20A017CD64FC002241ED /* square@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D209E17CD64FC002241ED /* square@2x.png */; };
-		758D20A317CD6518002241ED /* square_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D20A117CD6518002241ED /* square_highlighted.png */; };
-		758D20A417CD6518002241ED /* square_highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D20A217CD6518002241ED /* square_highlighted@2x.png */; };
 		758D20B017CD793F002241ED /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 758D20AF17CD793F002241ED /* SettingsViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +32,11 @@
 		75178F2D1811AF820057781B /* PDGesturedTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDGesturedTableView.m; sourceTree = "<group>"; };
 		75178F3F1811CCC00057781B /* settingsIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settingsIcon.png; sourceTree = "<group>"; };
 		75178F401811CCC00057781B /* settingsIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settingsIcon@2x.png"; sourceTree = "<group>"; };
+		75178F431812CCE10057781B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		75178F451814492B0057781B /* square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = square.png; sourceTree = "<group>"; };
+		75178F461814492B0057781B /* square@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "square@2x.png"; sourceTree = "<group>"; };
+		75178F471814492B0057781B /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
+		75178F481814492B0057781B /* circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle@2x.png"; sourceTree = "<group>"; };
 		758D206F17CD54D2002241ED /* PDGesturedTableView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PDGesturedTableView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		758D207217CD54D2002241ED /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		758D207417CD54D2002241ED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -51,14 +52,6 @@
 		758D208817CD54D2002241ED /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		758D209217CD559E002241ED /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		758D209317CD559E002241ED /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		758D209517CD5FE5002241ED /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
-		758D209617CD5FE5002241ED /* circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle@2x.png"; sourceTree = "<group>"; };
-		758D209917CD6000002241ED /* circle_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle_highlighted.png; sourceTree = "<group>"; };
-		758D209A17CD6000002241ED /* circle_highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle_highlighted@2x.png"; sourceTree = "<group>"; };
-		758D209D17CD64FC002241ED /* square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = square.png; sourceTree = "<group>"; };
-		758D209E17CD64FC002241ED /* square@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "square@2x.png"; sourceTree = "<group>"; };
-		758D20A117CD6518002241ED /* square_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = square_highlighted.png; sourceTree = "<group>"; };
-		758D20A217CD6518002241ED /* square_highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "square_highlighted@2x.png"; sourceTree = "<group>"; };
 		758D20AE17CD793F002241ED /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		758D20AF17CD793F002241ED /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,6 +90,7 @@
 		758D207117CD54D2002241ED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				75178F431812CCE10057781B /* QuartzCore.framework */,
 				758D207217CD54D2002241ED /* UIKit.framework */,
 				758D207417CD54D2002241ED /* Foundation.framework */,
 				758D207617CD54D2002241ED /* CoreGraphics.framework */,
@@ -138,16 +132,12 @@
 		758D20A917CD71DE002241ED /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				758D209517CD5FE5002241ED /* circle.png */,
-				758D209617CD5FE5002241ED /* circle@2x.png */,
-				758D209917CD6000002241ED /* circle_highlighted.png */,
-				758D209A17CD6000002241ED /* circle_highlighted@2x.png */,
-				758D209D17CD64FC002241ED /* square.png */,
-				758D209E17CD64FC002241ED /* square@2x.png */,
 				75178F3F1811CCC00057781B /* settingsIcon.png */,
 				75178F401811CCC00057781B /* settingsIcon@2x.png */,
-				758D20A117CD6518002241ED /* square_highlighted.png */,
-				758D20A217CD6518002241ED /* square_highlighted@2x.png */,
+				75178F451814492B0057781B /* square.png */,
+				75178F461814492B0057781B /* square@2x.png */,
+				75178F471814492B0057781B /* circle.png */,
+				75178F481814492B0057781B /* circle@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -206,17 +196,13 @@
 				758D207D17CD54D2002241ED /* InfoPlist.strings in Resources */,
 				758D208517CD54D2002241ED /* Default.png in Resources */,
 				75178F411811CCC00057781B /* settingsIcon.png in Resources */,
+				75178F4B1814492B0057781B /* circle.png in Resources */,
+				75178F4A1814492B0057781B /* square@2x.png in Resources */,
+				75178F491814492B0057781B /* square.png in Resources */,
+				75178F4C1814492B0057781B /* circle@2x.png in Resources */,
 				758D208717CD54D2002241ED /* Default@2x.png in Resources */,
 				75178F421811CCC00057781B /* settingsIcon@2x.png in Resources */,
 				758D208917CD54D2002241ED /* Default-568h@2x.png in Resources */,
-				758D209717CD5FE5002241ED /* circle.png in Resources */,
-				758D209817CD5FE5002241ED /* circle@2x.png in Resources */,
-				758D209B17CD6001002241ED /* circle_highlighted.png in Resources */,
-				758D209C17CD6001002241ED /* circle_highlighted@2x.png in Resources */,
-				758D209F17CD64FC002241ED /* square.png in Resources */,
-				758D20A017CD64FC002241ED /* square@2x.png in Resources */,
-				758D20A317CD6518002241ED /* square_highlighted.png in Resources */,
-				758D20A417CD6518002241ED /* square_highlighted@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

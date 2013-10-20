@@ -9,24 +9,27 @@
 #import <UIKit/UIKit.h>
 
 @class PDGesturedTableView;
+@class PDGesturedTableViewCell;
 
 #pragma mark Interfaces
 
-@interface PDGesturedTableViewCellSlidingSideView : UIView
+@interface PDGesturedTableViewCellSlidingFraction : NSObject
 
-- (id)initWithIcon:(UIImage *)icon highlightedIcon:(UIImage *)highlightedIcon width:(CGFloat)width highlightedColor:(UIColor *)highlightedColor;
+@property (copy, nonatomic) void (^didReleaseBlock)(PDGesturedTableView * gestureTableView, PDGesturedTableViewCell * cell);
+@property (copy, nonatomic) void (^didActivateBlock)(PDGesturedTableView * gestureTableView, PDGesturedTableViewCell * cell);
+@property (copy, nonatomic) void (^didDeactivateBlock)(PDGesturedTableView * gestureTableView, PDGesturedTableViewCell * cell);
 
-@property (strong, nonatomic) UIImageView * iconImageView;
-@property (strong, nonatomic) UIColor * highlightedColor;
++ (id)slidingFractionWithIcon:(UIImage *)icon color:(UIColor *)color activationFraction:(CGFloat)activationFraction;
 
 @end
 
 @interface PDGesturedTableViewCell : UITableViewCell <UITextViewDelegate, UIGestureRecognizerDelegate>
 
+@property (nonatomic) BOOL bouncesAtLastSlidingFraction;
+
 - (id)initForGesturedTableView:(PDGesturedTableView *)gesturedTableView style:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 
-@property (strong, nonatomic) PDGesturedTableViewCellSlidingSideView * leftSlidingSideView;
-@property (strong, nonatomic) PDGesturedTableViewCellSlidingSideView * rightSlidingSideView;
+- (void)addSlidingFraction:(PDGesturedTableViewCellSlidingFraction *)slidingFraction;
 
 - (void)replace;
 - (void)dismissWithCompletion:(void (^)(NSIndexPath * indexPath))completion;
@@ -35,16 +38,12 @@
 
 @interface PDGesturedTableView : UITableView
 
-@property (copy, nonatomic) void (^didTriggerLeftSideBlock)(PDGesturedTableViewCell * cell);
-@property (copy, nonatomic) void (^didTriggerRightSideBlock)(PDGesturedTableViewCell * cell);
-@property (copy, nonatomic) void (^cellDidReachLeftHighlightLimit)(PDGesturedTableViewCell * cell);
-@property (copy, nonatomic) void (^cellDidReachLeftNoHighlightLimit)(PDGesturedTableViewCell * cell);
-@property (copy, nonatomic) void (^cellDidReachRightHighlightLimit)(PDGesturedTableViewCell * cell);
-@property (copy, nonatomic) void (^cellDidReachRightNoHighlightLimit)(PDGesturedTableViewCell * cell);
-
 @property (nonatomic) CGFloat edgeSlidingMargin;
 
-@property (strong, nonatomic) UIView * backgroundView;
 @property (nonatomic) BOOL enabled;
+
+// Coming soon ;)
+
+// @property (strong, nonatomic) UIView * backgroundViewForEmpty;
 
 @end
