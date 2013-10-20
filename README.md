@@ -21,4 +21,4 @@ Check out the **example app**. You'll see implementing this powerful control isn
 
 ## LICENSE
 
-You can use it for whatever you want, however you want. I just would love to know if you're using it in any project of yours.
+You can use it for whatever you want, however you want. I just [would love to know](http://twitter.com/Dromaguirre) if you're using it in any project of yours.
