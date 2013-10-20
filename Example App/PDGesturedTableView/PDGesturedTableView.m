@@ -31,7 +31,7 @@
     CGFloat originalHorizontalCenter;
 }
 
-@property (strong, nonatomic) PDGesturedTableView * gesturedTableView;
+@property (weak, nonatomic) PDGesturedTableView * gesturedTableView;
 @property (strong, nonatomic) PDGesturedTableViewCellSlidingView * slidingView;
 
 @property (strong, nonatomic) NSMutableArray * leftSlidingFractions;
