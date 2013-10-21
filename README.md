@@ -10,6 +10,7 @@ Check out the **example app**. You'll see implementing this powerful control isn
 ## Features
 
 - **Multiple actions** in a single slide depending on the lenght the user slided (as Mailbox's does).
+- A **UIView** can be set to be shown **when there's no content** on the table view (as Mailbox's does).
 - Super easy **customization**.
 - A **left and right margin** can be set to let the user swipe between different table views.
 - **Block-driven**. No silly delegates :)
@@ -17,8 +18,9 @@ Check out the **example app**. You'll see implementing this powerful control isn
 ## Wish list
 
 - ✅ ~~**Multiple actions** in a single slide depending on the lenght the user slided (as Mailbox's does).~~
+- ✅ ~~A **UIView** can be set to be shown **when there's no content** on the table view (as Mailbox's does).~~
 - **Move cells** with a long press and pan gesture.
 
 ## LICENSE
 
-You can use it for whatever you want, however you want. I just [would love to know](http://twitter.com/Dromaguirre) if you're using it in any project of yours.
+You can use it for whatever you want, however you want. I just **[would love to know](mailto:dromaguirre@gmail.com)** if you're using it in any project of yours.
