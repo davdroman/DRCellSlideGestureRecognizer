@@ -110,9 +110,9 @@
         self.leftSlidingFractions = [NSMutableArray new];
         self.rightSlidingFractions = [NSMutableArray new];
         
-        UIPanGestureRecognizer * slidePanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(slide:)];
-        [slidePanGestureRecognizer setDelegate:self];
-        [self addGestureRecognizer:slidePanGestureRecognizer];
+        UIPanGestureRecognizer * panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(slideCell:)];
+        [panGestureRecognizer setDelegate:self];
+        [self addGestureRecognizer:panGestureRecognizer];
     }
     
     return self;
@@ -130,14 +130,6 @@
     if ([gestureRecognizer isKindOfClass:NSClassFromString(@"UIPanGestureRecognizer")]) {
         CGFloat horizontalLocation = [(UIPanGestureRecognizer *)gestureRecognizer locationInView:self].x;
         CGPoint translation = [(UIPanGestureRecognizer *)gestureRecognizer translationInView:self];
-        
-        // Testing Stuff...
-        
-        /* NSLog(@"--------------");
-        NSLog(@"1: %@", (horizontalLocation > self.gesturedTableView.edgeSlidingMargin ? @"YES" : @"NO"));
-        NSLog(@"2: %@", (horizontalLocation < panGestureRecognizer.view.frame.size.width - self.gesturedTableView.edgeSlidingMargin ? @"YES" : @"NO"));
-        NSLog(@"3: %@", (fabsf(translation.x) >= fabsf(translation.y) ? @"YES" : @"NO"));
-        NSLog(@"4: %@", (self.gesturedTableView.enabled ? @"YES" : @"NO")); */
          
         if (horizontalLocation > self.gesturedTableView.edgeSlidingMargin && horizontalLocation < self.frame.size.width - self.gesturedTableView.edgeSlidingMargin && fabsf(translation.x) >= fabsf(translation.y) && self.gesturedTableView.enabled) {
             return YES;
@@ -167,16 +159,16 @@
     [self.rightSlidingFractions sortUsingDescriptors:@[rightFractionsSortDescriptor]];
 }
 
-- (void)slide:(UIPanGestureRecognizer *)slidePanGestureRecognizer {
-    if (slidePanGestureRecognizer.state == UIGestureRecognizerStateBegan) {
+- (void)slideCell:(UIPanGestureRecognizer *)panGestureRecognizer {
+    if (panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
         originalHorizontalCenter = self.center.x;
         
         [self sortSlidingFractions];
         
         [self.slidingView setFrame:CGRectMake(0, self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
         [self.gesturedTableView insertSubview:self.slidingView atIndex:0];
-    } else if (slidePanGestureRecognizer.state == UIGestureRecognizerStateChanged) {
-        CGFloat horizontalTranslation = [slidePanGestureRecognizer translationInView:self].x;
+    } else if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        CGFloat horizontalTranslation = [panGestureRecognizer translationInView:self].x;
         
         if ([self.leftSlidingFractions count] == 0 && self.frame.origin.x+horizontalTranslation > 0) horizontalTranslation = 0;
         else if ([self.rightSlidingFractions count] == 0 && self.frame.origin.x+horizontalTranslation < 0) horizontalTranslation = 0;
@@ -212,7 +204,7 @@
             [self.slidingView setIcon:[firstSlidingFraction icon]];
             [self.slidingView setIconsAlpha:fabsf(self.frame.origin.x)/(firstSlidingFraction.activationFraction*self.frame.size.width)];
         }
-    } else if (slidePanGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+    } else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if (!currentSlidingFraction && self.frame.origin.x != 0) {
             [UIView animateWithDuration:0.1 animations:^{
                 [self setFrame:CGRectMake((self.frame.origin.x > 0 ? -7 : 7), self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
@@ -233,40 +225,6 @@
     }
 }
 
-- (void)replace {
-    [UIView animateWithDuration:0.3 animations:^{
-        [self setFrame:CGRectMake(0, self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
-        [self.slidingView setAlpha:0];
-    } completion:^(BOOL finished) {
-        [self.slidingView removeFromSuperview];
-        [self.slidingView setAlpha:1];
-    }];
-}
-
-- (void)moveCellToHorizontalPosition:(CGFloat)horizontalPosition completion:(void (^)(NSIndexPath * indexPath))completion {
-    [UIView animateWithDuration:0.4 animations:^{
-        [self setFrame:CGRectMake(horizontalPosition, self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.slidingView setAlpha:0];
-        } completion:^(BOOL finished) {
-            NSIndexPath * indexPath = [self.gesturedTableView indexPathForCell:self];
-            completion(indexPath);
-            [self.gesturedTableView setUpdating:YES];
-            [self.gesturedTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-            [self.gesturedTableView setUpdating:NO];
-            [self removeFromSuperview];
-            [self setFrame:CGRectMake(0, self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
-            [self.slidingView removeFromSuperview];
-            [self.slidingView setAlpha:1];
-        }];
-    }];
-}
-
-- (void)dismissWithCompletion:(void (^)(NSIndexPath * indexPath))completion {
-    [self moveCellToHorizontalPosition:(self.frame.origin.x > 0 ? self.frame.size.width : -self.frame.size.width) completion:completion];
-}
-
 - (void)setFrame:(CGRect)frame {
     [self.slidingView setFrame:CGRectMake(self.slidingView.frame.origin.x, frame.origin.y, self.slidingView.frame.size.width, self.slidingView.frame.size.height)];
     [super setFrame:(self.gesturedTableView.updating ? CGRectMake(self.frame.origin.x, frame.origin.y, frame.size.width, frame.size.height) : frame)];
@@ -279,13 +237,97 @@
 - (id)init {
     if (self = [super init]) {
         [self setAllowsSelection:NO];
-        [self setSeparatorInset:UIEdgeInsetsZero];
+        [self setBackgroundView:[UIView new]];
         [self setTableFooterView:[UIView new]];
+        [self setSeparatorInset:UIEdgeInsetsZero];
         
         [self setEnabled:YES];
     }
     
     return self;
+}
+
+- (void)updateAnimatedly:(BOOL)animatedly {
+    [UIView setAnimationsEnabled:animatedly];
+    [self beginUpdates];
+    [self endUpdates];
+    [UIView setAnimationsEnabled:YES];
+}
+
+- (void)moveCell:(PDGesturedTableViewCell *)cell toHorizontalPosition:(CGFloat)horizontalPosition duration:(NSTimeInterval)duration completion:(void (^)(void))completion {
+    [UIView animateWithDuration:duration animations:^{
+        [cell setFrame:CGRectMake(horizontalPosition, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height)];
+    } completion:^(BOOL finished) {
+        if (completion) completion();
+    }];
+}
+
+- (void)removeCell:(PDGesturedTableViewCell *)cell completion:(void (^)(void))completion {
+    [self moveCell:cell toHorizontalPosition:(cell.frame.origin.x > 0 ? cell.frame.size.width : -cell.frame.size.width) duration:0.4 completion:^{
+        [UIView animateWithDuration:0.3 animations:^{
+            [cell.slidingView setAlpha:0];
+        } completion:^(BOOL finished) {
+            NSIndexPath * indexPath = [self indexPathForCell:cell];
+            if (completion) completion();
+            [self setUpdating:YES];
+            [self deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            [self setUpdating:NO];
+            [cell removeFromSuperview];
+            [cell setFrame:CGRectMake(0, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height)];
+            [cell.slidingView removeFromSuperview];
+            [cell.slidingView setAlpha:1];
+        }];
+    }];
+}
+
+- (void)replaceCell:(PDGesturedTableViewCell *)cell completion:(void (^)(void))completion {
+    [self moveCell:cell toHorizontalPosition:0 duration:0.25 completion:^{
+        [cell.slidingView removeFromSuperview];
+        if (completion) completion();
+    }];
+}
+
+- (void)showOrHideBackgroundView {
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.backgroundView setAlpha:([self isEmpty] ? 1 : 0)];
+    }];
+}
+
+- (BOOL)isEmpty {
+    BOOL isEmpty = YES;
+    
+    for (NSInteger s = 0; s < [self numberOfSections]; s++) {
+        if ([self numberOfRowsInSection:s] > 0) {
+            isEmpty = NO;
+        }
+    }
+    
+    return isEmpty;
+}
+
+- (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation {
+    [self insertRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+    [self showOrHideBackgroundView];
+}
+
+- (void)insertSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation {
+    [super insertSections:sections withRowAnimation:animation];
+    [self showOrHideBackgroundView];
+}
+
+- (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation {
+    [super deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+    [self showOrHideBackgroundView];
+}
+
+- (void)deleteSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation {
+    [super deleteSections:sections withRowAnimation:animation];
+    [self showOrHideBackgroundView];
+}
+
+- (void)reloadData {
+    [super reloadData];
+    [self showOrHideBackgroundView];
 }
 
 @end

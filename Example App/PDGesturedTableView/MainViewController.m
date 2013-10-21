@@ -56,6 +56,15 @@
     [self.gesturedTableView setDataSource:self];
     [self.gesturedTableView setRowHeight:60];
     
+    UILabel * noMoreLoremIpsumLabel = [UILabel new];
+    [noMoreLoremIpsumLabel setBackgroundColor:[UIColor clearColor]];
+    [noMoreLoremIpsumLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:19]];
+    [noMoreLoremIpsumLabel setText:@"No more lorem ipsum!"];
+    [noMoreLoremIpsumLabel sizeToFit];
+    [noMoreLoremIpsumLabel setCenter:CGPointMake(self.gesturedTableView.backgroundView.frame.size.width/2, self.gesturedTableView.backgroundView.frame.size.height/2)];
+    
+    [self.gesturedTableView.backgroundView addSubview:noMoreLoremIpsumLabel];
+    
     [self.view insertSubview:self.gesturedTableView belowSubview:self.navigationBar];
 }
 
@@ -79,45 +88,37 @@
     if (cell == nil) {
         __unsafe_unretained typeof(self) _self = self;
         
+        void (^completionForReleaseBlocks)(PDGesturedTableView *, PDGesturedTableViewCell *) = ^(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell){
+            [gesturedTableView removeCell:cell completion:^{
+                NSIndexPath * indexPath = [gesturedTableView indexPathForCell:cell];
+                
+                [_self.strings removeObjectAtIndex:indexPath.row];
+            }];
+        };
+        
         cell = [[PDGesturedTableViewCell alloc] initForGesturedTableView:tableView style:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         
         PDGesturedTableViewCellSlidingFraction * greenSlidingFraction = [PDGesturedTableViewCellSlidingFraction slidingFractionWithIcon:[UIImage imageNamed:@"circle.png"] color:[UIColor colorWithRed:0.2 green:0.8 blue:0.2 alpha:1] activationFraction:0.25];
         
-        [greenSlidingFraction setDidReleaseBlock:^(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell) {
-            [cell dismissWithCompletion:^(NSIndexPath *indexPath) {
-                [_self.strings removeObjectAtIndex:indexPath.row];
-            }];
-        }];
+        [greenSlidingFraction setDidReleaseBlock:completionForReleaseBlocks];
         
         [cell addSlidingFraction:greenSlidingFraction];
         
         PDGesturedTableViewCellSlidingFraction * redSlidingFraction = [PDGesturedTableViewCellSlidingFraction slidingFractionWithIcon:[UIImage imageNamed:@"square.png"] color:[UIColor redColor] activationFraction:0.75];
         
-        [redSlidingFraction setDidReleaseBlock:^(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell) {
-            [cell dismissWithCompletion:^(NSIndexPath *indexPath) {
-                [_self.strings removeObjectAtIndex:indexPath.row];
-            }];
-        }];
+        [redSlidingFraction setDidReleaseBlock:completionForReleaseBlocks];
         
         [cell addSlidingFraction:redSlidingFraction];
         
         PDGesturedTableViewCellSlidingFraction * yellowSlidingFraction = [PDGesturedTableViewCellSlidingFraction slidingFractionWithIcon:[UIImage imageNamed:@"circle.png"] color:[UIColor colorWithRed:239.0/255.0 green:222.0/255 blue:24.0/255 alpha:1] activationFraction:-0.25];
         
-        [yellowSlidingFraction setDidReleaseBlock:^(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell) {
-            [cell dismissWithCompletion:^(NSIndexPath *indexPath) {
-                [self.strings removeObjectAtIndex:indexPath.row];
-            }];
-        }];
+        [yellowSlidingFraction setDidReleaseBlock:completionForReleaseBlocks];
         
         [cell addSlidingFraction:yellowSlidingFraction];
         
         PDGesturedTableViewCellSlidingFraction * brownSlidingFraction = [PDGesturedTableViewCellSlidingFraction slidingFractionWithIcon:[UIImage imageNamed:@"square.png"] color:[UIColor brownColor] activationFraction:-0.75];
         
-        [brownSlidingFraction setDidReleaseBlock:^(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell) {
-            [cell dismissWithCompletion:^(NSIndexPath *indexPath) {
-                [self.strings removeObjectAtIndex:indexPath.row];
-            }];
-        }];
+        [brownSlidingFraction setDidReleaseBlock:completionForReleaseBlocks];
         
         [cell addSlidingFraction:brownSlidingFraction];
         

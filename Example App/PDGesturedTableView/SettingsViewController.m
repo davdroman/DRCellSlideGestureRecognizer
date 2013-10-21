@@ -111,7 +111,7 @@
             
             [[NSUserDefaults standardUserDefaults] setBool:!optionEnabled forKey:optionKey];
             
-            [cell replace];
+            [gesturedTableView replaceCell:cell completion:nil];
         }];
         
         [cell addSlidingFraction:checkSlidingFraction];

@@ -31,9 +31,6 @@
 
 - (void)addSlidingFraction:(PDGesturedTableViewCellSlidingFraction *)slidingFraction;
 
-- (void)replace;
-- (void)dismissWithCompletion:(void (^)(NSIndexPath * indexPath))completion;
-
 @end
 
 @interface PDGesturedTableView : UITableView
@@ -42,8 +39,8 @@
 
 @property (nonatomic) BOOL enabled;
 
-// Coming soon ;)
-
-// @property (strong, nonatomic) UIView * backgroundViewForEmpty;
+- (void)updateAnimatedly:(BOOL)animatedly;
+- (void)removeCell:(PDGesturedTableViewCell *)cell completion:(void (^)(void))completion;
+- (void)replaceCell:(PDGesturedTableViewCell *)cell completion:(void (^)(void))completion;
 
 @end
