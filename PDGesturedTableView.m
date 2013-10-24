@@ -306,7 +306,7 @@
 }
 
 - (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation {
-    [self insertRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+    [super insertRowsAtIndexPaths:indexPaths withRowAnimation:animation];
     [self showOrHideBackgroundView];
 }
 
