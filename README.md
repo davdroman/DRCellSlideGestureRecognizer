@@ -15,10 +15,11 @@ Check out the **example app**. You'll see implementing this powerful control isn
 - A **left and right margin** can be set to let the user swipe between different table views.
 - **Block-driven**. No silly delegates :)
 
-## Wish list
+## Wish List
 
 - ✅ ~~**Multiple actions** in a single slide depending on the lenght the user slided (as Mailbox's does).~~
 - ✅ ~~A **UIView** can be set to be shown **when there's no content** on the table view (as Mailbox's does).~~
+- **CocoaPods** support.
 - **Move cells** with a long press and pan gesture.
 
 ## LICENSE
