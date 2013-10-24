@@ -15,11 +15,17 @@ Check out the **example app**. You'll see implementing this powerful control isn
 - A **left and right margin** can be set to let the user swipe between different table views.
 - **Block-driven**. No silly delegates :)
 
+## CocoaPods
+
+You can easily install PDGesturedTableView through CocoaPods using this command:
+
+`pod 'PDGesturedTableView', '~> 0.1'`
+
 ## Wish List
 
 - ✅ ~~**Multiple actions** in a single slide depending on the lenght the user slided (as Mailbox's does).~~
 - ✅ ~~A **UIView** can be set to be shown **when there's no content** on the table view (as Mailbox's does).~~
-- **CocoaPods** support.
+- ✅ ~~**CocoaPods** support.~~
 - **Move cells** with a long press and pan gesture.
 
 ## LICENSE
