@@ -16,3 +16,4 @@ profile
 *.moved-aside
 DerivedData
 .idea/
+/Example App/PDGesturedTableView.xcodeproj/project.xcworkspace/xcuserdata/Dromaguirre.xcuserdatad/UserInterfaceState.xcuserstate
