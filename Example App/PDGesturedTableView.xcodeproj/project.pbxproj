@@ -170,6 +170,11 @@
 			attributes = {
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "David Román Aguirre";
+				TargetAttributes = {
+					758D206E17CD54D2002241ED = {
+						DevelopmentTeam = 928NVD8D9L;
+					};
+				};
 			};
 			buildConfigurationList = 758D206A17CD54D2002241ED /* Build configuration list for PBXProject "PDGesturedTableView" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -294,10 +299,13 @@
 		758D208D17CD54D2002241ED /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PDGesturedTableView/PDGesturedTableView-Prefix.pch";
 				INFOPLIST_FILE = "PDGesturedTableView/PDGesturedTableView-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -305,10 +313,13 @@
 		758D208E17CD54D2002241ED /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PDGesturedTableView/PDGesturedTableView-Prefix.pch";
 				INFOPLIST_FILE = "PDGesturedTableView/PDGesturedTableView-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

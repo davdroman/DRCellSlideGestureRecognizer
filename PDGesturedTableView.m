@@ -119,11 +119,7 @@
 }
 
 - (void)addSlidingFraction:(PDGesturedTableViewCellSlidingFraction *)slidingFraction {
-    if (slidingFraction.activationFraction > 0) {
-        [self.leftSlidingFractions addObject:slidingFraction];
-    } else if (slidingFraction.activationFraction < 0) {
-        [self.rightSlidingFractions addObject:slidingFraction];
-    }
+    [(slidingFraction.activationFraction > 0 ? self.leftSlidingFractions : self.rightSlidingFractions) addObject:slidingFraction];
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
@@ -142,7 +138,9 @@
 }
 
 - (PDGesturedTableViewCellSlidingFraction *)currentSlidingFractionForArray:(NSArray *)fractionsArray {
-    for (PDGesturedTableViewCellSlidingFraction * fraction in fractionsArray) {
+    for (NSInteger i = [fractionsArray count]-1; i >= 0; i--) {
+        PDGesturedTableViewCellSlidingFraction * fraction = fractionsArray[i];
+        
         if (fabsf(self.frame.origin.x/self.frame.size.width) >= fabsf(fraction.activationFraction)) {
             return fraction;
         }
@@ -152,10 +150,10 @@
 }
 
 - (void)sortSlidingFractions {
-    NSSortDescriptor * leftFractionsSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"activationFraction" ascending:NO];
+    NSSortDescriptor * leftFractionsSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"activationFraction" ascending:YES];
     [self.leftSlidingFractions sortUsingDescriptors:@[leftFractionsSortDescriptor]];
     
-    NSSortDescriptor * rightFractionsSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"activationFraction" ascending:YES];
+    NSSortDescriptor * rightFractionsSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"activationFraction" ascending:NO];
     [self.rightSlidingFractions sortUsingDescriptors:@[rightFractionsSortDescriptor]];
 }
 
@@ -175,7 +173,7 @@
         
         CGFloat retention = 0;
         
-        if (self.bouncesAtLastSlidingFraction && [[currentSlidingFractions firstObject] isEqual:currentSlidingFraction]) {
+        if (self.bouncesAtLastSlidingFraction && [[currentSlidingFractions lastObject] isEqual:currentSlidingFraction]) {
             retention = (horizontalTranslation-currentSlidingFraction.activationFraction*self.frame.size.width)*0.75;
         }
         
@@ -198,7 +196,7 @@
             [self.slidingView setIcon:currentSlidingFraction.icon];
             [self.slidingView setIconsAlpha:self.frame.origin.x > 0 ? 1 : -1];
         } else {
-            PDGesturedTableViewCellSlidingFraction * firstSlidingFraction = [currentSlidingFractions lastObject];
+            PDGesturedTableViewCellSlidingFraction * firstSlidingFraction = [currentSlidingFractions firstObject];
             
             [self.slidingView setBackgroundColor:[UIColor clearColor]];
             [self.slidingView setIcon:[firstSlidingFraction icon]];
