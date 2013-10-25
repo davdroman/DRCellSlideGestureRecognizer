@@ -17,11 +17,9 @@ Check out the **example app**. You'll see implementing this powerful control isn
 
 ## CocoaPods
 
-You can easily install PDGesturedTableView through CocoaPods using this command:
+You can easily install PDGesturedTableView through CocoaPods adding the following to your Podfile:
 
-`pod 'PDGesturedTableView', '~> 0.1'`
-
-*iOS 7 or newer. Requires ARC.*
+	pod 'PDGesturedTableView'
 
 ## Wish List
 
@@ -30,6 +28,11 @@ You can easily install PDGesturedTableView through CocoaPods using this command:
 - ✅ ~~**CocoaPods** support.~~
 - **Move cells** with a long press and pan gesture.
 
-## LICENSE
+## Requirements
+
+- iOS 7 or higher.
+- Automatic Reference Counting (ARC).
+
+## License
 
 You can use it for whatever you want, however you want. I just **[would love to know](mailto:dromaguirre@gmail.com)** if you're using it in any project of yours.
