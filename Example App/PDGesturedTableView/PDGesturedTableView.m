@@ -119,7 +119,7 @@
 }
 
 - (void)addSlidingFraction:(PDGesturedTableViewCellSlidingFraction *)slidingFraction {
-    [(slidingFraction.activationFraction > 0 ? self.leftSlidingFractions : self.rightSlidingFractions) addObject:slidingFraction];
+    if (slidingFraction) [(slidingFraction.activationFraction > 0 ? self.leftSlidingFractions : self.rightSlidingFractions) addObject:slidingFraction];
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
