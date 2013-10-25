@@ -21,6 +21,8 @@ You can easily install PDGesturedTableView through CocoaPods using this command:
 
 `pod 'PDGesturedTableView', '~> 0.1'`
 
+*iOS 7 or newer. Requires ARC.*
+
 ## Wish List
 
 - ✅ ~~**Multiple actions** in a single slide depending on the lenght the user slided (as Mailbox's does).~~
