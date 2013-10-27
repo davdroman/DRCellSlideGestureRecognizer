@@ -25,6 +25,7 @@
 		758D208917CD54D2002241ED /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 758D208817CD54D2002241ED /* Default-568h@2x.png */; };
 		758D209417CD559E002241ED /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 758D209317CD559E002241ED /* MainViewController.m */; };
 		758D20B017CD793F002241ED /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 758D20AF17CD793F002241ED /* SettingsViewController.m */; };
+		75BEF39E181D9D4A00972AE6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75178F431812CCE10057781B /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75BEF39E181D9D4A00972AE6 /* QuartzCore.framework in Frameworks */,
 				758D207317CD54D2002241ED /* UIKit.framework in Frameworks */,
 				758D207517CD54D2002241ED /* Foundation.framework in Frameworks */,
 				758D207717CD54D2002241ED /* CoreGraphics.framework in Frameworks */,

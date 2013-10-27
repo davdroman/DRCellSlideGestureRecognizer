@@ -30,7 +30,14 @@
     [self.view.layer setMasksToBounds:YES];
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
-    self.strings = [[@"lorem ipsum dolor sit amet consectetur adipiscing elit cras gravida quam eu adipiscing elementum" componentsSeparatedByString:@" "] mutableCopy];
+    self.strings = [[NSMutableArray alloc] initWithObjects:
+                    @"Swipe right at different lengths",
+                    @"You can set actions to swipe lengths",
+                    @"Now, do the same swiping left",
+                    @"Pretty nice, isn't it?",
+                    @"Now, tap and hold a cell to move it",
+                    @"And finally, swipe all cells!",
+    nil];
     
     [self.navigationBar setFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
     
@@ -59,11 +66,20 @@
     UILabel * noMoreLoremIpsumLabel = [UILabel new];
     [noMoreLoremIpsumLabel setBackgroundColor:[UIColor clearColor]];
     [noMoreLoremIpsumLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:19]];
-    [noMoreLoremIpsumLabel setText:@"No more lorem ipsum!"];
+    [noMoreLoremIpsumLabel setText:@"Congrats, you've just discovered PDGesturedTableView :)"];
+    [noMoreLoremIpsumLabel setNumberOfLines:2];
+    [noMoreLoremIpsumLabel setTextAlignment:NSTextAlignmentCenter];
+    [noMoreLoremIpsumLabel setFrame:CGRectMake(0, 0, 300, CGFLOAT_MAX)];
     [noMoreLoremIpsumLabel sizeToFit];
     [noMoreLoremIpsumLabel setCenter:CGPointMake(self.gesturedTableView.backgroundView.frame.size.width/2, self.gesturedTableView.backgroundView.frame.size.height/2)];
     
     [self.gesturedTableView.backgroundView addSubview:noMoreLoremIpsumLabel];
+    
+    __unsafe_unretained typeof(self) _self = self;
+    
+    [self.gesturedTableView setDidMoveCellFromIndexPathToIndexPathBlock:^(NSIndexPath * fromIndexPath, NSIndexPath * toIndexPath) {
+        [_self.strings exchangeObjectAtIndex:fromIndexPath.row withObjectAtIndex:toIndexPath.row];
+    }];
     
     [self.view insertSubview:self.gesturedTableView belowSubview:self.navigationBar];
 }
