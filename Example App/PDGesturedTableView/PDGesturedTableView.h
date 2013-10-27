@@ -35,7 +35,11 @@
 
 @interface PDGesturedTableView : UITableView
 
+@property (copy, nonatomic) void (^didMoveCellFromIndexPathToIndexPathBlock)(NSIndexPath * fromIndexPath, NSIndexPath * toIndexPath);
+@property (copy, nonatomic) void (^didFinishMovingCellBlock)(NSIndexPath * oldIndexPath, NSIndexPath * newIndexPath);
+
 @property (nonatomic) CGFloat edgeSlidingMargin;
+@property (nonatomic) CGFloat edgeMovingMargin;
 
 @property (nonatomic) BOOL enabled;
 
