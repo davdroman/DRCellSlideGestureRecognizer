@@ -173,7 +173,11 @@
         
         return NO;
     } else if ([gestureRecognizer isKindOfClass:NSClassFromString(@"UILongPressGestureRecognizer")]) {
-        return !self.gesturedTableView.moving;
+        if (!self.gesturedTableView.moving && self.gesturedTableView.didMoveCellFromIndexPathToIndexPathBlock) {
+            return YES;
+        }
+        
+        return NO;
     }
     
     return YES;
@@ -286,8 +290,6 @@
 }
 
 - (void)moveCell:(UILongPressGestureRecognizer *)longPressGestureRecognizer {
-    if (!self.gesturedTableView.didMoveCellFromIndexPathToIndexPathBlock) return;
-    
     if (longPressGestureRecognizer.state == UIGestureRecognizerStateBegan) {
         [self.gesturedTableView setMoving:YES];
         
