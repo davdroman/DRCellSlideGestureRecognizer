@@ -59,6 +59,8 @@
     PDGesturedTableViewCell * nextCell;
     PDGesturedTableViewCell * previousCell;
     PDGesturedTableViewCell * copiedCell;
+    
+    CADisplayLink * autoscrollTimer;
 }
 
 @property (weak, nonatomic) PDGesturedTableView * gesturedTableView;
@@ -135,7 +137,7 @@
 @implementation PDGesturedTableViewCell
 
 - (id)initForGesturedTableView:(PDGesturedTableView *)gesturedTableView style:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.gesturedTableView = gesturedTableView;
         self.slidingView = [PDGesturedTableViewCellSlidingView new];
         
@@ -315,6 +317,9 @@
         previousPoint = [longPressGestureRecognizer locationInView:self.gesturedTableView].y;
         
         [self resetPreviousAndNextCellAndIndexPath];
+        
+        /* autoscrollTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(autoscrollIfNeeded:)];
+        [autoscrollTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode]; */
     } else if (longPressGestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGFloat currentPoint = [longPressGestureRecognizer locationInView:self.gesturedTableView].y;
         CGFloat verticalTranslation = currentPoint-previousPoint;
@@ -340,6 +345,7 @@
             }];
         }
     } else if (longPressGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        [autoscrollTimer invalidate];
         [self.gesturedTableView setMoving:NO];
         
         [copiedCell animateShadowWithRadius:0.5 opacity:0.4 duration:0.3];
@@ -359,6 +365,19 @@
         }];
         
         if (self.gesturedTableView.didFinishMovingCellBlock) self.gesturedTableView.didFinishMovingCellBlock(originIndexPath, finalIndexPath);
+    }
+}
+
+- (void)autoscrollIfNeeded:(CADisplayLink *)timer {
+    CGFloat scrollVerticalAddition = 0;
+    
+    if (self.gesturedTableView.contentOffset.y < self.gesturedTableView.contentSize.height-self.gesturedTableView.frame.size.height) {
+        scrollVerticalAddition = 2.5;
+    }
+    
+    if (copiedCell.frame.origin.y+copiedCell.frame.size.height-self.gesturedTableView.contentOffset.y > self.gesturedTableView.frame.size.height-self.gesturedTableView.edgeMovingMargin) {
+        [self.gesturedTableView setContentOffset:CGPointMake(0, self.gesturedTableView.contentOffset.y+scrollVerticalAddition)];
+        // [copiedCell setCenter:CGPointMake(copiedCell.center.x, copiedCell.center.y)];
     }
 }
 
