@@ -13,35 +13,32 @@
 
 #pragma mark Interfaces
 
-@interface PDGesturedTableViewCellSlidingFraction : NSObject
+@interface PDGesturedTableViewCellAction : NSObject
 
-@property (copy, nonatomic) void (^didReleaseBlock)(PDGesturedTableView * gestureTableView, PDGesturedTableViewCell * cell);
-@property (copy, nonatomic) void (^didActivateBlock)(PDGesturedTableView * gestureTableView, PDGesturedTableViewCell * cell);
-@property (copy, nonatomic) void (^didDeactivateBlock)(PDGesturedTableView * gestureTableView, PDGesturedTableViewCell * cell);
+@property (copy, nonatomic) void (^didActivateBlock)(PDGesturedTableView *, PDGesturedTableViewCell *);
+@property (copy, nonatomic) void (^didHighlightBlock)(PDGesturedTableView *, PDGesturedTableViewCell *);
+@property (copy, nonatomic) void (^didUnhighlightBlock)(PDGesturedTableView *, PDGesturedTableViewCell *);
 
-+ (id)slidingFractionWithIcon:(UIImage *)icon color:(UIColor *)color activationFraction:(CGFloat)activationFraction;
-
-@end
-
-@interface PDGesturedTableViewCell : UITableViewCell <UITextViewDelegate, UIGestureRecognizerDelegate>
-
-@property (nonatomic) BOOL bouncesAtLastSlidingFraction;
-
-- (id)initForGesturedTableView:(PDGesturedTableView *)gesturedTableView style:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
-
-- (void)addSlidingFraction:(PDGesturedTableViewCellSlidingFraction *)slidingFraction;
++ (id)actionForFraction:(CGFloat)fraction icon:(UIImage *)icon color:(UIColor *)color;
 
 @end
 
-@interface PDGesturedTableView : UITableView
+@interface PDGesturedTableViewCell : UITableViewCell <UIGestureRecognizerDelegate>
+
+- (void)addActionForFraction:(CGFloat)fraction icon:(UIImage *)icon color:(UIColor *)color activationBlock:(void (^)(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell))activationBlock highlightBlock:(void (^)(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell))highlightBlock unhighlightBlock:(void (^)(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell))unhighlightBlock;
+- (void)addAction:(PDGesturedTableViewCellAction *)action;
+
+@end
+
+@interface PDGesturedTableView : UITableView {
+    BOOL justMovedToNewSuperview;
+}
 
 @property (copy, nonatomic) void (^didMoveCellFromIndexPathToIndexPathBlock)(NSIndexPath * fromIndexPath, NSIndexPath * toIndexPath);
 @property (copy, nonatomic) void (^didFinishMovingCellBlock)(NSIndexPath * oldIndexPath, NSIndexPath * newIndexPath);
 
-@property (nonatomic) CGFloat edgeSlidingMargin;
-@property (nonatomic) CGFloat edgeMovingMargin;
-
 @property (nonatomic) BOOL enabled;
+@property (nonatomic) CGFloat edgeSlidingMargin;
 
 - (void)updateAnimatedly:(BOOL)animatedly;
 - (void)removeCell:(PDGesturedTableViewCell *)cell completion:(void (^)(void))completion;

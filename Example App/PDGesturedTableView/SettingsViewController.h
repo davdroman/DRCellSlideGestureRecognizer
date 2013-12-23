@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-#import "PDGesturedTableView.h"
+@class SettingsNavigationBar;
+@class PDGesturedTableView;
 
 @interface SettingsViewController : UIViewController <UITableViewDataSource> {
     UIColor * greenColor;
@@ -16,7 +17,7 @@
 
 @property (strong, nonatomic) NSArray * options;
 
-@property (strong, nonatomic) UINavigationBar * navigationBar;
+@property (strong, nonatomic) SettingsNavigationBar * navigationBar;
 @property (strong, nonatomic) PDGesturedTableView * gesturedTableView;
 
 @end

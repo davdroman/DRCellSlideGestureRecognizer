@@ -3,31 +3,32 @@ PDGesturedTableView
 
 Great Mailbox-like UITableView subclass.
 
-![Example app running on 2 iPhones](https://raw.github.com/Dromaguirre/PDGesturedTableView/master/Images/screenshot-1.png)
+![Example app running on 2 iPhones](https://raw.github.com/Dromaguirre/PDGesturedTableView/master/Images/1.gif)
 
 Check out the **example app**. You'll see implementing this powerful control isn't hard at all.
 
 ## Features
 
-- **Multiple actions** in a single slide depending on the lenght the user slided (Mailbox feature).
-- 🆕 **Tap and hold** to move cells (Mailbox feature).
-- A **UIView** can be set to be shown **when there's no content** on the table view (Mailbox feature).
+- **Multiple actions** in a single slide depending on the lenght the user slided.
+- **Tap and hold** to move cells.
+- A **UIView** can be set to be shown **when there's no content** on the table view.
 - Super easy **customization**.
 - A **left and right margin** can be set to let the user swipe between different table views.
 - **Block-driven**. No silly delegates :)
 
 ## CocoaPods
 
-You can easily install PDGesturedTableView through CocoaPods adding the following to your Podfile:
+You can install PDGesturedTableView through CocoaPods adding the following to your Podfile:
 
 	pod 'PDGesturedTableView'
 
 ## Wish List
 
-- ✅ ~~**Multiple actions** in a single slide depending on the lenght the user slided (Mailbox feature).~~
-- ✅ ~~A **UIView** can be set to be shown **when there's no content** on the table view (Mailbox feature).~~
-- ✅ ~~**CocoaPods** support.~~
-- ✅ ~~**Move cells** with a long press and pan gesture.~~
+- ~~**Multiple actions** in a single slide depending on the lenght the user slided (Mailbox feature).~~
+- ~~A **UIView** can be set to be shown **when there's no content** on the table view (Mailbox feature).~~
+- ~~**CocoaPods** support.~~
+- ~~**Move cells** with a long press and pan gesture.~~
+- **Autoscroll** when the current moving cell is near the edge of the screen. **I'll need some help with this**.
 
 ## Requirements
 

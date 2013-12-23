@@ -8,49 +8,20 @@
 
 #import "PDGesturedTableView.h"
 
-#import <QuartzCore/QuartzCore.h>
+#pragma mark Interface Extensions -
 
-#pragma mark Categories
-
-@interface NSArray (ObjectExistance)
-
-- (BOOL)objectExistsAtIndex:(NSInteger)index;
-
-@end
-
-@implementation NSArray (ObjectExistance)
-
-- (BOOL)objectExistsAtIndex:(NSInteger)index {
-    if (index < [self count]) {
-        return YES;
-    }
-    
-    return NO;
-}
-
-@end
-
-#pragma mark Interface Extensions & Private Interfaces
-
-@interface PDGesturedTableViewCellSlidingFraction ()
+@interface PDGesturedTableViewCellAction ()
 
 @property (strong, nonatomic) UIImage * icon;
 @property (strong, nonatomic) UIColor * color;
-@property (nonatomic) CGFloat activationFraction;
-
-@end
-
-@interface PDGesturedTableViewCellSlidingView : UIView
-
-@property (strong, nonatomic) UIImageView * leftIconImageView;
-@property (strong, nonatomic) UIImageView * rightIconImageView;
+@property (nonatomic) CGFloat fraction;
 
 @end
 
 @interface PDGesturedTableViewCell () {
-    NSArray * currentSlidingFractions;
-    PDGesturedTableViewCellSlidingFraction * currentSlidingFraction;
-    CGFloat originalHorizontalCenter;
+    CGFloat originalHorizontalCenterPoint;
+    NSArray * currentActions;
+    PDGesturedTableViewCellAction * currentAction;
     
     NSIndexPath * originIndexPath;
     CGFloat previousPoint;
@@ -59,15 +30,15 @@
     PDGesturedTableViewCell * nextCell;
     PDGesturedTableViewCell * previousCell;
     PDGesturedTableViewCell * copiedCell;
-    
-    CADisplayLink * autoscrollTimer;
 }
 
 @property (weak, nonatomic) PDGesturedTableView * gesturedTableView;
-@property (strong, nonatomic) PDGesturedTableViewCellSlidingView * slidingView;
 
-@property (strong, nonatomic) NSMutableArray * leftSlidingFractions;
-@property (strong, nonatomic) NSMutableArray * rightSlidingFractions;
+@property (strong, nonatomic) UIView * leftSideView;
+@property (strong, nonatomic) UIView * rightSideView;
+
+@property (strong, nonatomic) NSMutableArray * leftActions;
+@property (strong, nonatomic) NSMutableArray * rightActions;
 
 @end
 
@@ -75,74 +46,36 @@
 
 @property (nonatomic) BOOL updating;
 @property (nonatomic) BOOL moving;
-@property (nonatomic) BOOL scrolling;
 
 @end
 
-#pragma mark Implementations
+#pragma mark - Implementations -
 
-@implementation PDGesturedTableViewCellSlidingFraction
+@implementation PDGesturedTableViewCellAction
 
-+ (id)slidingFractionWithIcon:(UIImage *)icon color:(UIColor *)color activationFraction:(CGFloat)activationFraction {
-    PDGesturedTableViewCellSlidingFraction * slidingFraction = [PDGesturedTableViewCellSlidingFraction new];
++ (id)actionForFraction:(CGFloat)fraction icon:(UIImage *)icon color:(UIColor *)color {
+    PDGesturedTableViewCellAction * action = [PDGesturedTableViewCellAction new];
     
-    [slidingFraction setIcon:icon];
-    [slidingFraction setColor:color];
-    [slidingFraction setActivationFraction:activationFraction];
+    [action setIcon:icon];
+    [action setColor:color];
+    [action setFraction:fraction];
     
-    return slidingFraction;
-}
-
-@end
-
-@implementation PDGesturedTableViewCellSlidingView
-
-- (id)init {
-    if (self = [super init]) {
-        self.leftIconImageView = [UIImageView new];
-        self.rightIconImageView = [UIImageView new];
-        
-        [self.leftIconImageView setContentMode:UIViewContentModeLeft];
-        [self.rightIconImageView setContentMode:UIViewContentModeRight];
-    }
-    
-    return self;
-}
-
-- (void)setFrame:(CGRect)frame {
-    [super setFrame:frame];
-    
-    CGFloat iconImageViewsMargin = 17;
-    CGRect iconImageViewsFrame = CGRectMake(iconImageViewsMargin, 0, self.frame.size.width-iconImageViewsMargin*2, self.frame.size.height);
-    
-    [self.leftIconImageView setFrame:iconImageViewsFrame];
-    [self.rightIconImageView setFrame:iconImageViewsFrame];
-    
-    [self addSubview:self.leftIconImageView];
-    [self addSubview:self.rightIconImageView];
-}
-
-- (void)setIcon:(UIImage *)icon {
-    [self.leftIconImageView setImage:icon];
-    [self.rightIconImageView setImage:icon];
-}
-
-- (void)setIconsAlpha:(CGFloat)alpha {
-    [self.leftIconImageView setAlpha:alpha];
-    [self.rightIconImageView setAlpha:-alpha];
+    return action;
 }
 
 @end
 
 @implementation PDGesturedTableViewCell
 
-- (id)initForGesturedTableView:(PDGesturedTableView *)gesturedTableView style:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.gesturedTableView = gesturedTableView;
-        self.slidingView = [PDGesturedTableViewCellSlidingView new];
+        self.leftSideView = [UIView new];
+        [self.leftSideView.layer setMasksToBounds:YES];
+        self.rightSideView = [UIView new];
+        [self.rightSideView.layer setMasksToBounds:YES];
         
-        self.leftSlidingFractions = [NSMutableArray new];
-        self.rightSlidingFractions = [NSMutableArray new];
+        self.leftActions = [NSMutableArray new];
+        self.rightActions = [NSMutableArray new];
         
         UIPanGestureRecognizer * panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(slideCell:)];
         [panGestureRecognizer setDelegate:self];
@@ -150,14 +83,15 @@
         
         UILongPressGestureRecognizer * longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(moveCell:)];
         [longPressGestureRecognizer setDelegate:self];
+        [longPressGestureRecognizer setMinimumPressDuration:0.175];
         [self addGestureRecognizer:longPressGestureRecognizer];
     }
     
     return self;
 }
 
-- (void)addSlidingFraction:(PDGesturedTableViewCellSlidingFraction *)slidingFraction {
-    if (slidingFraction) [(slidingFraction.activationFraction > 0 ? self.leftSlidingFractions : self.rightSlidingFractions) addObject:slidingFraction];
+- (void)didMoveToSuperview {
+    [self setGesturedTableView:(PDGesturedTableView *)self.superview.superview];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
@@ -185,89 +119,110 @@
     return YES;
 }
 
-- (PDGesturedTableViewCellSlidingFraction *)currentSlidingFractionForArray:(NSArray *)fractionsArray {
-    for (NSInteger i = [fractionsArray count]-1; i >= 0; i--) {
-        PDGesturedTableViewCellSlidingFraction * fraction = fractionsArray[i];
+- (void)addAction:(PDGesturedTableViewCellAction *)action {
+    if (action.fraction > 0) {
+        [self.leftActions addObject:action];
+        [self.leftActions sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"fraction" ascending:YES]]];
+    } else {
+        [self.rightActions addObject:action];
+        [self.rightActions sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"fraction" ascending:NO]]];
+    }
+}
+
+- (void)addActionForFraction:(CGFloat)fraction icon:(UIImage *)icon color:(UIColor *)color activationBlock:(void (^)(PDGesturedTableView *, PDGesturedTableViewCell *))activationBlock highlightBlock:(void (^)(PDGesturedTableView *, PDGesturedTableViewCell *))highlightBlock unhighlightBlock:(void (^)(PDGesturedTableView *, PDGesturedTableViewCell *))unhighlightBlock {
+    PDGesturedTableViewCellAction * action = [PDGesturedTableViewCellAction actionForFraction:fraction icon:icon color:color];
+    
+    [action setDidActivateBlock:activationBlock];
+    [action setDidHighlightBlock:highlightBlock];
+    [action setDidUnhighlightBlock:unhighlightBlock];
+    
+    [self addAction:action];
+}
+
+- (void)slideCell:(UIPanGestureRecognizer *)panGestureRecognizer {
+    if (panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        originalHorizontalCenterPoint = self.center.x;
         
-        if (fabsf(self.frame.origin.x/self.frame.size.width) >= fabsf(fraction.activationFraction)) {
-            return fraction;
+        UIImageView * leftSideViewIconView = [UIImageView new];
+        [leftSideViewIconView setFrame:CGRectMake(20, 0, 50, self.frame.size.height)];
+        [leftSideViewIconView setContentMode:UIViewContentModeLeft];
+        [leftSideViewIconView.layer setMasksToBounds:NO];
+        [leftSideViewIconView setTag:1];
+        [self.leftSideView addSubview:leftSideViewIconView];
+        [self.superview insertSubview:self.leftSideView belowSubview:self];
+        
+        UIImageView * rightSideViewIconView = [UIImageView new];
+        [rightSideViewIconView setFrame:CGRectMake(20, 0, 50, self.frame.size.height)];
+        [rightSideViewIconView setContentMode:UIViewContentModeRight];
+        [rightSideViewIconView.layer setMasksToBounds:NO];
+        [rightSideViewIconView setTag:1];
+        [self.rightSideView addSubview:rightSideViewIconView];
+        [self.superview insertSubview:self.rightSideView belowSubview:self];
+    } else if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        CGFloat horizontalTranslation = [panGestureRecognizer translationInView:self].x;
+        
+        if ([self.leftActions count] == 0 && self.frame.origin.x+horizontalTranslation > 0) horizontalTranslation = 0;
+        else if ([self.rightActions count] == 0 && self.frame.origin.x+horizontalTranslation < 0) horizontalTranslation = 0;
+        
+        [self setFrame:CGRectMake(horizontalTranslation, self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
+        
+        PDGesturedTableViewCellAction * oldAction = currentAction;
+        
+        if (self.frame.origin.x > 0) {
+            currentAction = [self currentActionForArray:self.leftActions];
+            [self setSideView:self.leftSideView withCurrentActionAndActionsArray:self.leftActions];
+        } else if (self.frame.origin.x < 0) {
+            currentAction = [self currentActionForArray:self.rightActions];
+            [self setSideView:self.rightSideView withCurrentActionAndActionsArray:self.rightActions];
+        }
+        
+        if (![oldAction isEqual:currentAction]) {
+            if (oldAction.didUnhighlightBlock) oldAction.didUnhighlightBlock(self.gesturedTableView, self);
+            if (currentAction.didHighlightBlock) currentAction.didHighlightBlock(self.gesturedTableView, self);
+        }
+    } else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        if (!currentAction && self.frame.origin.x != 0) {
+            [UIView animateWithDuration:0.1 animations:^{
+                [self setFrame:CGRectMake((self.frame.origin.x > 0 ? -7 : 7), self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
+                [self.leftSideView setAlpha:0];
+                [self.rightSideView setAlpha:0];
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.1 animations:^{
+                    [self setFrame:CGRectMake(0, self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
+                } completion:^(BOOL finished) {
+                    [self.leftSideView removeFromSuperview];
+                    [self.rightSideView removeFromSuperview];
+                }];
+            }];
+        } else if (currentAction.didActivateBlock) currentAction.didActivateBlock(self.gesturedTableView, self);
+        
+        currentAction = nil;
+    }
+}
+
+- (PDGesturedTableViewCellAction *)currentActionForArray:(NSArray *)array {
+    for (NSInteger i = [array count]-1; i >= 0; i--) {
+        PDGesturedTableViewCellAction * action = array[i];
+        
+        if (fabsf(self.frame.origin.x/self.frame.size.width) >= fabsf(action.fraction)) {
+            return action;
         }
     }
     
     return nil;
 }
 
-- (void)sortSlidingFractions {
-    NSSortDescriptor * leftFractionsSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"activationFraction" ascending:YES];
-    [self.leftSlidingFractions sortUsingDescriptors:@[leftFractionsSortDescriptor]];
-    
-    NSSortDescriptor * rightFractionsSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"activationFraction" ascending:NO];
-    [self.rightSlidingFractions sortUsingDescriptors:@[rightFractionsSortDescriptor]];
-}
-
-- (void)slideCell:(UIPanGestureRecognizer *)panGestureRecognizer {
-    if (panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        originalHorizontalCenter = self.center.x;
+- (void)setSideView:(UIView *)sideView withCurrentActionAndActionsArray:(NSArray *)array {
+    if (currentAction) {
+        [sideView setBackgroundColor:currentAction.color];
+        [(UIImageView *)[sideView viewWithTag:1] setImage:currentAction.icon];
+        [sideView setAlpha:1];
+    } else {
+        PDGesturedTableViewCellAction * firstAction = [array firstObject];
         
-        [self sortSlidingFractions];
-        
-        [self.slidingView setFrame:CGRectMake(0, self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
-        [self.gesturedTableView insertSubview:self.slidingView atIndex:0];
-    } else if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
-        CGFloat horizontalTranslation = [panGestureRecognizer translationInView:self].x;
-        
-        if ([self.leftSlidingFractions count] == 0 && self.frame.origin.x+horizontalTranslation > 0) horizontalTranslation = 0;
-        else if ([self.rightSlidingFractions count] == 0 && self.frame.origin.x+horizontalTranslation < 0) horizontalTranslation = 0;
-        
-        CGFloat retention = 0;
-        
-        if (self.bouncesAtLastSlidingFraction && [[currentSlidingFractions lastObject] isEqual:currentSlidingFraction]) {
-            retention = (horizontalTranslation-currentSlidingFraction.activationFraction*self.frame.size.width)*0.75;
-        }
-        
-        [self setCenter:CGPointMake(originalHorizontalCenter+horizontalTranslation-retention, self.center.y)];
-        
-        if (self.frame.origin.x > 0) currentSlidingFractions = self.leftSlidingFractions;
-        else if (self.frame.origin.x < 0) currentSlidingFractions = self.rightSlidingFractions;
-        
-        PDGesturedTableViewCellSlidingFraction * oldSlidingFraction = currentSlidingFraction;
-        
-        currentSlidingFraction = [self currentSlidingFractionForArray:currentSlidingFractions];
-        
-        if (![oldSlidingFraction isEqual:currentSlidingFraction]) {
-            if (oldSlidingFraction.didDeactivateBlock) oldSlidingFraction.didDeactivateBlock(self.gesturedTableView, self);
-            if (currentSlidingFraction.didActivateBlock) currentSlidingFraction.didActivateBlock(self.gesturedTableView, self);
-        }
-        
-        if (currentSlidingFraction) {
-            [self.slidingView setBackgroundColor:currentSlidingFraction.color];
-            [self.slidingView setIcon:currentSlidingFraction.icon];
-            [self.slidingView setIconsAlpha:self.frame.origin.x > 0 ? 1 : -1];
-        } else {
-            PDGesturedTableViewCellSlidingFraction * firstSlidingFraction = [currentSlidingFractions firstObject];
-            
-            [self.slidingView setBackgroundColor:[UIColor clearColor]];
-            [self.slidingView setIcon:[firstSlidingFraction icon]];
-            [self.slidingView setIconsAlpha:fabsf(self.frame.origin.x)/(firstSlidingFraction.activationFraction*self.frame.size.width)];
-        }
-    } else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        if (!currentSlidingFraction && self.frame.origin.x != 0) {
-            [UIView animateWithDuration:0.1 animations:^{
-                [self setFrame:CGRectMake((self.frame.origin.x > 0 ? -7 : 7), self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
-                [self.slidingView setAlpha:0];
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.1 animations:^{
-                    [self setFrame:CGRectMake(0, self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
-                } completion:^(BOOL finished) {
-                    [self.slidingView removeFromSuperview];
-                    [self.slidingView setAlpha:1];
-                }];
-            }];
-        } else {
-            if (currentSlidingFraction.didReleaseBlock) currentSlidingFraction.didReleaseBlock(self.gesturedTableView, self);
-        }
-        
-        currentSlidingFraction = nil;
+        [sideView setBackgroundColor:[UIColor clearColor]];
+        [(UIImageView *)[sideView viewWithTag:1] setImage:firstAction.icon];
+        [sideView setAlpha:self.frame.origin.x/(firstAction.fraction*self.frame.size.width)];
     }
 }
 
@@ -295,7 +250,7 @@
     if (longPressGestureRecognizer.state == UIGestureRecognizerStateBegan) {
         [self.gesturedTableView setMoving:YES];
         
-        copiedCell = [[PDGesturedTableViewCell alloc] initForGesturedTableView:self.gesturedTableView style:UITableViewCellStyleDefault reuseIdentifier:self.reuseIdentifier];
+        copiedCell = [[PDGesturedTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:self.reuseIdentifier];
         [copiedCell setFrame:self.frame];
         [copiedCell setBackgroundColor:self.backgroundColor];
         
@@ -305,7 +260,7 @@
         
         originIndexPath = [self.gesturedTableView indexPathForCell:self];
         [self setHidden:YES];
-        [self.superview addSubview:copiedCell];
+        [self.gesturedTableView addSubview:copiedCell];
         
         [copiedCell.layer setShadowOffset:CGSizeZero];
         [copiedCell animateShadowWithRadius:2 opacity:0.6 duration:0.2];
@@ -317,6 +272,8 @@
         previousPoint = [longPressGestureRecognizer locationInView:self.gesturedTableView].y;
         
         [self resetPreviousAndNextCellAndIndexPath];
+        
+        // Pretty hard thing to implement. Maybe someday :|
         
         /* autoscrollTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(autoscrollIfNeeded:)];
         [autoscrollTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode]; */
@@ -345,7 +302,7 @@
             }];
         }
     } else if (longPressGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        [autoscrollTimer invalidate];
+        // [autoscrollTimer invalidate];
         [self.gesturedTableView setMoving:NO];
         
         [copiedCell animateShadowWithRadius:0.5 opacity:0.4 duration:0.3];
@@ -368,19 +325,6 @@
     }
 }
 
-- (void)autoscrollIfNeeded:(CADisplayLink *)timer {
-    CGFloat scrollVerticalAddition = 0;
-    
-    if (self.gesturedTableView.contentOffset.y < self.gesturedTableView.contentSize.height-self.gesturedTableView.frame.size.height) {
-        scrollVerticalAddition = 2.5;
-    }
-    
-    if (copiedCell.frame.origin.y+copiedCell.frame.size.height-self.gesturedTableView.contentOffset.y > self.gesturedTableView.frame.size.height-self.gesturedTableView.edgeMovingMargin) {
-        [self.gesturedTableView setContentOffset:CGPointMake(0, self.gesturedTableView.contentOffset.y+scrollVerticalAddition)];
-        // [copiedCell setCenter:CGPointMake(copiedCell.center.x, copiedCell.center.y)];
-    }
-}
-
 - (void)resetPreviousAndNextCellAndIndexPath {
     NSArray * indexPaths = [self.gesturedTableView indexPathsForVisibleRows];
     
@@ -388,12 +332,12 @@
         NSIndexPath * indexPath = indexPaths[i];
         
         if ([indexPath isEqual:[self.gesturedTableView indexPathForCell:self]]) {
-            if ([indexPaths objectExistsAtIndex:i-1]) {
+            if (i-1 < [indexPaths count]) {
                 previousIndexPath = indexPaths[i-1];
                 previousCell = (PDGesturedTableViewCell *)[self.gesturedTableView cellForRowAtIndexPath:previousIndexPath];
             }
             
-            if ([indexPaths objectExistsAtIndex:i+1]) {
+            if (i+1 < [indexPaths count]) {
                 nextIndexPath = indexPaths[i+1];
                 nextCell = (PDGesturedTableViewCell *)[self.gesturedTableView cellForRowAtIndexPath:nextIndexPath];
             }
@@ -401,9 +345,21 @@
     }
 }
 
+- (void)updateSideViews {
+    [self.leftSideView setFrame:CGRectMake(0, self.frame.origin.y, self.frame.origin.x, self.frame.size.height)];
+    [self.rightSideView setFrame:CGRectMake(self.frame.size.width, self.frame.origin.y, self.frame.origin.x, self.frame.size.height)];
+    UIImageView * rightSideIconView = (UIImageView *)[self.rightSideView viewWithTag:1];
+    [rightSideIconView setFrame:CGRectMake(0, 0, self.rightSideView.frame.size.width-20, self.rightSideView.frame.size.height)];
+}
+
+- (void)setCenter:(CGPoint)center {
+    [super setCenter:CGPointMake(center.x, center.y)];
+    [self updateSideViews];
+}
+
 - (void)setFrame:(CGRect)frame {
-    [self.slidingView setFrame:CGRectMake(self.slidingView.frame.origin.x, frame.origin.y, self.slidingView.frame.size.width, self.slidingView.frame.size.height)];
     [super setFrame:(self.gesturedTableView.updating ? CGRectMake(self.frame.origin.x, frame.origin.y, frame.size.width, frame.size.height) : frame)];
+    [self updateSideViews];
 }
 
 @end
@@ -418,12 +374,14 @@
         [self setSeparatorInset:UIEdgeInsetsZero];
         
         [self setEnabled:YES];
-        
         [self setEdgeSlidingMargin:0];
-        [self setEdgeMovingMargin:80];
     }
     
     return self;
+}
+
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    if (self.superview != newSuperview) justMovedToNewSuperview = YES;
 }
 
 - (void)updateAnimatedly:(BOOL)animatedly {
@@ -442,9 +400,10 @@
 }
 
 - (void)removeCell:(PDGesturedTableViewCell *)cell completion:(void (^)(void))completion {
-    [self moveCell:cell toHorizontalPosition:(cell.frame.origin.x > 0 ? cell.frame.size.width : -cell.frame.size.width) duration:0.4 completion:^{
+    [self moveCell:cell toHorizontalPosition:(cell.frame.origin.x > 0 ? cell.frame.size.width : -cell.frame.size.width) duration:0.35 completion:^{
         [UIView animateWithDuration:0.3 animations:^{
-            [cell.slidingView setAlpha:0];
+            [cell.leftSideView setAlpha:0];
+            [cell.rightSideView setAlpha:0];
         } completion:^(BOOL finished) {
             NSIndexPath * indexPath = [self indexPathForCell:cell];
             if (completion) completion();
@@ -453,21 +412,35 @@
             [self setUpdating:NO];
             [cell removeFromSuperview];
             [cell setFrame:CGRectMake(0, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height)];
-            [cell.slidingView removeFromSuperview];
-            [cell.slidingView setAlpha:1];
+            [cell.leftSideView removeFromSuperview];
+            [cell.rightSideView removeFromSuperview];
         }];
     }];
 }
 
 - (void)replaceCell:(PDGesturedTableViewCell *)cell completion:(void (^)(void))completion {
     [self moveCell:cell toHorizontalPosition:0 duration:0.25 completion:^{
-        [cell.slidingView removeFromSuperview];
+        [cell.leftSideView removeFromSuperview];
+        [cell.rightSideView removeFromSuperview];
         if (completion) completion();
     }];
 }
 
-- (void)showOrHideBackgroundView {
-    [UIView animateWithDuration:0.3 animations:^{
+#pragma mark Background View Methods
+
+- (void)setWrapperViewAlpha:(CGFloat)alpha {
+    for (UIView * subview in self.subviews) {
+        if ([NSStringFromClass([subview class]) isEqualToString:@"UITableViewWrapperView"]) {
+            [subview setAlpha:alpha];
+        }
+    }
+}
+
+- (void)showOrHideBackgroundViewAnimatedly:(BOOL)animatedly {
+    if (justMovedToNewSuperview) justMovedToNewSuperview = NO;
+    [self setWrapperViewAlpha:([self isEmpty] ? 0 : 1)];
+    
+    [UIView animateWithDuration:(animatedly ? 0.3 : 0) animations:^{
         [self.backgroundView setAlpha:([self isEmpty] ? 1 : 0)];
     }];
 }
@@ -475,8 +448,8 @@
 - (BOOL)isEmpty {
     BOOL isEmpty = YES;
     
-    for (NSInteger s = 0; s < [self numberOfSections]; s++) {
-        if ([self numberOfRowsInSection:s] > 0) {
+    for (NSInteger i = 0; i < [self numberOfSections]; i++) {
+        if ([self numberOfRowsInSection:i] > 0) {
             isEmpty = NO;
         }
     }
@@ -486,27 +459,27 @@
 
 - (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation {
     [super insertRowsAtIndexPaths:indexPaths withRowAnimation:animation];
-    [self showOrHideBackgroundView];
+    [self showOrHideBackgroundViewAnimatedly:!justMovedToNewSuperview];
 }
 
 - (void)insertSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation {
     [super insertSections:sections withRowAnimation:animation];
-    [self showOrHideBackgroundView];
+    [self showOrHideBackgroundViewAnimatedly:!justMovedToNewSuperview];
 }
 
 - (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation {
     [super deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
-    [self showOrHideBackgroundView];
+    [self showOrHideBackgroundViewAnimatedly:!justMovedToNewSuperview];
 }
 
 - (void)deleteSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation {
     [super deleteSections:sections withRowAnimation:animation];
-    [self showOrHideBackgroundView];
+    [self showOrHideBackgroundViewAnimatedly:!justMovedToNewSuperview];
 }
 
 - (void)reloadData {
     [super reloadData];
-    [self showOrHideBackgroundView];
+    [self showOrHideBackgroundViewAnimatedly:!justMovedToNewSuperview];
 }
 
 @end

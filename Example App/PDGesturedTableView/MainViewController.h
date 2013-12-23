@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-#import "PDGesturedTableView.h"
+@class MainNavigationBar;
+@class PDGesturedTableView;
 
 @interface MainViewController : UIViewController <UITableViewDataSource>
 
 @property (strong, nonatomic) NSMutableArray * strings;
 
-@property (strong, nonatomic) UINavigationBar * navigationBar;
+@property (strong, nonatomic) MainNavigationBar * navigationBar;
 @property (strong, nonatomic) PDGesturedTableView * gesturedTableView;
 
 @end

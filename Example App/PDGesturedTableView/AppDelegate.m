@@ -13,15 +13,17 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    NSDictionary * defaultsDictionary = @{@"option1": @YES, @"option2": @YES, @"option3": @YES, @"option4": @NO, @"option5": @NO};
+    NSDictionary * defaults = @{@"option1": @YES,
+                                @"option2": @YES,
+                                @"option3": @YES,
+                                @"option4": @NO,
+                                @"option5": @NO};
     
-    [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsDictionary];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
-    MainViewController * mainViewController = [MainViewController new];
-    
-    [self.window setRootViewController:mainViewController];
+    [self.window setBackgroundColor:[UIColor whiteColor]];
+    [self.window setRootViewController:[MainViewController new]];
     [self.window makeKeyAndVisible];
     
     return YES;

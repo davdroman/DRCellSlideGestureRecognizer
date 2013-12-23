@@ -8,6 +8,13 @@
 
 #import "MainViewController.h"
 
+#import <Social/Social.h>
+#import <Masonry.h>
+
+#import "MainNavigationBar.h"
+#import "PDGesturedTableView.h"
+#import "TableViewBackgroundView.h"
+
 #import "SettingsViewController.h"
 
 @implementation MainViewController
@@ -16,7 +23,7 @@
     if (self = [super init]) {
         self.strings = [NSMutableArray new];
         
-        self.navigationBar = [UINavigationBar new];
+        self.navigationBar = [MainNavigationBar new];
         self.gesturedTableView = [PDGesturedTableView new];
     }
     
@@ -26,68 +33,72 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view.layer setCornerRadius:4.5];
-    [self.view.layer setMasksToBounds:YES];
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    [self setup];
+    [self setupView];
+    [self setupConstraints]; // Applies Autolayout constraints through a great framework called Masonry. If you don't know it yet, I totally recommend it ;)
+}
+
+- (void)setup {
+    [self.strings addObjectsFromArray:@[@"Swipe right at different lengths",
+                                        @"You can also swipe left",
+                                        @"Swipe some cells at once, too!",
+                                        @"Tap and hold a cell to move it",
+                                        @"Finally, swipe all cells"]];
     
-    self.strings = [[NSMutableArray alloc] initWithObjects:
-                    @"Swipe right at different lengths",
-                    @"You can set actions to swipe lengths",
-                    @"Now, do the same swiping left",
-                    @"Pretty nice, isn't it?",
-                    @"Now, tap and hold a cell to move it",
-                    @"And finally, swipe all cells!",
-    nil];
+    __unsafe_unretained typeof(self) _self = self; // This prevents retain cycles in the following blocks.
     
-    [self.navigationBar setFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
+    [self.navigationBar setDidTapLeftButtonBlock:^(MainNavigationBar * navigationBar) {
+        [_self presentViewController:[SettingsViewController new] animated:YES completion:nil];
+    }];
     
-    UINavigationItem * item = [UINavigationItem new];
-    [item setTitle:@"PDGesturedTableView"];
+    [self.navigationBar setDidTapRightButtonBlock:^(MainNavigationBar * navigationBar) {
+        [_self.strings addObject:[NSString stringWithFormat:@"Cell %i", _self.strings.count+1]];
+        [_self.gesturedTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_self.strings.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
+    }];
     
-    UIImage * settingsIconImage = [UIImage imageNamed:@"settingsIcon.png"];
-    
-    UIButton * settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [settingsButton setFrame:CGRectMake(0, 0, settingsIconImage.size.width, 44)];
-    [settingsButton addTarget:self action:@selector(presentSettingsViewController) forControlEvents:UIControlEventTouchUpInside];
-    [settingsButton setContentMode:UIViewContentModeCenter];
-    [settingsButton setImage:settingsIconImage forState:UIControlStateNormal];
-    
-    item.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
-    
-    [self.navigationBar setItems:@[item]];
-    
-    [self.view addSubview:self.navigationBar];
-    
-    [self.gesturedTableView setFrame:CGRectMake(0, self.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.navigationBar.frame.size.height)];
     [self.gesturedTableView setBackgroundColor:[UIColor colorWithWhite:0.96 alpha:1]];
     [self.gesturedTableView setDataSource:self];
     [self.gesturedTableView setRowHeight:60];
-    
-    UILabel * noMoreLoremIpsumLabel = [UILabel new];
-    [noMoreLoremIpsumLabel setBackgroundColor:[UIColor clearColor]];
-    [noMoreLoremIpsumLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:19]];
-    [noMoreLoremIpsumLabel setText:@"Congrats, you've just discovered PDGesturedTableView :)"];
-    [noMoreLoremIpsumLabel setNumberOfLines:2];
-    [noMoreLoremIpsumLabel setTextAlignment:NSTextAlignmentCenter];
-    [noMoreLoremIpsumLabel setFrame:CGRectMake(0, 0, 300, CGFLOAT_MAX)];
-    [noMoreLoremIpsumLabel sizeToFit];
-    [noMoreLoremIpsumLabel setCenter:CGPointMake(self.gesturedTableView.backgroundView.frame.size.width/2, self.gesturedTableView.backgroundView.frame.size.height/2)];
-    
-    [self.gesturedTableView.backgroundView addSubview:noMoreLoremIpsumLabel];
-    
-    __unsafe_unretained typeof(self) _self = self;
     
     [self.gesturedTableView setDidMoveCellFromIndexPathToIndexPathBlock:^(NSIndexPath * fromIndexPath, NSIndexPath * toIndexPath) {
         [_self.strings exchangeObjectAtIndex:fromIndexPath.row withObjectAtIndex:toIndexPath.row];
     }];
     
+    // Gestured Table View "backgroundView" setup (the view that will automatically show up when there're no cells on the table view).
+    
+    TableViewBackgroundView * backgroundView = [TableViewBackgroundView new];
+    
+    [backgroundView setDidTapTweetButtonBlock:^{
+        SLComposeViewController * tweetComposerViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+        [tweetComposerViewController setInitialText:@"I've just discovered PDGesturedTableView by @Dromaguirre and it's awesome! You should check it out!"];
+        [tweetComposerViewController addURL:[NSURL URLWithString:@"http://github.com/Dromaguirre/PDGesturedTableView"]];
+        [_self presentViewController:tweetComposerViewController animated:YES completion:nil];
+    }];
+    
+    [self.gesturedTableView setBackgroundView:backgroundView];
+}
+
+- (void)setupView {
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    
+    [self.view addSubview:self.navigationBar];
     [self.view insertSubview:self.gesturedTableView belowSubview:self.navigationBar];
 }
 
-- (void)presentSettingsViewController {
-    SettingsViewController * settingsViewController = [SettingsViewController new];
-    [settingsViewController setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-    [self presentViewController:settingsViewController animated:YES completion:nil];
+- (void)setupConstraints {
+    [self.navigationBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(@0);
+        make.left.equalTo(@0);
+        make.right.equalTo(@0);
+        make.height.equalTo(@64);
+    }];
+    
+    [self.gesturedTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.navigationBar.mas_bottom);
+        make.left.equalTo(@0);
+        make.right.equalTo(@0);
+        make.bottom.equalTo(@0);
+    }];
 }
 
 #pragma mark UITableViewDataSource Methods
@@ -97,14 +108,16 @@
 }
 
 - (UITableViewCell *)tableView:(PDGesturedTableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString * cellIdentifier = @"Cell Identifier";
+    static NSString * cellIdentifier = @"Cell";
     
     PDGesturedTableViewCell * cell = (PDGesturedTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    if (cell == nil) {
+    if (!cell) {
         __unsafe_unretained typeof(self) _self = self;
         
-        void (^completionForReleaseBlocks)(PDGesturedTableView *, PDGesturedTableViewCell *) = ^(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell){
+        // The following block is used for all cells as all of them do the same thing in this case: dismissing.
+        
+        void (^removeCellBlock)(PDGesturedTableView *, PDGesturedTableViewCell *) = ^(PDGesturedTableView * gesturedTableView, PDGesturedTableViewCell * cell) {
             [gesturedTableView removeCell:cell completion:^{
                 NSIndexPath * indexPath = [gesturedTableView indexPathForCell:cell];
                 
@@ -112,33 +125,17 @@
             }];
         };
         
-        cell = [[PDGesturedTableViewCell alloc] initForGesturedTableView:tableView style:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        
-        PDGesturedTableViewCellSlidingFraction * greenSlidingFraction = [PDGesturedTableViewCellSlidingFraction slidingFractionWithIcon:[UIImage imageNamed:@"circle.png"] color:[UIColor colorWithRed:0.2 green:0.8 blue:0.2 alpha:1] activationFraction:0.25];
-        
-        [greenSlidingFraction setDidReleaseBlock:completionForReleaseBlocks];
-        
-        [cell addSlidingFraction:greenSlidingFraction];
-        
-        PDGesturedTableViewCellSlidingFraction * redSlidingFraction = [PDGesturedTableViewCellSlidingFraction slidingFractionWithIcon:[UIImage imageNamed:@"square.png"] color:[UIColor redColor] activationFraction:0.75];
-        
-        [redSlidingFraction setDidReleaseBlock:completionForReleaseBlocks];
-        
-        [cell addSlidingFraction:redSlidingFraction];
-        
-        PDGesturedTableViewCellSlidingFraction * yellowSlidingFraction = [PDGesturedTableViewCellSlidingFraction slidingFractionWithIcon:[UIImage imageNamed:@"circle.png"] color:[UIColor colorWithRed:239.0/255.0 green:222.0/255 blue:24.0/255 alpha:1] activationFraction:-0.25];
-        
-        [yellowSlidingFraction setDidReleaseBlock:completionForReleaseBlocks];
-        
-        [cell addSlidingFraction:yellowSlidingFraction];
-        
-        PDGesturedTableViewCellSlidingFraction * brownSlidingFraction = [PDGesturedTableViewCellSlidingFraction slidingFractionWithIcon:[UIImage imageNamed:@"square.png"] color:[UIColor brownColor] activationFraction:-0.75];
-        
-        [brownSlidingFraction setDidReleaseBlock:completionForReleaseBlocks];
-        
-        [cell addSlidingFraction:brownSlidingFraction];
+        cell = [[PDGesturedTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         
         [cell.textLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
+        
+        [cell addActionForFraction:0.25 icon:[UIImage imageNamed:@"circle"] color:[UIColor colorWithRed:85.0/255.0 green:213.0/255.0 blue:80.0/255.0 alpha:1] activationBlock:removeCellBlock highlightBlock:nil unhighlightBlock:nil];
+        
+        [cell addActionForFraction:0.7 icon:[UIImage imageNamed:@"square"] color:[UIColor colorWithRed:213.0/255.0 green:70.0/255.0 blue:70.0/255.0 alpha:1] activationBlock:removeCellBlock highlightBlock:nil unhighlightBlock:nil];
+        
+        [cell addActionForFraction:-0.25 icon:[UIImage imageNamed:@"circle"] color:[UIColor colorWithRed:236.0/255.0 green:223.0/255 blue:60.0/255 alpha:1] activationBlock:removeCellBlock highlightBlock:nil unhighlightBlock:nil];
+        
+        [cell addActionForFraction:-0.7 icon:[UIImage imageNamed:@"square.png"] color:[UIColor colorWithRed:182.0/255.0 green:127.0/255 blue:78.0/255 alpha:1] activationBlock:removeCellBlock highlightBlock:nil unhighlightBlock:nil];
     }
     
     [cell.textLabel setText:self.strings[indexPath.row]];
