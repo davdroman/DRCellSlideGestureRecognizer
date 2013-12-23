@@ -3,7 +3,9 @@ PDGesturedTableView
 
 Great Mailbox-like UITableView subclass.
 
-![Example app running on 2 iPhones](https://raw.github.com/Dromaguirre/PDGesturedTableView/master/Images/1.gif)
+<p align="center">
+	<img src="https://raw.github.com/Dromaguirre/PDGesturedTableView/master/Images/1.gif" alt="PDGesturedTableView GIF" title="PDGesturedTableView GIF" style="width:320px" />
+</p>
 
 Check out the **example app**. You'll see implementing this powerful control isn't hard at all.
 
