@@ -24,6 +24,43 @@ You can install PDGesturedTableView through CocoaPods adding the following to yo
 
 	pod 'PDGesturedTableView'
 
+## How to use
+
+PDGesturedTableView basic setup is exactly the same as an usual UITableView.
+
+### Adding actions to cells
+
+This implementation should go in your `tableView:cellForRowAtIndexPath:` method call as follows:
+
+	- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	
+		[...]
+		
+		[cell addActionForFraction:0.25 icon:actionIcon color:actionColor activationBlock:^(PDGesturedTableView *gesturedTableView, PDGesturedTableViewCell *cell) {
+            // Action for user release.
+        } highlightBlock:^(PDGesturedTableView *gesturedTableView, PDGesturedTableViewCell *cell) {
+            // Optional action for when the action highlights.
+        } unhighlightBlock:^(PDGesturedTableView *gesturedTableView, PDGesturedTableViewCell *cell) {
+            // Optional action for when the action unhighlights.
+        }];
+	}
+
+As you can see, we only use one (long) method to add an action to the cell. Let's analyze it:
+
+- **`fraction`** specifies the fraction of the entire cell width where the action will be highlighted. For instance, if you specify `0.5` the action will highlight when the cell gets to the center of the table. Also, if you specify a negative value, say `-0.5`, the action will highlight when the cell gets to the center, too, but on its right side.
+- **`icon`** is a `UIImage` instance for that action.
+- **`color`** is the color for the action highlight.
+- **`activationBlock`** is the block that will execute when the user releases the cell.
+- **`highlightBlock`** is the block that will execute when the action highlights.
+- **`unhighlightBlock`** is the block that will execute when the action unhighlights.
+
+#### Main actions for `activationBlock`.
+
+`activationBlock` can contain any action you want, but I highly recommended to use one of the following methods in addition to the ones you use:
+
+- PDGesturedTableView's `removeCell:completion:`, which removes the specified cell from the table view animatedly. In the `completion` block you **MUST** delete the object that cell is representing from the table view data source.
+- PDGesturedTableView's `replaceCell:completion`, which returns the cell to the place it was before the user dragged it.
+
 ## Wish List
 
 - ~~**Multiple actions** in a single slide depending on the lenght the user slided (Mailbox feature).~~
