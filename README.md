@@ -41,6 +41,8 @@ This implementation should go in your `tableView:cellForRowAtIndexPath:` method 
         } unhighlightBlock:^(PDGesturedTableView *gesturedTableView, PDGesturedTableViewCell *cell) {
             // Optional action for when the action unhighlights.
         }];
+        
+        return cell;
 	}
 
 As you can see, we only use one (long) method to add an action to the cell. Let's analyze it:
