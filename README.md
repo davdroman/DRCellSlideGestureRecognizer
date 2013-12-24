@@ -48,7 +48,7 @@ This implementation should go in your `tableView:cellForRowAtIndexPath:` method 
 As you can see, we only use one (long) method to add an action to the cell. Let's analyze it:
 
 - **`fraction`** specifies the fraction of the entire cell width where the action will be highlighted. For instance, if you specify `0.5` the action will highlight when the cell gets to the center of the table. Also, if you specify a negative value, say `-0.5`, the action will highlight when the cell gets to the center, too, but on its right side.
-- **`icon`** is a `UIImage` instance for that action.
+- **`icon`** is the icon for that action.
 - **`color`** is the color for the action highlight.
 - **`activationBlock`** is the block that will execute when the user releases the cell.
 - **`highlightBlock`** is the block that will execute when the action highlights.
