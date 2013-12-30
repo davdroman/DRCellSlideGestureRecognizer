@@ -9,10 +9,12 @@ build/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
+*.xcworkspace
 !default.xcworkspace
 xcuserdata
 profile
 *.moved-aside
 DerivedData
 .idea/
-/Example App/PDGesturedTableView.xcodeproj/project.xcworkspace/xcuserdata/Dromaguirre.xcuserdatad/UserInterfaceState.xcuserstate
+Tests/Pods
+Tests/Podfile.lock
