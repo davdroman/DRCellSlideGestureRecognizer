@@ -48,10 +48,6 @@
 
 @end
 
-@interface PDGestureTableViewHeaderView : UITableViewHeaderFooterView
-
-@end
-
 @interface PDGestureTableView : UITableView
 
 @property (copy, nonatomic) void (^didMoveCellFromIndexPathToIndexPathBlock)(NSIndexPath * fromIndexPath, NSIndexPath * toIndexPath);

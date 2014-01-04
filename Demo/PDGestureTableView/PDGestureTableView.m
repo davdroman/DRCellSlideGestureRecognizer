@@ -54,17 +54,10 @@
 
 @end
 
-@interface PDGestureTableViewHeaderView ()
-
-@property (weak, nonatomic) PDGestureTableView * gestureTableView;
-
-@end
-
 @interface PDGestureTableView () {
     BOOL justMovedToNewSuperview;
 }
 
-@property (nonatomic, getter = isUpdating) BOOL updating;
 @property (nonatomic, getter = isMoving) BOOL moving;
 
 @end
@@ -445,24 +438,12 @@
 }
 
 - (void)setFrame:(CGRect)frame {
-    [super setFrame:(self.gestureTableView.isUpdating ? CGRectMake(frame.origin.x, self.frame.origin.y, frame.size.width, frame.size.height) : frame)];
+    [super setFrame:frame];
     [self updateSideViews];
 }
 
 - (void)setAlpha:(CGFloat)alpha {
     [super setAlpha:1];
-}
-
-@end
-
-@implementation PDGestureTableViewHeaderView
-
-- (void)didMoveToSuperview {
-    [self setGestureTableView:(PDGestureTableView *)self.superview];
-}
-
-- (void)setFrame:(CGRect)frame {
-    [super setFrame:(self.gestureTableView.isUpdating ? CGRectMake(frame.origin.x, self.frame.origin.y, frame.size.width, frame.size.height) : frame)];
 }
 
 @end
@@ -574,18 +555,18 @@
 
 - (void)removeCell:(PDGestureTableViewCell *)cell completion:(void (^)(void))completion {
     [self setEnabled:NO];
-    [self setUpdating:YES];
     
     UITableViewRowAnimation animation = cell.frame.origin.x > 0 ? UITableViewRowAnimationRight : UITableViewRowAnimationLeft;
     
-    [self deleteRowsAtIndexPaths:@[[self indexPathForCell:cell]] withRowAnimation:animation duration:0.3 completion:^{
-        [self setUpdating:NO];
-        [UIView animateWithDuration:0.25 animations:^{
-            [self beginUpdates];
-            [self endUpdates];
+    [UIView animateWithDuration:0.3 animations:^{
+        [cell setCenter:CGPointMake(cell.frame.size.width/2+cell.frame.size.width, cell.center.y)];
+    } completion:^(BOOL finished) {
+        NSIndexPath * indexPath = [self indexPathForCell:cell];
+        [UIView animateWithDuration:0.3 animations:^{
             [cell.leftSideView setAlpha:0];
             [cell.rightSideView setAlpha:0];
-        } completion:^(BOOL finished) {
+        }];
+        [self deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:animation duration:0.3 completion:^{
             [cell.leftSideView setAlpha:1];
             [cell.rightSideView setAlpha:1];
             [cell.leftSideView removeFromSuperview];
@@ -616,19 +597,17 @@
 
 #pragma mark -
 
-- (void)performDataSourceAction:(void (^)(void))action duration:(NSTimeInterval)duration completion:(void (^)(void))completion {
+// This is based on UITableView-AnimationControl [http://github.com/Dromaguirre/UITableView-AnimationControl]. You should check it out, it's pretty useful stuff.
+
+- (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation duration:(NSTimeInterval)duration completion:(void (^)(void))completion {
     [CATransaction begin];
     
     [CATransaction setCompletionBlock:completion];
-    [UIView animateWithDuration:duration animations:action];
+    [UIView animateWithDuration:duration animations:^{
+        [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+    }];
     
     [CATransaction commit];
-}
-
-- (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation duration:(NSTimeInterval)duration completion:(void (^)(void))completion {
-    [self performDataSourceAction:^{
-        [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
-    } duration:duration completion:completion];
 }
 
 @end
