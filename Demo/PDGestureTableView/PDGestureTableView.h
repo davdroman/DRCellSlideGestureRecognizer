@@ -48,6 +48,10 @@
 
 @end
 
+@interface PDGestureTableViewHeaderView : UITableViewHeaderFooterView
+
+@end
+
 @interface PDGestureTableView : UITableView
 
 @property (copy, nonatomic) void (^didMoveCellFromIndexPathToIndexPathBlock)(NSIndexPath * fromIndexPath, NSIndexPath * toIndexPath);
@@ -58,17 +62,5 @@
 
 - (void)removeCell:(PDGestureTableViewCell *)cell completion:(void (^)(void))completion;
 - (void)replaceCell:(PDGestureTableViewCell *)cell bounce:(CGFloat)bounce completion:(void (^)(void))completion;
-
-- (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation duration:(NSTimeInterval)duration completion:(void (^)(void))completion;
-- (void)insertSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation duration:(NSTimeInterval)duration completion:(void (^)(void))completion;
-
-- (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation duration:(NSTimeInterval)duration completion:(void (^)(void))completion;
-- (void)deleteSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation duration:(NSTimeInterval)duration completion:(void (^)(void))completion;
-
-- (void)reloadRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation duration:(NSTimeInterval)duration completion:(void (^)(void))completion;
-- (void)reloadSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation duration:(NSTimeInterval)duration completion:(void (^)(void))completion;
-
-- (void)moveRowAtIndexPath:(NSIndexPath *)indexPath toIndexPath:(NSIndexPath *)newIndexPath duration:(NSTimeInterval)duration completion:(void (^)(void))completion;
-- (void)moveSection:(NSInteger)section toSection:(NSInteger)newSection duration:(NSTimeInterval)duration completion:(void (^)(void))completion;
 
 @end

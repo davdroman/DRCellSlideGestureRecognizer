@@ -98,7 +98,7 @@
 
 - (IBAction)addCell:(id)sender {
     [self.strings addObject:[NSString stringWithFormat:@"Cell %i", self.strings.count+1]];
-    [(PDGestureTableView *)self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.strings.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationLeft duration:0.3 completion:nil];
+    [(PDGestureTableView *)self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.strings.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
 }
 
 @end

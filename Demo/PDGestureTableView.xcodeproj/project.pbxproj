@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75070C3D18788D4C00F74665 /* PDGestureTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75070C3C18788D4C00F74665 /* PDGestureTableView.m */; };
 		75190A8718721E63009E84C6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75190A8618721E63009E84C6 /* Foundation.framework */; };
 		75190A8918721E63009E84C6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75190A8818721E63009E84C6 /* CoreGraphics.framework */; };
 		75190A8B18721E63009E84C6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75190A8A18721E63009E84C6 /* UIKit.framework */; };
@@ -19,7 +20,6 @@
 		75190AAA18721E63009E84C6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 75190AA818721E63009E84C6 /* InfoPlist.strings */; };
 		75190AAC18721E63009E84C6 /* PDGestureTableViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 75190AAB18721E63009E84C6 /* PDGestureTableViewTests.m */; };
 		75190AC218721EF6009E84C6 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75190AB818721EF6009E84C6 /* MainViewController.m */; };
-		75190AC318721EF6009E84C6 /* PDGestureTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75190ABA18721EF6009E84C6 /* PDGestureTableView.m */; };
 		75190AC518721EF6009E84C6 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75190ABE18721EF6009E84C6 /* SettingsViewController.m */; };
 		75190AC618721EF6009E84C6 /* TableViewBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75190AC018721EF6009E84C6 /* TableViewBackgroundView.m */; };
 		75190AC818721F52009E84C6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75190AC718721F52009E84C6 /* Images.xcassets */; };
@@ -41,6 +41,8 @@
 
 /* Begin PBXFileReference section */
 		0244514DD1C942DCA4BA2C04 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		75070C3B18788D4C00F74665 /* PDGestureTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDGestureTableView.h; sourceTree = "<group>"; };
+		75070C3C18788D4C00F74665 /* PDGestureTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDGestureTableView.m; sourceTree = "<group>"; };
 		75190A8318721E63009E84C6 /* PDGestureTableView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PDGestureTableView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75190A8618721E63009E84C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		75190A8818721E63009E84C6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -58,8 +60,6 @@
 		75190AAB18721E63009E84C6 /* PDGestureTableViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PDGestureTableViewTests.m; sourceTree = "<group>"; };
 		75190AB718721EF6009E84C6 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		75190AB818721EF6009E84C6 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		75190AB918721EF6009E84C6 /* PDGestureTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDGestureTableView.h; sourceTree = "<group>"; };
-		75190ABA18721EF6009E84C6 /* PDGestureTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDGestureTableView.m; sourceTree = "<group>"; };
 		75190ABD18721EF6009E84C6 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		75190ABE18721EF6009E84C6 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		75190ABF18721EF6009E84C6 /* TableViewBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewBackgroundView.h; sourceTree = "<group>"; };
@@ -147,8 +147,8 @@
 		75190A8D18721E63009E84C6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				75190AB918721EF6009E84C6 /* PDGestureTableView.h */,
-				75190ABA18721EF6009E84C6 /* PDGestureTableView.m */,
+				75070C3B18788D4C00F74665 /* PDGestureTableView.h */,
+				75070C3C18788D4C00F74665 /* PDGestureTableView.m */,
 				75190AC718721F52009E84C6 /* Images.xcassets */,
 				75190A8E18721E63009E84C6 /* PDGestureTableView-Info.plist */,
 				75190A8F18721E63009E84C6 /* InfoPlist.strings */,
@@ -332,10 +332,10 @@
 			files = (
 				75190AC618721EF6009E84C6 /* TableViewBackgroundView.m in Sources */,
 				75190A9718721E63009E84C6 /* AppDelegate.m in Sources */,
-				75190AC318721EF6009E84C6 /* PDGestureTableView.m in Sources */,
 				75190A9318721E63009E84C6 /* main.m in Sources */,
 				75190AC218721EF6009E84C6 /* MainViewController.m in Sources */,
 				75190AC518721EF6009E84C6 /* SettingsViewController.m in Sources */,
+				75070C3D18788D4C00F74665 /* PDGestureTableView.m in Sources */,
 				75AED80218772E7E00761FC7 /* SBSettingsViewController.m in Sources */,
 				75AED7FF187718B700761FC7 /* SBMainViewController.m in Sources */,
 			);
