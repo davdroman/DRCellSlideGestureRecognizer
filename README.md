@@ -97,8 +97,6 @@ As you can see, there's a class method `actionWithIcon:color:fraction:didTrigger
 	}];
 	```
 
-**Note:** if you're using more than one section in the table view it'll work absolutely fine. Just remember you'll need to use a `PDGestureTableViewHeaderView` instance as the header view for it.
-
 ## Wish List
 
 - ~~**Multiple actions in a single slide depending on the lenght the user slided (Mailbox feature).**~~
