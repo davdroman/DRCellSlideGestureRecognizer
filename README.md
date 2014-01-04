@@ -91,7 +91,7 @@ As you can see, there's a class method `actionWithIcon:color:fraction:didTrigger
 
 - PDGestureTableView's `replaceCell:bounce:completion:`, which replaces the cell to its original position (bounce specifies how much bounce effect will it be replaced with).
 	
-	```
+	```objective-c
 	[cell.firstLeftAction setDidTriggerBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {
 	    [gestureTableView replaceCell:cell bounce:10 completion:nil];
 	}];
