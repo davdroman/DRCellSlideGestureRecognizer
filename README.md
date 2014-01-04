@@ -4,7 +4,7 @@ PDGestureTableView
 <br />
 
 <p align="center">
-	<img src="https://raw.github.com/Dromaguirre/PDGestureTableView/images/1.png" alt="PDGestureTableView" title="PDGestureTableView" width="640px" />
+	<img src="https://raw.github.com/Dromaguirre/PDGestureTableView/images/1.png" alt="PDGestureTableView" title="PDGestureTableView" width="470px" />
 </p>
 
 ## Features
