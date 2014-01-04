@@ -1,8 +1,8 @@
 //
 //  AppDelegate.m
-//  PDGesturedTableView
+//  PDGestureTableView
 //
-//  Created by David Román Aguirre on 27/08/13.
+//  Created by David Román Aguirre on 30/12/13.
 //  Copyright (c) 2013 David Román Aguirre. All rights reserved.
 //
 
@@ -11,6 +11,14 @@
 #import "MainViewController.h"
 
 @implementation AppDelegate
+
+- (id)init {
+    if (self = [super init]) {
+        self.window = [UIWindow new];
+    }
+    
+    return self;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSDictionary * defaults = @{@"option1": @YES,
@@ -21,9 +29,15 @@
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
     
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [self.window setFrame:[[UIScreen mainScreen] bounds]];
     [self.window setBackgroundColor:[UIColor whiteColor]];
-    [self.window setRootViewController:[MainViewController new]];
+    
+    // Code implementation
+    // [self.window setRootViewController:[[UINavigationController alloc] initWithRootViewController:[MainViewController new]]];
+    
+    // Storyboard implementation
+    [self.window setRootViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateInitialViewController]];
+    
     [self.window makeKeyAndVisible];
     
     return YES;

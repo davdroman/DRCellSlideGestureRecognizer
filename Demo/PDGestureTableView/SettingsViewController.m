@@ -1,6 +1,6 @@
 //
 //  ConfigurationViewController.m
-//  PDGesturedTableView
+//  PDGestureTableView
 //
 //  Created by David Román Aguirre on 28/08/13.
 //  Copyright (c) 2013 David Román Aguirre. All rights reserved.
@@ -8,8 +8,7 @@
 
 #import "SettingsViewController.h"
 
-#import "SettingsNavigationBar.h"
-#import "PDGesturedTableView.h"
+#import "PDGestureTableView.h"
 
 #import <Masonry.h>
 
@@ -21,8 +20,7 @@
         
         self.options = [NSArray new];
         
-        self.navigationBar = [SettingsNavigationBar new];
-        self.gesturedTableView = [PDGesturedTableView new];
+        self.gestureTableView = [PDGestureTableView new];
     }
     
     return self;
@@ -41,44 +39,34 @@
         self.options = [self.options arrayByAddingObject:@{@"title": [NSString stringWithFormat:@"Option %i", i+1], @"key": [NSString stringWithFormat:@"option%i", i+1]}];
     }
     
-    __unsafe_unretained typeof(self) _self = self;
+    [self setTitle:@"Example Settings"];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(didTapRightButton)];
     
-    [self.navigationBar setDidTapRightButtonBlock:^(SettingsNavigationBar * navigationBar) {
-        [_self dismissViewControllerAnimated:YES completion:nil];
-    }];
-    
-    [self.gesturedTableView setBackgroundColor:[UIColor colorWithWhite:0.96 alpha:1]];
-    [self.gesturedTableView setDataSource:self];
-    [self.gesturedTableView setSeparatorColor:[UIColor colorWithWhite:0.85 alpha:1]];
-    [self.gesturedTableView setRowHeight:60];
+    [self.gestureTableView setBackgroundColor:[UIColor colorWithWhite:0.96 alpha:1]];
+    [self.gestureTableView setDataSource:self];
+    [self.gestureTableView setSeparatorColor:[UIColor colorWithWhite:0.85 alpha:1]];
+    [self.gestureTableView setRowHeight:60];
+}
+
+- (void)didTapRightButton {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)setupView {
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
-    [self.view addSubview:self.navigationBar];
-    [self.view insertSubview:self.gesturedTableView belowSubview:self.navigationBar];
+    [self.view addSubview:self.gestureTableView];
 }
 
 - (void)setupConstraints {
-    [self.navigationBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(@0);
-        make.left.equalTo(@0);
-        make.right.equalTo(@0);
-        make.height.equalTo(@64);
-    }];
-    
-    [self.gesturedTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.navigationBar.mas_bottom);
-        make.left.equalTo(@0);
-        make.bottom.equalTo(@0);
-        make.right.equalTo(@0);
+    [self.gestureTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(@0);
     }];
 }
 
 #pragma mark Color Methods
 
-- (void)changeCellColors:(PDGesturedTableViewCell *)cell {
+- (void)changeCellColors:(PDGestureTableViewCell *)cell {
     [cell.contentView setBackgroundColor:[self inverseBackgroundColor:cell.contentView.backgroundColor]];
     [cell.textLabel setTextColor:[self inverseTextColor:cell.textLabel.textColor]];
 }
@@ -97,33 +85,35 @@
     return [self.options count];
 }
 
-- (UITableViewCell *)tableView:(PDGesturedTableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(PDGestureTableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString * cellIdentifier = @"Option Cell";
     
-    PDGesturedTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    PDGestureTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    if (cell == nil) {
+    if (!cell) {
         __unsafe_unretained typeof(self) _self = self;
         
-        cell = [[PDGesturedTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[PDGestureTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         
-        [cell addActionForFraction:0.25 icon:[UIImage imageNamed:@"green-circle.png"] color:[UIColor clearColor] activationBlock:^(PDGesturedTableView *gesturedTableView, PDGesturedTableViewCell *cell) {
-            NSInteger row = [_self.gesturedTableView indexPathForCell:cell].row;
+        [cell setFirstLeftAction:[PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"green-circle"] color:[UIColor clearColor] fraction:0.25 didTriggerBlock:^(PDGestureTableView *gestureTableView, PDGestureTableViewCell *cell) {
+            NSInteger row = [_self.gestureTableView indexPathForCell:cell].row;
             
             NSString * optionKey = [[NSString alloc] initWithFormat:@"option%i", row+1];
             BOOL optionEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:optionKey];
             
             [[NSUserDefaults standardUserDefaults] setBool:!optionEnabled forKey:optionKey];
-            
-            [gesturedTableView replaceCell:cell completion:nil];
-        } highlightBlock:^(PDGesturedTableView *gesturedTableView, PDGesturedTableViewCell *cell) {
+
+            [gestureTableView replaceCell:cell bounce:0 completion:nil];
+        } didHighlightBlock:^(PDGestureTableView *gestureTableView, PDGestureTableViewCell *cell) {
             [_self changeCellColors:cell];
-        } unhighlightBlock:^(PDGesturedTableView *gesturedTableView, PDGesturedTableViewCell *cell) {
+        } didUnhighlightBlock:^(PDGestureTableView *gestureTableView, PDGestureTableViewCell *cell) {
             [_self changeCellColors:cell];
-        }];
+        }]];
     }
     
     [cell.textLabel setText:self.options[indexPath.row][@"title"]];
+    [cell setIconsFollowSliding:NO];
+    
     BOOL optionEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:self.options[indexPath.row][@"key"]];
     
     if (optionEnabled) {

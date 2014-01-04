@@ -1,8 +1,8 @@
 //
 //  main.m
-//  PDGesturedTableView
+//  PDGestureTableView
 //
-//  Created by David Román Aguirre on 27/08/13.
+//  Created by David Román Aguirre on 30/12/13.
 //  Copyright (c) 2013 David Román Aguirre. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 #import "AppDelegate.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char * argv[])
 {
     @autoreleasepool {
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
