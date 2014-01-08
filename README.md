@@ -107,10 +107,6 @@ As you can see, there's a class method `actionWithIcon:color:fraction:didTrigger
 - iOS 7 or higher.
 - Automatic Reference Counting (ARC).
 
-## Creator
-
-- [David Román](http://twitter.com/Dromaguirre)
-
 ## License
 
-You can use it for whatever you want, however you want. I just **[would love to know](mailto:dromaguirre@gmail.com)** if you're using it in any project of yours.
+You can use it with total freedom. I just would love to know if you're using it in any project of yours, so an [email](mailto:dromaguirre@gmail.com) or a [tweet](http://twitter.com/Dromaguirre) would be really appreciated :)
