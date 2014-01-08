@@ -109,7 +109,7 @@ As you can see, there's a class method `actionWithIcon:color:fraction:didTrigger
 
 ## Creator
 
-- [David Román](http://github.com/Dromaguirre) | [@Dromaguirre](http://twitter.com/Dromaguirre)
+- [David Román](http://twitter.com/Dromaguirre)
 
 ## License
 
