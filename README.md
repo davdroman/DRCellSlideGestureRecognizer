@@ -99,13 +99,8 @@ As you can see, there's a class method `actionWithIcon:color:fraction:didTrigger
 
 ## Wish List
 
-- ~~**Multiple actions in a single slide depending on the lenght the user slided (Mailbox feature).**~~
-- ~~**Being able to set a UIView to be shown when there's no content on the table view (Mailbox feature).**~~
-- ~~**CocoaPods support.**~~
-- ~~**Move cells with a long press and pan gesture.**~~
-- ~~**Storyboards/Xibs & Autolayout compatibility.**~~
+- Autoscroll when the current moving cell is near the edge of the screen (currently working on this).
 - Cell bouncing when reaching the last action.
-- Autoscroll when the current moving cell is near the edge of the screen. *I'll need some help with this*.
 
 ## Requirements
 
