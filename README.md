@@ -109,4 +109,6 @@ As you can see, there's a class method `actionWithIcon:color:fraction:didTrigger
 
 ## License
 
-You can use it with total freedom. I just would love to know if you're using it in any project of yours, so an [**email**](mailto:dromaguirre@gmail.com) or a [**tweet**](http://twitter.com/Dromaguirre) would be really appreciated :)
+PDGestureTableView is available under the MIT license.
+
+Also, I'd really love to know you're using it in any of your projects, so send me an [**email**](mailto:dromaguirre@gmail.com) or a [**tweet**](http://twitter.com/Dromaguirre) and make my day :)
