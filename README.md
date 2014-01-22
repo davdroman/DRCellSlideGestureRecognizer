@@ -64,13 +64,6 @@ Here's how actions should be set:
 - `fraction` specifies the fraction of the entire cell width where the action **will be highlighted**. For instance, if you specify 0.5 the action will highlight when the cell gets to the middle of the table width.
 - `didTriggerBlock` is the block that will execute when the user **releases the cell**.
 
-As you can see, there's a class method `actionWithIcon:color:fraction:didTriggerBlock` available for creating actions, but you can also use some others. These are all methods you can use to **create an action**:
-
-- `actionWithIcon:color:`
-- `actionWithIcon:color:fraction:`
-- `actionWithIcon:color:fraction:didTriggerBlock:`
-- `actionWithIcon:color:fraction:didTriggerBlock:didHighlightBlock:didUnhighlightBlock:`
-
 #### Main actions for `didTriggerBlock`.
 
 `didTriggerBlock` can contain any action you want, but I highly recommended to use one of the following methods in addition to the ones you want to use:
