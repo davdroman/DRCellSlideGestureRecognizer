@@ -42,6 +42,7 @@
     PDGestureTableViewCell * nextCell;
     PDGestureTableViewCell * previousCell;
     PDGestureTableViewCell * copiedCell;
+    CADisplayLink * autoscrollTimer;
 }
 
 @property (weak, nonatomic) PDGestureTableView * gestureTableView;
@@ -58,6 +59,7 @@
     BOOL justMovedToNewSuperview;
 }
 
+@property (nonatomic, getter = isRemoving) BOOL removing;
 @property (nonatomic, getter = isMoving) BOOL moving;
 
 @end
@@ -66,33 +68,13 @@
 
 @implementation PDGestureTableViewCellAction
 
-+ (id)actionWithIcon:(UIImage *)icon color:(UIColor *)color {
++ (id)actionWithIcon:(UIImage *)icon color:(UIColor *)color fraction:(CGFloat)fraction didTriggerBlock:(void (^)(PDGestureTableView *, PDGestureTableViewCell *))didTriggerBlock {
     PDGestureTableViewCellAction * action = [PDGestureTableViewCellAction new];
     
     [action setIcon:icon];
     [action setColor:color];
-    
-    return action;
-}
-
-+ (id)actionWithIcon:(UIImage *)icon color:(UIColor *)color fraction:(CGFloat)fraction {
-    PDGestureTableViewCellAction * action = [PDGestureTableViewCellAction actionWithIcon:icon color:color];
     [action setFraction:fraction];
-    
-    return action;
-}
-
-+ (id)actionWithIcon:(UIImage *)icon color:(UIColor *)color fraction:(CGFloat)fraction didTriggerBlock:(void (^)(PDGestureTableView *, PDGestureTableViewCell *))didTriggerBlock {
-    PDGestureTableViewCellAction * action = [PDGestureTableViewCellAction actionWithIcon:icon color:color fraction:fraction];
     [action setDidTriggerBlock:didTriggerBlock];
-    
-    return action;
-}
-
-+ (id)actionWithIcon:(UIImage *)icon color:(UIColor *)color fraction:(CGFloat)fraction didTriggerBlock:(void (^)(PDGestureTableView *, PDGestureTableViewCell *))didTriggerBlock didHighlightBlock:(void (^)(PDGestureTableView *, PDGestureTableViewCell *))didHighlightBlock didUnhighlightBlock:(void (^)(PDGestureTableView *, PDGestureTableViewCell *))didUnhighlightBlock {
-    PDGestureTableViewCellAction * action = [PDGestureTableViewCellAction actionWithIcon:icon color:color fraction:fraction didTriggerBlock:didTriggerBlock];
-    [action setDidHighlightBlock:didHighlightBlock];
-    [action setDidUnhighlightBlock:didUnhighlightBlock];
     
     return action;
 }
@@ -134,9 +116,8 @@
 }
 
 - (void)setup {
-    [self setIconsFollowSliding:YES];
-    [self setIconsMargin:20];
-    [self setReplacementDuration:0.25];
+    [self setActionIconsFollowSliding:YES];
+    [self setActionIconsMargin:20];
     
     self.leftSideView = [PDGestureTableViewCellSideView new];
     self.rightSideView = [PDGestureTableViewCellSideView new];
@@ -199,11 +180,8 @@
         [self performChanges];
         [self setCenter:CGPointMake(self.frame.size.width/2+horizontalTranslation, self.center.y)];
     } else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        if (!currentAction && self.frame.origin.x != 0) {
-            [self.gestureTableView replaceCell:self bounce:8 completion:^{
-                [self.leftSideView removeFromSuperview];
-                [self.rightSideView removeFromSuperview];
-            }];
+        if ((!currentAction && self.frame.origin.x != 0) || self.gestureTableView.isRemoving) {
+            self.gestureTableView.cellDismissingBlock(self.gestureTableView, self);
         } else if (currentAction.didTriggerBlock) currentAction.didTriggerBlock(self.gestureTableView, self);
         
         currentAction = nil;
@@ -219,12 +197,12 @@
 }
 
 - (void)setupSideViews {
-    UIViewContentMode leftSideViewContentMode = self.iconsFollowSliding ? UIViewContentModeRight : UIViewContentModeLeft;
+    UIViewContentMode leftSideViewContentMode = self.actionIconsFollowSliding ? UIViewContentModeRight : UIViewContentModeLeft;
     
     [self.leftSideView.iconImageView setContentMode:leftSideViewContentMode];
     [self.superview insertSubview:self.leftSideView atIndex:0];
     
-    UIViewContentMode rightSideViewContentMode = self.iconsFollowSliding ? UIViewContentModeLeft : UIViewContentModeRight;
+    UIViewContentMode rightSideViewContentMode = self.actionIconsFollowSliding ? UIViewContentModeLeft : UIViewContentModeRight;
     
     [self.rightSideView.iconImageView setContentMode:rightSideViewContentMode];
     [self.superview insertSubview:self.rightSideView atIndex:0];
@@ -243,16 +221,16 @@
         }
     } else {
         if (self.frame.origin.x > 0) {
-            [self.leftSideView setBackgroundColor:self.normalColor];
+            [self.leftSideView setBackgroundColor:self.actionNormalColor];
             [self.leftSideView.iconImageView setImage:self.firstLeftAction.icon];
         } else if (self.frame.origin.x < 0) {
-            [self.rightSideView setBackgroundColor:self.normalColor];
+            [self.rightSideView setBackgroundColor:self.actionNormalColor];
             [self.rightSideView.iconImageView setImage:self.firstRightAction.icon];
         }
     }
     
-    [self.leftSideView.iconImageView setAlpha:self.frame.origin.x/(self.iconsMargin*2+self.leftSideView.iconImageView.image.size.width)];
-    [self.rightSideView.iconImageView setAlpha:-(self.frame.origin.x/(self.iconsMargin*2+self.rightSideView.iconImageView.image.size.width))];
+    [self.leftSideView.iconImageView setAlpha:self.frame.origin.x/(self.actionIconsMargin*2+self.leftSideView.iconImageView.image.size.width)];
+    [self.rightSideView.iconImageView setAlpha:-(self.frame.origin.x/(self.actionIconsMargin*2+self.rightSideView.iconImageView.image.size.width))];
     
     if (currentAction != actionForCurrentPosition) {
         if (actionForCurrentPosition.didHighlightBlock) actionForCurrentPosition.didHighlightBlock(self.gestureTableView, self);
@@ -303,6 +281,16 @@
     [self.layer setShadowOpacity:opacity];
 }
 
+// Sorry, this code is so messy as cell movement with autoscroll is in the works.
+
+- (CGFloat)copiedCellY {
+    return copiedCell.frame.origin.y-self.gestureTableView.frame.origin.y-self.gestureTableView.contentInset.top;
+}
+
+- (CGFloat)copiedCellCenterY {
+    return copiedCell.center.y-self.gestureTableView.frame.origin.y-self.gestureTableView.contentInset.top;
+}
+
 - (void)moveCell:(UILongPressGestureRecognizer *)longPressGestureRecognizer {
     if (longPressGestureRecognizer.state == UIGestureRecognizerStateBegan) {
         [self.gestureTableView setMoving:YES];
@@ -317,7 +305,8 @@
         
         originIndexPath = [self.gestureTableView indexPathForCell:self];
         [self setHidden:YES];
-        [self.gestureTableView addSubview:copiedCell];
+        [copiedCell setCenter:CGPointMake(copiedCell.center.x, copiedCell.center.y+self.gestureTableView.frame.origin.y+self.gestureTableView.contentInset.top)];
+        [self.gestureTableView.superview addSubview:copiedCell];
         
         [copiedCell.layer setShadowOffset:CGSizeZero];
         [copiedCell animateShadowWithRadius:2 opacity:0.6 duration:0.2];
@@ -330,10 +319,8 @@
         
         [self resetPreviousAndNextCellAndIndexPath];
         
-        // Pretty hard thing to implement. Maybe someday :|
-        
-        // autoscrollTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(autoscrollIfNeeded:)];
-        // [autoscrollTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+        autoscrollTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(autoscrollIfNeeded:)];
+        [autoscrollTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
     } else if (longPressGestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGFloat currentPoint = [longPressGestureRecognizer locationInView:self.gestureTableView].y;
         CGFloat verticalTranslation = currentPoint-previousPoint;
@@ -341,7 +328,7 @@
         
         [copiedCell setCenter:CGPointMake(copiedCell.center.x, copiedCell.center.y+verticalTranslation)];
         
-        if (nextCell && verticalTranslation > 0 && copiedCell.center.y > nextCell.frame.origin.y) {
+        if (nextCell && verticalTranslation > 0 && [self copiedCellCenterY] > nextCell.frame.origin.y) {
             self.gestureTableView.didMoveCellFromIndexPathToIndexPathBlock([self.gestureTableView indexPathForCell:self], nextIndexPath);
             
             [UIView animateWithDuration:0.2 animations:^{
@@ -349,7 +336,7 @@
             } completion:^(BOOL finished) {
                 if (finished) [self resetPreviousAndNextCellAndIndexPath];
             }];
-        } else if (previousCell && verticalTranslation < 0 && copiedCell.frame.origin.y < previousCell.center.y) {
+        } else if (previousCell && verticalTranslation < 0 && [self copiedCellY] < previousCell.center.y) {
             self.gestureTableView.didMoveCellFromIndexPathToIndexPathBlock([self.gestureTableView indexPathForCell:self], previousIndexPath);
             
             [UIView animateWithDuration:0.2 animations:^{
@@ -359,15 +346,13 @@
             }];
         }
     } else if (longPressGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        // [autoscrollTimer invalidate];
+        [autoscrollTimer invalidate];
         [self.gestureTableView setMoving:NO];
         
         [copiedCell animateShadowWithRadius:0.5 opacity:0.4 duration:0.3];
         
-        NSIndexPath * finalIndexPath = [self.gestureTableView indexPathForCell:self];
-        
         [UIView animateWithDuration:0.3 animations:^{
-            [copiedCell setCenter:self.center];
+            [copiedCell setCenter:CGPointMake(self.center.x, self.center.y+self.gestureTableView.frame.origin.y+self.gestureTableView.contentInset.top)];
             [copiedCell setTransform:CGAffineTransformMakeScale(1, 1)];
         } completion:^(BOOL finished) {
             for (UIView * view in copiedCell.contentView.subviews) {
@@ -377,8 +362,6 @@
             [copiedCell removeFromSuperview];
             [self setHidden:NO];
         }];
-        
-        if (self.gestureTableView.didFinishMovingCellBlock) self.gestureTableView.didFinishMovingCellBlock(originIndexPath, finalIndexPath);
     }
 }
 
@@ -400,6 +383,10 @@
             }
         }
     }
+}
+
+- (void)autoscrollIfNeeded:(CADisplayLink *)autoscrollTimer {
+    
 }
 
 #pragma mark -
@@ -428,8 +415,8 @@
     [self.leftSideView setFrame:CGRectMake(0, self.frame.origin.y, self.frame.origin.x, self.frame.size.height)];
     [self.rightSideView setFrame:CGRectMake(self.frame.origin.x+self.frame.size.width, self.frame.origin.y, self.frame.size.width-(self.frame.origin.x+self.frame.size.width), self.frame.size.height)];
     
-    [self.leftSideView.iconImageView setFrame:CGRectMake(self.iconsMargin, 0, MAX(self.leftSideView.iconImageView.image.size.width, self.leftSideView.frame.size.width-self.iconsMargin*2), self.leftSideView.frame.size.height)];
-    [self.rightSideView.iconImageView setFrame:CGRectMake(self.rightSideView.frame.size.width-self.iconsMargin, 0, MIN(-self.rightSideView.iconImageView.image.size.width, self.iconsMargin*2-self.rightSideView.frame.size.width), self.rightSideView.frame.size.height)];
+    [self.leftSideView.iconImageView setFrame:CGRectMake(self.actionIconsMargin, 0, MAX(self.leftSideView.iconImageView.image.size.width, self.leftSideView.frame.size.width-self.actionIconsMargin*2), self.leftSideView.frame.size.height)];
+    [self.rightSideView.iconImageView setFrame:CGRectMake(self.rightSideView.frame.size.width-self.actionIconsMargin, 0, MIN(-self.rightSideView.iconImageView.image.size.width, self.actionIconsMargin*2-self.rightSideView.frame.size.width), self.rightSideView.frame.size.height)];
 }
 
 - (void)setCenter:(CGPoint)center {
@@ -440,10 +427,6 @@
 - (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
     [self updateSideViews];
-}
-
-- (void)setAlpha:(CGFloat)alpha {
-    [super setAlpha:1];
 }
 
 @end
@@ -483,12 +466,19 @@
 }
 
 - (void)setup {
+    [self setEdgeSlidingMargin:0];
+    [self setEdgeAutoscrollMargin:40];
+    
     [self setAllowsSelection:NO];
     [self setBackgroundView:[UIView new]];
     [self setTableFooterView:[UIView new]];
     [self setSeparatorInset:UIEdgeInsetsZero];
     
     [self setEnabled:YES];
+
+    [self setCellDismissingBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {
+        [gestureTableView replaceCell:cell duration:0.25 bounce:8 completion:nil];
+    }];
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview {
@@ -555,11 +545,12 @@
 
 - (void)removeCell:(PDGestureTableViewCell *)cell completion:(void (^)(void))completion {
     [self setEnabled:NO];
+    [self setRemoving:YES];
     
     UITableViewRowAnimation animation = cell.frame.origin.x > 0 ? UITableViewRowAnimationRight : UITableViewRowAnimationLeft;
     
     [UIView animateWithDuration:0.3 animations:^{
-        [cell setCenter:CGPointMake(cell.frame.size.width/2+cell.frame.size.width, cell.center.y)];
+        [cell setCenter:CGPointMake(cell.frame.size.width/2+(cell.frame.origin.x > 0 ? cell.frame.size.width : -cell.frame.size.width), cell.center.y)];
     } completion:^(BOOL finished) {
         NSIndexPath * indexPath = [self indexPathForCell:cell];
         [UIView animateWithDuration:0.3 animations:^{
@@ -572,20 +563,21 @@
             [cell.leftSideView removeFromSuperview];
             [cell.rightSideView removeFromSuperview];
             [self setEnabled:YES];
+            [self setRemoving:NO];
             if (completion) completion();
         }];
     }];
 }
 
-- (void)replaceCell:(PDGestureTableViewCell *)cell bounce:(CGFloat)bounce completion:(void (^)(void))completion {
+- (void)replaceCell:(PDGestureTableViewCell *)cell duration:(NSTimeInterval)duration bounce:(CGFloat)bounce completion:(void (^)(void))completion {
     bounce = fabsf(bounce);
     
-    [UIView animateWithDuration:cell.replacementDuration animations:^{
+    [UIView animateWithDuration:duration animations:^{
         [cell setCenter:CGPointMake(cell.frame.size.width/2 + (cell.frame.origin.x > 0 ? -bounce : bounce), cell.center.y)];
         [cell.leftSideView.iconImageView setAlpha:0];
         [cell.rightSideView.iconImageView setAlpha:0];
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:cell.replacementDuration/2 animations:^{
+        [UIView animateWithDuration:duration/2 animations:^{
             [cell setCenter:CGPointMake(cell.frame.size.width/2, cell.center.y)];
         } completion:^(BOOL finished) {
             [cell.leftSideView removeFromSuperview];

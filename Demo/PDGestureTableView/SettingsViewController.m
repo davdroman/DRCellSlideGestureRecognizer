@@ -103,16 +103,18 @@
             
             [[NSUserDefaults standardUserDefaults] setBool:!optionEnabled forKey:optionKey];
 
-            [gestureTableView replaceCell:cell bounce:0 completion:nil];
-        } didHighlightBlock:^(PDGestureTableView *gestureTableView, PDGestureTableViewCell *cell) {
-            [_self changeCellColors:cell];
-        } didUnhighlightBlock:^(PDGestureTableView *gestureTableView, PDGestureTableViewCell *cell) {
-            [_self changeCellColors:cell];
+            [gestureTableView replaceCell:cell duration:0.25 bounce:0 completion:nil];
         }]];
+        
+        [cell.firstLeftAction setDidHighlightBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {
+            [_self changeCellColors:cell];
+        }];
+        
+        [cell.firstLeftAction setDidUnhighlightBlock:cell.firstLeftAction.didHighlightBlock];
     }
     
     [cell.textLabel setText:self.options[indexPath.row][@"title"]];
-    [cell setIconsFollowSliding:NO];
+    [cell setActionIconsFollowSliding:NO];
     
     BOOL optionEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:self.options[indexPath.row][@"key"]];
     

@@ -18,27 +18,23 @@
 @property (strong, nonatomic) UIImage * icon;
 @property (strong, nonatomic) UIColor * color;
 @property (nonatomic) CGFloat fraction;
+// @property (nonatomic) CGFloat elasticity;
 
 @property (copy, nonatomic) void (^didTriggerBlock)(PDGestureTableView *, PDGestureTableViewCell *);
 @property (copy, nonatomic) void (^didHighlightBlock)(PDGestureTableView *, PDGestureTableViewCell *);
 @property (copy, nonatomic) void (^didUnhighlightBlock)(PDGestureTableView *, PDGestureTableViewCell *);
 
-+ (id)actionWithIcon:(UIImage *)icon color:(UIColor *)color;
-+ (id)actionWithIcon:(UIImage *)icon color:(UIColor *)color fraction:(CGFloat)fraction;
 + (id)actionWithIcon:(UIImage *)icon color:(UIColor *)color fraction:(CGFloat)fraction didTriggerBlock:(void (^)(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell))didTriggerBlock;
-+ (id)actionWithIcon:(UIImage *)icon color:(UIColor *)color fraction:(CGFloat)fraction didTriggerBlock:(void (^)(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell))didTriggerBlock didHighlightBlock:(void (^)(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell))didHighlightBlock didUnhighlightBlock:(void (^)(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell))didUnhighlightBlock;
 
 @end
 
 @interface PDGestureTableViewCell : UITableViewCell <UIGestureRecognizerDelegate>
 
-@property (nonatomic) BOOL iconsFollowSliding;
-@property (nonatomic) CGFloat iconsMargin;
-@property (strong, nonatomic) UIColor * normalColor;
-@property (nonatomic) CGFloat replacementDuration;
+@property (nonatomic) BOOL actionIconsFollowSliding;
+@property (nonatomic) CGFloat actionIconsMargin;
+@property (strong, nonatomic) UIColor * actionNormalColor;
 
 // @property (nonatomic) BOOL bounces;
-// @property (nonatomic) CGFloat elasticity;
 
 @property (strong, nonatomic) PDGestureTableViewCellAction * firstLeftAction;
 @property (strong, nonatomic) PDGestureTableViewCellAction * secondLeftAction;
@@ -50,13 +46,15 @@
 
 @interface PDGestureTableView : UITableView
 
-@property (copy, nonatomic) void (^didMoveCellFromIndexPathToIndexPathBlock)(NSIndexPath * fromIndexPath, NSIndexPath * toIndexPath);
-@property (copy, nonatomic) void (^didFinishMovingCellBlock)(NSIndexPath * oldIndexPath, NSIndexPath * newIndexPath);
-
 @property (nonatomic, getter = isEnabled) BOOL enabled;
 @property (nonatomic) CGFloat edgeSlidingMargin;
+@property (nonatomic) CGFloat edgeAutoscrollMargin;
+
+@property (copy, nonatomic) void (^cellDismissingBlock)(PDGestureTableView *, PDGestureTableViewCell *);
+@property (copy, nonatomic) BOOL (^shouldMoveCellFromIndexPathToIndexPathBlock)(NSIndexPath * fromIndexPath, NSIndexPath * toIndexPath);
+@property (copy, nonatomic) void (^didMoveCellFromIndexPathToIndexPathBlock)(NSIndexPath * fromIndexPath, NSIndexPath * toIndexPath);
 
 - (void)removeCell:(PDGestureTableViewCell *)cell completion:(void (^)(void))completion;
-- (void)replaceCell:(PDGestureTableViewCell *)cell bounce:(CGFloat)bounce completion:(void (^)(void))completion;
+- (void)replaceCell:(PDGestureTableViewCell *)cell duration:(NSTimeInterval)duration bounce:(CGFloat)bounce completion:(void (^)(void))completion;
 
 @end
