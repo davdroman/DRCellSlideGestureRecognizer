@@ -82,11 +82,11 @@ Here's how actions should be set:
 	}];
 	```
 
-- PDGestureTableView's `replaceCell:bounce:completion:`, which replaces the cell to its original position (bounce specifies how much bounce effect will it be replaced with).
+- PDGestureTableView's `replaceCell:duration:bounce:completion:`, which replaces the cell to its original position (`bounce` specifies how much bounce effect will it be replaced with).
 	
 	```objective-c
 	[cell.firstLeftAction setDidTriggerBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {
-	    [gestureTableView replaceCell:cell bounce:10 completion:nil];
+	    [gestureTableView replaceCell:cell duration:0.25 bounce:10 completion:nil];
 	}];
 	```
 
