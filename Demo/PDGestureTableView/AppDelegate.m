@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 
 #import "MainViewController.h"
+#import "PDGestureTableView.h"
 
 @implementation AppDelegate
 

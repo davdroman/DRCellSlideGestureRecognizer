@@ -55,15 +55,6 @@
 
 @end
 
-@interface PDGestureTableView () {
-    BOOL justMovedToNewSuperview;
-}
-
-@property (nonatomic, getter = isRemoving) BOOL removing;
-@property (nonatomic, getter = isMoving) BOOL moving;
-
-@end
-
 #pragma mark - Implementations -
 
 @implementation PDGestureTableViewCellAction
@@ -151,7 +142,7 @@
             return YES;
         }
     } else if ([gestureRecognizer class] == [UILongPressGestureRecognizer class]) {
-        if (!self.gestureTableView.moving && self.gestureTableView.didMoveCellFromIndexPathToIndexPathBlock) {
+        if (self.gestureTableView.isEnabled && self.gestureTableView.didMoveCellFromIndexPathToIndexPathBlock) {
             return YES;
         }
     }
@@ -170,8 +161,8 @@
         [self setupSideViews];
     } else if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
         /* if (self.frame.origin.x + horizontalTranslation > margin) {
-            coeficient = (elastic-((self.frame.origin.x+horizontalTranslation/(-(1/6)*margin+elastic/1.45))-margin))/elastic;
-        } */
+         coeficient = (elastic-((self.frame.origin.x+horizontalTranslation/(-(1/6)*margin+elastic/1.45))-margin))/elastic;
+         } */
         
         if ((![self hasAnyLeftAction] && self.frame.size.width/2+horizontalTranslation > self.frame.size.width/2) || (![self hasAnyRightAction] && self.frame.size.width/2+horizontalTranslation < self.frame.size.width/2)) {
             horizontalTranslation = 0;
@@ -180,8 +171,8 @@
         [self performChanges];
         [self setCenter:CGPointMake(self.frame.size.width/2+horizontalTranslation, self.center.y)];
     } else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        if ((!currentAction && self.frame.origin.x != 0) || self.gestureTableView.isRemoving) {
-            self.gestureTableView.cellDismissingBlock(self.gestureTableView, self);
+        if ((!currentAction && self.frame.origin.x != 0) || !self.gestureTableView.isEnabled) {
+            self.gestureTableView.cellReplacingBlock(self.gestureTableView, self);
         } else if (currentAction.didTriggerBlock) currentAction.didTriggerBlock(self.gestureTableView, self);
         
         currentAction = nil;
@@ -293,7 +284,7 @@
 
 - (void)moveCell:(UILongPressGestureRecognizer *)longPressGestureRecognizer {
     if (longPressGestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        [self.gestureTableView setMoving:YES];
+        [self.gestureTableView setEnabled:NO];
         
         copiedCell = [[PDGestureTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:self.reuseIdentifier];
         [copiedCell setFrame:self.frame];
@@ -347,7 +338,7 @@
         }
     } else if (longPressGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         [autoscrollTimer invalidate];
-        [self.gestureTableView setMoving:NO];
+        [self.gestureTableView setEnabled:YES];
         
         [copiedCell animateShadowWithRadius:0.5 opacity:0.4 duration:0.3];
         
@@ -469,20 +460,19 @@
     [self setEdgeSlidingMargin:0];
     [self setEdgeAutoscrollMargin:40];
     
-    [self setAllowsSelection:NO];
     [self setBackgroundView:[UIView new]];
     [self setTableFooterView:[UIView new]];
     [self setSeparatorInset:UIEdgeInsetsZero];
     
     [self setEnabled:YES];
-
-    [self setCellDismissingBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {
+    
+    [self setCellReplacingBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {
         [gestureTableView replaceCell:cell duration:0.25 bounce:8 completion:nil];
     }];
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview {
-    if (self.superview != newSuperview) justMovedToNewSuperview = YES;
+    [self showOrHideBackgroundViewAnimatedly:NO];
 }
 
 #pragma mark -
@@ -496,7 +486,6 @@
 }
 
 - (void)showOrHideBackgroundViewAnimatedly:(BOOL)animatedly {
-    if (justMovedToNewSuperview) justMovedToNewSuperview = NO;
     [self setWrapperViewAlpha:([self isEmpty] ? 0 : 1)];
     
     [UIView animateWithDuration:(animatedly ? 0.3 : 0) animations:^{
@@ -505,71 +494,76 @@
 }
 
 - (BOOL)isEmpty {
-    BOOL isEmpty = YES;
-    
-    for (NSInteger i = 0; i < [self numberOfSections]; i++) {
-        if ([self numberOfRowsInSection:i] > 0) {
-            isEmpty = NO;
+    if (self.dataSource) {
+        NSInteger numberOfSections = [self.dataSource numberOfSectionsInTableView:self];
+        
+        for (int i = 0; i < numberOfSections; i++) {
+            NSInteger numberOfRowsAtSection = [self.dataSource tableView:self numberOfRowsInSection:i];
+            
+            if (numberOfRowsAtSection > 0) return NO;
         }
     }
     
-    return isEmpty;
+    return YES;
 }
 
 - (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation {
     [super insertRowsAtIndexPaths:indexPaths withRowAnimation:animation];
-    [self showOrHideBackgroundViewAnimatedly:!justMovedToNewSuperview];
+    [self showOrHideBackgroundViewAnimatedly:YES];
 }
 
 - (void)insertSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation {
     [super insertSections:sections withRowAnimation:animation];
-    [self showOrHideBackgroundViewAnimatedly:!justMovedToNewSuperview];
+    [self showOrHideBackgroundViewAnimatedly:YES];
 }
 
 - (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation {
     [super deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
-    [self showOrHideBackgroundViewAnimatedly:!justMovedToNewSuperview];
+    [self showOrHideBackgroundViewAnimatedly:YES];
 }
 
 - (void)deleteSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation {
     [super deleteSections:sections withRowAnimation:animation];
-    [self showOrHideBackgroundViewAnimatedly:!justMovedToNewSuperview];
+    [self showOrHideBackgroundViewAnimatedly:YES];
 }
 
 - (void)reloadData {
     [super reloadData];
-    [self showOrHideBackgroundViewAnimatedly:!justMovedToNewSuperview];
+    [self showOrHideBackgroundViewAnimatedly:YES];
 }
 
 #pragma mark -
 
-- (void)removeCell:(PDGestureTableViewCell *)cell completion:(void (^)(void))completion {
+- (void)removeCell:(PDGestureTableViewCell *)cell duration:(NSTimeInterval)duration completion:(void (^)(void))completion {
+    if (duration == 0) duration = 0.3;
+    
     [self setEnabled:NO];
-    [self setRemoving:YES];
     
     UITableViewRowAnimation animation = cell.frame.origin.x > 0 ? UITableViewRowAnimationRight : UITableViewRowAnimationLeft;
     
-    [UIView animateWithDuration:0.3 animations:^{
+    [UIView animateWithDuration:duration animations:^{
         [cell setCenter:CGPointMake(cell.frame.size.width/2+(cell.frame.origin.x > 0 ? cell.frame.size.width : -cell.frame.size.width), cell.center.y)];
     } completion:^(BOOL finished) {
         NSIndexPath * indexPath = [self indexPathForCell:cell];
-        [UIView animateWithDuration:0.3 animations:^{
+        
+        [UIView animateWithDuration:duration animations:^{
             [cell.leftSideView setAlpha:0];
             [cell.rightSideView setAlpha:0];
         }];
-        [self deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:animation duration:0.3 completion:^{
+        
+        [self deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:animation duration:duration completion:^{
             [cell.leftSideView setAlpha:1];
             [cell.rightSideView setAlpha:1];
             [cell.leftSideView removeFromSuperview];
             [cell.rightSideView removeFromSuperview];
             [self setEnabled:YES];
-            [self setRemoving:NO];
             if (completion) completion();
         }];
     }];
 }
 
 - (void)replaceCell:(PDGestureTableViewCell *)cell duration:(NSTimeInterval)duration bounce:(CGFloat)bounce completion:(void (^)(void))completion {
+    if (duration == 0) duration = 0.25;
     bounce = fabsf(bounce);
     
     [UIView animateWithDuration:duration animations:^{

@@ -29,6 +29,7 @@
         self.options = [self.options arrayByAddingObject:@{@"title": [NSString stringWithFormat:@"Option %i", i+1], @"key": [NSString stringWithFormat:@"option%i", i+1]}];
     }
     
+    [self.tableView setAllowsSelection:NO];
     [self.tableView setBackgroundColor:[UIColor colorWithWhite:0.96 alpha:1]];
     [self.tableView setSeparatorColor:[UIColor colorWithWhite:0.85 alpha:1]];
     [self.tableView setRowHeight:60];
@@ -70,7 +71,7 @@
         
         [[NSUserDefaults standardUserDefaults] setBool:!optionEnabled forKey:optionKey];
         
-        [gestureTableView replaceCell:cell duration:0.25 bounce:0 completion:nil];
+        [gestureTableView replaceCell:cell duration:0 bounce:0 completion:nil];
     }]];
     
     [cell.firstLeftAction setDidHighlightBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {

@@ -42,6 +42,7 @@
     [self setTitle:@"Example Settings"];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(didTapRightButton)];
     
+    [self.gestureTableView setAllowsSelection:NO];
     [self.gestureTableView setBackgroundColor:[UIColor colorWithWhite:0.96 alpha:1]];
     [self.gestureTableView setDataSource:self];
     [self.gestureTableView setSeparatorColor:[UIColor colorWithWhite:0.85 alpha:1]];
@@ -103,7 +104,7 @@
             
             [[NSUserDefaults standardUserDefaults] setBool:!optionEnabled forKey:optionKey];
 
-            [gestureTableView replaceCell:cell duration:0.25 bounce:0 completion:nil];
+            [gestureTableView replaceCell:cell duration:0 bounce:0 completion:nil];
         }]];
         
         [cell.firstLeftAction setDidHighlightBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {

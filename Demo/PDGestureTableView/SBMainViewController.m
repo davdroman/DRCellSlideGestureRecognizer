@@ -32,6 +32,7 @@
                                         @"Tap and hold a cell to move it",
                                         @"Finally, swipe all cells"]];
     
+    [self.tableView setAllowsSelection:NO];
     [self.tableView setBackgroundColor:[UIColor colorWithWhite:0.95 alpha:1]];
     [self.tableView setRowHeight:65];
     
@@ -74,7 +75,7 @@
         NSIndexPath * indexPath = [gestureTableView indexPathForCell:cell];
         [_self.strings removeObjectAtIndex:indexPath.row];
         
-        [gestureTableView removeCell:cell completion:nil];
+        [gestureTableView removeCell:cell duration:0 completion:nil];
     };
     
     UIColor * greenColor = [UIColor colorWithRed:85.0/255.0 green:213.0/255.0 blue:80.0/255.0 alpha:1];

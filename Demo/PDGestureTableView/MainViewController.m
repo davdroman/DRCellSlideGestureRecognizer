@@ -49,6 +49,7 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings"] style:UIBarButtonItemStylePlain target:self action:@selector(didTapLeftButton)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(didTapRightButton)];
     
+    [self.gestureTableView setAllowsSelection:NO];
     [self.gestureTableView setBackgroundColor:[UIColor colorWithWhite:0.96 alpha:1]];
     [self.gestureTableView setDataSource:self];
     [self.gestureTableView setRowHeight:65];
@@ -112,7 +113,7 @@
             NSIndexPath * indexPath = [gestureTableView indexPathForCell:cell];
             [_self.strings removeObjectAtIndex:indexPath.row];
             
-            [gestureTableView removeCell:cell completion:nil];
+            [gestureTableView removeCell:cell duration:0 completion:nil];
         };
         
         cell = [[PDGestureTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];

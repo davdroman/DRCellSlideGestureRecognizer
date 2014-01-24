@@ -9,7 +9,7 @@ PDGestureTableView
 
 ## Features
 
-- **Swipe** the cells to perform multiple actions.
+- **Swipe** cells to perform multiple actions.
 - **Tap and hold** to move cells.
 - A **UIView** can be set to be shown **when there's no content** on the table view.
 - A **left and right margin** can be set so if the table view is inside a scroll view the user can scroll it by swiping the edges.
@@ -64,19 +64,21 @@ Here's how actions should be set:
 - `fraction` specifies the fraction of the entire cell width where the action **will be highlighted**. For instance, if you specify 0.5 the action will highlight when the cell gets to the middle of the table width.
 - `didTriggerBlock` is the block that will execute when the user **releases the cell**.
 
-#### Main actions for `didTriggerBlock`.
+#### Actions for `didTriggerBlock`.
 
 `didTriggerBlock` can contain any action you want, but I highly recommended to use one of the following methods in addition to the ones you want to use:
 
 - PDGestureTableView's `removeCell:completion:`, which removes the specified cell from the table view animatedly. It works in a similar way to `deleteRowsAtIndexPaths:withRowAnimation` so before calling it you must remove any pertinent data from the data source.
 
 	```objective-c
-	[cell.firstLeftAction setDidTriggerBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {
+	[...]
+	
+	didTriggerBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {
 	    NSIndexPath * indexPath = [gestureTableView indexPathForCell:cell];
 	    
 	    [dataArray removeObjectAtIndex:indexPath.row];
 	    
-	    [gestureTableView removeCell:cell completion:^{
+	    [gestureTableView removeCell:cell duration:0.25 completion:^{
 	        NSLog(@"Cell removed!");
 	    }];
 	}];
@@ -85,14 +87,18 @@ Here's how actions should be set:
 - PDGestureTableView's `replaceCell:duration:bounce:completion:`, which replaces the cell to its original position (`bounce` specifies how much bounce effect will it be replaced with).
 	
 	```objective-c
-	[cell.firstLeftAction setDidTriggerBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {
+	[...]
+	
+	didTriggerBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {
 	    [gestureTableView replaceCell:cell duration:0.25 bounce:10 completion:nil];
 	}];
 	```
 
+**Note:** if you set animation durations to `0`, it'll use a default appropriate duration.
+
 ## Wish List
 
-- Autoscroll when the current moving cell is near the edge of the screen (currently working on this).
+- Autoscroll when the current moving cell is near the edge of the table view.
 - Cell bouncing when reaching the last action.
 
 ## Requirements

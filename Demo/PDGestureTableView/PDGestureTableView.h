@@ -47,14 +47,15 @@
 @interface PDGestureTableView : UITableView
 
 @property (nonatomic, getter = isEnabled) BOOL enabled;
+
 @property (nonatomic) CGFloat edgeSlidingMargin;
 @property (nonatomic) CGFloat edgeAutoscrollMargin;
 
-@property (copy, nonatomic) void (^cellDismissingBlock)(PDGestureTableView *, PDGestureTableViewCell *);
+@property (copy, nonatomic) void (^cellReplacingBlock)(PDGestureTableView *, PDGestureTableViewCell *);
 @property (copy, nonatomic) BOOL (^shouldMoveCellFromIndexPathToIndexPathBlock)(NSIndexPath * fromIndexPath, NSIndexPath * toIndexPath);
 @property (copy, nonatomic) void (^didMoveCellFromIndexPathToIndexPathBlock)(NSIndexPath * fromIndexPath, NSIndexPath * toIndexPath);
 
-- (void)removeCell:(PDGestureTableViewCell *)cell completion:(void (^)(void))completion;
+- (void)removeCell:(PDGestureTableViewCell *)cell duration:(NSTimeInterval)duration completion:(void (^)(void))completion;
 - (void)replaceCell:(PDGestureTableViewCell *)cell duration:(NSTimeInterval)duration bounce:(CGFloat)bounce completion:(void (^)(void))completion;
 
 @end
