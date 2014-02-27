@@ -107,7 +107,7 @@ The first method will push it to the edge of the table view, and the second one 
 
 ##### `pushAndDeleteCellForIndexPath:completion:`
 
-- This method is composed by the two above. You call it when you just want to delete a cell from a table view not being managed by a `NSFetchedResultsController`. Before calling it you must remove any pertinent data from the data source.
+This method is composed by the two above. You call it when you just want to delete a cell from a table view not being managed by a `NSFetchedResultsController`. Before calling it you must remove any pertinent data from the data source.
 
 	```objective-c
 	[...]
@@ -129,7 +129,7 @@ The first method will push it to the edge of the table view, and the second one 
 
 ##### `replaceCellForIndexPath:completion:`
 
-- Replaces the cell to its original position.
+Replaces the cell to its original position.
 
 	```objective-c
 	[...]
