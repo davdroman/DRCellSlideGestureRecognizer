@@ -12,7 +12,7 @@
 
 @interface SBMainViewController : UITableViewController
 
-@property (strong, nonatomic) NSMutableArray * strings;
+@property (strong, nonatomic) NSMutableArray *strings;
 
 - (IBAction)addCell:(id)sender;
 

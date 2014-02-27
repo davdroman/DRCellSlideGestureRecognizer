@@ -12,7 +12,7 @@
 
 @interface PDGestureTableViewCellSideView : UIView
 
-@property (strong, nonatomic) UIImageView * iconImageView;
+@property (strong, nonatomic) UIImageView *iconImageView;
 
 @end
 
@@ -33,25 +33,31 @@
 #pragma mark - Interface Extensions -
 
 @interface PDGestureTableViewCell () {
-    PDGestureTableViewCellAction * currentAction;
+    PDGestureTableViewCellAction *currentAction;
     
-    NSIndexPath * originIndexPath;
+    NSIndexPath *originIndexPath;
     CGFloat previousPoint;
-    NSIndexPath * previousIndexPath;
-    NSIndexPath * nextIndexPath;
-    PDGestureTableViewCell * nextCell;
-    PDGestureTableViewCell * previousCell;
-    PDGestureTableViewCell * copiedCell;
-    CADisplayLink * autoscrollTimer;
+    NSIndexPath *previousIndexPath;
+    NSIndexPath *nextIndexPath;
+    PDGestureTableViewCell *nextCell;
+    PDGestureTableViewCell *previousCell;
+    PDGestureTableViewCell *copiedCell;
+    CADisplayLink *autoscrollTimer;
 }
 
-@property (weak, nonatomic) PDGestureTableView * gestureTableView;
+@property (weak, nonatomic) PDGestureTableView *gestureTableView;
 
-@property (strong, nonatomic) PDGestureTableViewCellSideView * leftSideView;
-@property (strong, nonatomic) PDGestureTableViewCellSideView * rightSideView;
+@property (strong, nonatomic) PDGestureTableViewCellSideView *leftSideView;
+@property (strong, nonatomic) PDGestureTableViewCellSideView *rightSideView;
 
-@property (strong, nonatomic) UIPanGestureRecognizer * panGestureRecognizer;
-@property (strong, nonatomic) UILongPressGestureRecognizer * longPressGestureRecognizer;
+@property (strong, nonatomic) UIPanGestureRecognizer *panGestureRecognizer;
+@property (strong, nonatomic) UILongPressGestureRecognizer *longPressGestureRecognizer;
+
+@end
+
+@interface PDGestureTableView ()
+
+@property (nonatomic, getter = isUpdating) BOOL updating;
 
 @end
 
@@ -59,8 +65,8 @@
 
 @implementation PDGestureTableViewCellAction
 
-+ (id)actionWithIcon:(UIImage *)icon color:(UIColor *)color fraction:(CGFloat)fraction didTriggerBlock:(void (^)(PDGestureTableView *, PDGestureTableViewCell *))didTriggerBlock {
-    PDGestureTableViewCellAction * action = [PDGestureTableViewCellAction new];
++ (id)actionWithIcon:(UIImage *)icon color:(UIColor *)color fraction:(CGFloat)fraction didTriggerBlock:(void (^)(PDGestureTableView *, NSIndexPath *))didTriggerBlock {
+    PDGestureTableViewCellAction *action = [PDGestureTableViewCellAction new];
     
     [action setIcon:icon];
     [action setColor:color];
@@ -136,9 +142,8 @@
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     if ([gestureRecognizer class] == [UIPanGestureRecognizer class]) {
         CGPoint velocity = [(UIPanGestureRecognizer *)gestureRecognizer velocityInView:self];
-        CGFloat horizontalLocation = [(UIPanGestureRecognizer *)gestureRecognizer locationInView:self].x;
         
-        if (fabsf(velocity.x) > fabsf(velocity.y) && horizontalLocation > self.gestureTableView.edgeSlidingMargin && horizontalLocation < self.frame.size.width - self.gestureTableView.edgeSlidingMargin && self.gestureTableView.isEnabled) {
+        if (fabsf(velocity.x) > fabsf(velocity.y) && self.gestureTableView.isEnabled) {
             return YES;
         }
     } else if ([gestureRecognizer class] == [UILongPressGestureRecognizer class]) {
@@ -160,7 +165,7 @@
     if (panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
         [self setupSideViews];
     } else if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
-        /* if (self.frame.origin.x + horizontalTranslation > margin) {
+        /*if (self.frame.origin.x + horizontalTranslation > margin) {
          coeficient = (elastic-((self.frame.origin.x+horizontalTranslation/(-(1/6)*margin+elastic/1.45))-margin))/elastic;
          } */
         
@@ -172,8 +177,8 @@
         [self setCenter:CGPointMake(self.frame.size.width/2+horizontalTranslation, self.center.y)];
     } else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if ((!currentAction && self.frame.origin.x != 0) || !self.gestureTableView.isEnabled) {
-            self.gestureTableView.cellReplacingBlock(self.gestureTableView, self);
-        } else if (currentAction.didTriggerBlock) currentAction.didTriggerBlock(self.gestureTableView, self);
+            [self.gestureTableView replaceCellForIndexPath:[self.gestureTableView indexPathForCell:self] completion:nil];
+        } else if (currentAction.didTriggerBlock) currentAction.didTriggerBlock(self.gestureTableView, [self.gestureTableView indexPathForCell:self]);
         
         currentAction = nil;
     }
@@ -200,7 +205,7 @@
 }
 
 - (void)performChanges {
-    PDGestureTableViewCellAction * actionForCurrentPosition = [self actionForCurrentPosition];
+    PDGestureTableViewCellAction *actionForCurrentPosition = [self actionForCurrentPosition];
     
     if (actionForCurrentPosition) {
         if (self.frame.origin.x > 0) {
@@ -212,10 +217,10 @@
         }
     } else {
         if (self.frame.origin.x > 0) {
-            [self.leftSideView setBackgroundColor:self.actionNormalColor];
+            [self.leftSideView setBackgroundColor:[UIColor clearColor]];
             [self.leftSideView.iconImageView setImage:self.firstLeftAction.icon];
         } else if (self.frame.origin.x < 0) {
-            [self.rightSideView setBackgroundColor:self.actionNormalColor];
+            [self.rightSideView setBackgroundColor:[UIColor clearColor]];
             [self.rightSideView.iconImageView setImage:self.firstRightAction.icon];
         }
     }
@@ -253,15 +258,15 @@
 #pragma mark -
 
 - (void)animateShadowWithRadius:(CGFloat)radius opacity:(CGFloat)opacity duration:(CFTimeInterval)duration {
-    CABasicAnimation * shadowRadiusAnimation = [CABasicAnimation animationWithKeyPath:@"shadowRadius"];
+    CABasicAnimation *shadowRadiusAnimation = [CABasicAnimation animationWithKeyPath:@"shadowRadius"];
     [shadowRadiusAnimation setFromValue:[NSNumber numberWithFloat:self.layer.shadowRadius]];
     [shadowRadiusAnimation setToValue:[NSNumber numberWithFloat:radius]];
     
-    CABasicAnimation * shadowOpacityAnimation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
+    CABasicAnimation *shadowOpacityAnimation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
     [shadowOpacityAnimation setFromValue:[NSNumber numberWithFloat:self.layer.shadowOpacity]];
     [shadowOpacityAnimation setToValue:[NSNumber numberWithFloat:opacity]];
     
-    CAAnimationGroup * shadowAnimations = [CAAnimationGroup new];
+    CAAnimationGroup *shadowAnimations = [CAAnimationGroup new];
     [shadowAnimations setAnimations:@[shadowRadiusAnimation, shadowOpacityAnimation]];
     [shadowAnimations setRemovedOnCompletion:YES];
     [shadowAnimations setDuration:duration];
@@ -272,7 +277,7 @@
     [self.layer setShadowOpacity:opacity];
 }
 
-// Sorry, this code is so messy as cell movement with autoscroll is in the works.
+// Sorry, this part is so messy as cell movement with autoscroll is in the works.
 
 - (CGFloat)copiedCellY {
     return copiedCell.frame.origin.y-self.gestureTableView.frame.origin.y-self.gestureTableView.contentInset.top;
@@ -290,7 +295,7 @@
         [copiedCell setFrame:self.frame];
         [copiedCell setBackgroundColor:self.backgroundColor];
         
-        for (UIView * view in self.contentView.subviews) {
+        for (UIView *view in self.contentView.subviews) {
             [copiedCell.contentView addSubview:view];
         }
         
@@ -346,7 +351,7 @@
             [copiedCell setCenter:CGPointMake(self.center.x, self.center.y+self.gestureTableView.frame.origin.y+self.gestureTableView.contentInset.top)];
             [copiedCell setTransform:CGAffineTransformMakeScale(1, 1)];
         } completion:^(BOOL finished) {
-            for (UIView * view in copiedCell.contentView.subviews) {
+            for (UIView *view in copiedCell.contentView.subviews) {
                 [self.contentView addSubview:view];
             }
             
@@ -357,10 +362,10 @@
 }
 
 - (void)resetPreviousAndNextCellAndIndexPath {
-    NSArray * indexPaths = [self.gestureTableView indexPathsForVisibleRows];
+    NSArray *indexPaths = [self.gestureTableView indexPathsForVisibleRows];
     
     for (NSInteger i = 0; i < [indexPaths count]; i++) {
-        NSIndexPath * indexPath = indexPaths[i];
+        NSIndexPath *indexPath = indexPaths[i];
         
         if ([indexPath isEqual:[self.gestureTableView indexPathForCell:self]]) {
             if (i-1 < [indexPaths count]) {
@@ -416,7 +421,7 @@
 }
 
 - (void)setFrame:(CGRect)frame {
-    [super setFrame:frame];
+    [super setFrame:(self.gestureTableView.isUpdating ? CGRectMake(self.frame.origin.x, frame.origin.y, frame.size.width, frame.size.height) : frame)];
     [self updateSideViews];
 }
 
@@ -457,18 +462,14 @@
 }
 
 - (void)setup {
-    [self setEdgeSlidingMargin:0];
-    [self setEdgeAutoscrollMargin:40];
-    
     [self setBackgroundView:[UIView new]];
     [self setTableFooterView:[UIView new]];
     [self setSeparatorInset:UIEdgeInsetsZero];
     
     [self setEnabled:YES];
-    
-    [self setCellReplacingBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {
-        [gestureTableView replaceCell:cell duration:0.25 bounce:8 completion:nil];
-    }];
+    [self setAnimationsDuration:0.25];
+    [self setCellBounceWhenReplaced:YES];
+    // [self setEdgeAutoscrollMargin:40];
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview {
@@ -477,8 +478,18 @@
 
 #pragma mark -
 
+- (void)setDataSource:(id<UITableViewDataSource>)dataSource {
+    [super setDataSource:dataSource];
+    [self showOrHideBackgroundViewAnimatedly:NO];
+}
+
+- (void)setBackgroundView:(UIView *)backgroundView {
+    [backgroundView setAlpha:self.backgroundView.alpha];
+    [super setBackgroundView:backgroundView];
+}
+
 - (void)setWrapperViewAlpha:(CGFloat)alpha {
-    for (UIView * subview in self.subviews) {
+    for (UIView *subview in self.subviews) {
         if ([NSStringFromClass([subview class]) isEqualToString:@"UITableViewWrapperView"]) {
             [subview setAlpha:alpha];
         }
@@ -534,44 +545,83 @@
 
 #pragma mark -
 
-- (void)removeCell:(PDGestureTableViewCell *)cell duration:(NSTimeInterval)duration completion:(void (^)(void))completion {
-    if (duration == 0) duration = 0.3;
+- (void)pushCellForIndexPath:(NSIndexPath *)indexPath completion:(void (^)(void))completion {
+    PDGestureTableViewCell *cell = (PDGestureTableViewCell *)[self cellForRowAtIndexPath:indexPath];
     
     [self setEnabled:NO];
     
-    UITableViewRowAnimation animation = cell.frame.origin.x > 0 ? UITableViewRowAnimationRight : UITableViewRowAnimationLeft;
+    CGFloat newHorizontalPosition = cell.frame.size.width/2+cell.frame.size.width*(cell.frame.origin.x >= 0 ? 1 : -1);
     
-    [UIView animateWithDuration:duration animations:^{
-        [cell setCenter:CGPointMake(cell.frame.size.width/2+(cell.frame.origin.x > 0 ? cell.frame.size.width : -cell.frame.size.width), cell.center.y)];
+    [UIView animateWithDuration:self.animationsDuration animations:^{
+        [cell setCenter:CGPointMake(newHorizontalPosition, cell.center.y)];
     } completion:^(BOOL finished) {
-        NSIndexPath * indexPath = [self indexPathForCell:cell];
-        
-        [UIView animateWithDuration:duration animations:^{
-            [cell.leftSideView setAlpha:0];
-            [cell.rightSideView setAlpha:0];
-        }];
-        
-        [self deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:animation duration:duration completion:^{
-            [cell.leftSideView setAlpha:1];
-            [cell.rightSideView setAlpha:1];
-            [cell.leftSideView removeFromSuperview];
-            [cell.rightSideView removeFromSuperview];
-            [self setEnabled:YES];
-            if (completion) completion();
-        }];
+        [self setEnabled:YES];
+        if (completion) completion();
     }];
 }
 
-- (void)replaceCell:(PDGestureTableViewCell *)cell duration:(NSTimeInterval)duration bounce:(CGFloat)bounce completion:(void (^)(void))completion {
-    if (duration == 0) duration = 0.25;
-    bounce = fabsf(bounce);
+- (void)deleteCellForIndexPath:(NSIndexPath *)indexPath animation:(UITableViewRowAnimation)animation completion:(void (^)(void))completion {
+    PDGestureTableViewCell *cell = (PDGestureTableViewCell *)[self cellForRowAtIndexPath:indexPath];
     
-    [UIView animateWithDuration:duration animations:^{
+    [self setEnabled:NO];
+    
+    if (cell.frame.origin.x != 0) {
+        [self setUpdating:YES];
+        animation = cell.frame.origin.x > 0 ? UITableViewRowAnimationRight : UITableViewRowAnimationLeft;
+    }
+    
+    [CATransaction setCompletionBlock:^{
+        [cell.leftSideView setAlpha:1];
+        [cell.rightSideView setAlpha:1];
+        [cell.leftSideView removeFromSuperview];
+        [cell.rightSideView removeFromSuperview];
+        [self setEnabled:YES];
+        [self setUpdating:NO];
+        if (completion) completion();
+    }];
+    
+    [cell.leftSideView setAlpha:0];
+    [cell.rightSideView setAlpha:0];
+    [self deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:animation];
+}
+
+- (void)beginUpdates {
+    [super beginUpdates];
+    
+    [UIView beginAnimations:@"UITableView+AnimationControl Animations ID" context:nil];
+    [UIView setAnimationDuration:self.animationsDuration];
+    [CATransaction begin];
+}
+
+- (void)endUpdates {
+    [super endUpdates];
+    [CATransaction commit];
+    [UIView commitAnimations];
+}
+
+- (void)pushAndDeleteCellForIndexPath:(NSIndexPath *)indexPath completion:(void (^)(void))completion {
+    [self pushCellForIndexPath:indexPath completion:^{
+        [self beginUpdates];
+        
+        [self deleteCellForIndexPath:indexPath animation:UITableViewRowAnimationNone completion:^{
+            if (completion) completion();
+        }];
+        
+        [self endUpdates];
+    }];
+}
+
+- (void)replaceCellForIndexPath:(NSIndexPath *)indexPath completion:(void (^)(void))completion {
+    PDGestureTableViewCell *cell = (PDGestureTableViewCell *)[self cellForRowAtIndexPath:indexPath];
+    
+    CGFloat bounce = self.cellBounceWhenReplaced ? MIN(7, fabsf(cell.frame.origin.x)/30) : 0;
+    
+    [UIView animateWithDuration:self.animationsDuration animations:^{
         [cell setCenter:CGPointMake(cell.frame.size.width/2 + (cell.frame.origin.x > 0 ? -bounce : bounce), cell.center.y)];
         [cell.leftSideView.iconImageView setAlpha:0];
         [cell.rightSideView.iconImageView setAlpha:0];
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:duration/2 animations:^{
+        [UIView animateWithDuration:self.animationsDuration/2 animations:^{
             [cell setCenter:CGPointMake(cell.frame.size.width/2, cell.center.y)];
         } completion:^(BOOL finished) {
             [cell.leftSideView removeFromSuperview];
@@ -579,21 +629,6 @@
             if (completion) completion();
         }];
     }];
-}
-
-#pragma mark -
-
-// This is based on UITableView-AnimationControl [http://github.com/Dromaguirre/UITableView-AnimationControl]. You should check it out, it's pretty useful stuff.
-
-- (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation duration:(NSTimeInterval)duration completion:(void (^)(void))completion {
-    [CATransaction begin];
-    
-    [CATransaction setCompletionBlock:completion];
-    [UIView animateWithDuration:duration animations:^{
-        [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
-    }];
-    
-    [CATransaction commit];
 }
 
 @end

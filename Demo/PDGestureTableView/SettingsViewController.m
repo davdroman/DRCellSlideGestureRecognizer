@@ -87,27 +87,25 @@
 }
 
 - (UITableViewCell *)tableView:(PDGestureTableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString * cellIdentifier = @"Option Cell";
+    static NSString *cellIdentifier = @"Option Cell";
     
-    PDGestureTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    PDGestureTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if (!cell) {
         __unsafe_unretained typeof(self) _self = self;
         
         cell = [[PDGestureTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         
-        [cell setFirstLeftAction:[PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"green-circle"] color:[UIColor clearColor] fraction:0.25 didTriggerBlock:^(PDGestureTableView *gestureTableView, PDGestureTableViewCell *cell) {
-            NSInteger row = [_self.gestureTableView indexPathForCell:cell].row;
-            
-            NSString * optionKey = [[NSString alloc] initWithFormat:@"option%i", row+1];
+        [cell setFirstLeftAction:[PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"green-circle"] color:[UIColor clearColor] fraction:0.25 didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath *indexPath) {
+            NSString *optionKey = [[NSString alloc] initWithFormat:@"option%i", indexPath.row+1];
             BOOL optionEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:optionKey];
             
             [[NSUserDefaults standardUserDefaults] setBool:!optionEnabled forKey:optionKey];
 
-            [gestureTableView replaceCell:cell duration:0 bounce:0 completion:nil];
+            [gestureTableView replaceCellForIndexPath:indexPath completion:nil];
         }]];
         
-        [cell.firstLeftAction setDidHighlightBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {
+        [cell.firstLeftAction setDidHighlightBlock:^(PDGestureTableView *gestureTableView, PDGestureTableViewCell *cell) {
             [_self changeCellColors:cell];
         }];
         

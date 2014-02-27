@@ -14,7 +14,7 @@
 
 - (id)init {
     if (self = [super init]) {
-        UILabel * congratsLabel = [UILabel new];
+        UILabel *congratsLabel = [UILabel new];
         [congratsLabel setBackgroundColor:[UIColor clearColor]];
         [congratsLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
         [congratsLabel setText:@"Congrats! You've just discovered PDGestureTableView :D"];
@@ -28,7 +28,7 @@
             make.centerY.equalTo(self);
         }];
         
-        UIButton * tweetButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        UIButton *tweetButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [tweetButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
         [tweetButton setTitle:@"Tweet" forState:UIControlStateNormal];
         [tweetButton addTarget:self action:@selector(didTapTweetButton:) forControlEvents:UIControlEventTouchUpInside];

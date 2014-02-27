@@ -9,12 +9,11 @@ PDGestureTableView
 
 ## Features
 
-- **Swipe** cells to perform multiple actions.
-- **Tap and hold** to move cells.
-- A **UIView** can be set to be shown **when there's no content** on the table view.
-- A **left and right margin** can be set so if the table view is inside a scroll view the user can scroll it by swiping the edges.
-- **Storyboards/Xibs** & **Autolayout** fully compatible.
-- **Block-driven**. No silly delegates :)
+- __Swipe__ cells to perform multiple actions.
+- __Tap and hold__ to move cells.
+- A __UIView__ can be set to be shown __when there's no content__ on the table view.
+- __Storyboards/Xibs__ & __Autolayout__ fully compatible.
+- __Block-driven__. No silly delegates :)
 
 ## CocoaPods
 
@@ -33,68 +32,116 @@ PDGestureTableViewCell has 4 possible actions:
 - `firstRightAction`
 - `secondRightAction`
 
-Here's how actions should be set:
+This is how actions should be set:
 
 ```objective-c
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     [...]
-    
+
     cell.firstLeftAction = [PDGestureTableViewCellAction
                             actionWithIcon:[UIImage imageNamed:@"icon"]
                             color:[UIColor greenColor]
                             fraction:0.25
-                            didTriggerBlock:^(PDGestureTableView *gestureTableView, PDGestureTableViewCell *cell) {
+                            didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath*indexPath) {
                                 // Action for first left action triggering.
                             }];
-                            
+
     cell.secondLeftAction = [PDGestureTableViewCellAction
                             actionWithIcon:[UIImage imageNamed:@"icon"]
                             color:[UIColor redColor]
                             fraction:0.7
-                            didTriggerBlock:^(PDGestureTableView *gestureTableView, PDGestureTableViewCell *cell) {
+                            didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath*indexPath) {
                                 // Action for second left action triggering.
                             }];
-    
+
     return cell;
 }
 ```
 
-- `icon` is the UIImage **icon** for that action.
-- `color` is the UIColor for the action **highlight**.
-- `fraction` specifies the fraction of the entire cell width where the action **will be highlighted**. For instance, if you specify 0.5 the action will highlight when the cell gets to the middle of the table width.
-- `didTriggerBlock` is the block that will execute when the user **releases the cell**.
+- `icon` is the UIImage __icon__ for that action.
+- `color` is the UIColor for the action __highlight__.
+- `fraction` specifies the fraction of the entire cell width where the action __will be highlighted__. For instance, if you specify 0.5 the action will highlight when the cell gets to the middle of the table width.
+- `didTriggerBlock` is the block that will execute when the user __releases the cell__.
 
 #### Actions for `didTriggerBlock`.
 
-`didTriggerBlock` can contain any action you want, but I highly recommended to use one of the following methods in addition to the ones you want to use:
+`didTriggerBlock` can contain any action you want, but besides the ones you use, you must use one of the following:
 
-- PDGestureTableView's `removeCell:completion:`, which removes the specified cell from the table view animatedly. It works in a similar way to `deleteRowsAtIndexPaths:withRowAnimation` so before calling it you must remove any pertinent data from the data source.
+##### `pushCellForIndexPath:completion` + `deleteCellForIndexPath:animation:completion`
+
+Usually, you'll use these two methods to delete a cell in a table view whose data source is being managed by a `NSFetchedResultsController` object.
+
+The first method will push it to the edge of the table view, and the second one will be called in the `NSFetchedResultsController` delegate method. It'll work great for non-gestural deletions as well.
+
+```objective-c
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	[...]
+
+	__unsafe_unretained typeof(self) weakSelf = self; // Get a weak reference of self so you can access it from didTriggerBlock without creating retain cycles.
+
+	cell.firstLeftAction = [PDGestureTableViewCellAction
+							actionWithIcon:[UIImage imageNamed:@"icon"]
+							color:[UIColor greenColor]
+							fraction:0.25
+							didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath*indexPath) {
+								NSManagedObject *object = [weakSelf.fetchedResultsController objectAtIndexPath:indexPath];
+
+								[weakSelf.fetchedResultsController deleteObject:object];
+							}];
+
+	return cell;
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+	switch(type) {
+		[...]
+
+        case NSFetchedResultsChangeDelete:
+            [self.gestureTableView deleteCellForIndexPath:indexPath animation:UITableViewRowAnimationRight completion:nil];
+            break;
+
+		[...]
+    }
+}
+```
+
+##### `pushAndDeleteCellForIndexPath:completion:`
+
+- This method is composed by the two above. You call it when you just want to delete a cell from a table view not being managed by a `NSFetchedResultsController`. Before calling it you must remove any pertinent data from the data source.
 
 	```objective-c
 	[...]
-	
-	didTriggerBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {
-	    NSIndexPath * indexPath = [gestureTableView indexPathForCell:cell];
-	    
-	    [dataArray removeObjectAtIndex:indexPath.row];
-	    
-	    [gestureTableView removeCell:cell duration:0.25 completion:^{
-	        NSLog(@"Cell removed!");
+
+	didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath*indexPath) {
+		[dataArray removeObjectAtIndex:indexPath.row];
+
+		[gestureTableView beginUpdates];
+
+	    [gestureTableView pushAndDeleteCellForIndexPath:indexPath completion:^{
+	        // Cell deleted.
 	    }];
+
+		[gestureTableView endUpdates];
 	}];
 	```
 
-- PDGestureTableView's `replaceCell:duration:bounce:completion:`, which replaces the cell to its original position (`bounce` specifies how much bounce effect will it be replaced with).
-	
+	Notice you __must__ use `beginUpdates` and `endUpdates` methods before and after calling this method, respectively.
+
+##### `replaceCellForIndexPath:completion:`
+
+- Replaces the cell to its original position.
+
 	```objective-c
 	[...]
-	
-	didTriggerBlock:^(PDGestureTableView * gestureTableView, PDGestureTableViewCell * cell) {
-	    [gestureTableView replaceCell:cell duration:0.25 bounce:10 completion:nil];
+
+	didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath *indexPath) {
+	    [gestureTableView replaceCellForIndexPath:indexPath completion:nil];
 	}];
 	```
 
-**Note:** if you set animation durations to `0`, it'll use a default appropriate duration.
+If you don't want the cell to bounce when replacing, set `cellBouncesWhenReplacing` to `NO`.
+
+Also, if you want to set the duration of all these animations, you can set `animationsDuration` to the amount of time you want.
 
 ## Wish List
 
@@ -110,4 +157,4 @@ Here's how actions should be set:
 
 PDGestureTableView is available under the MIT license.
 
-Also, I'd really love to know you're using it in any of your projects, so send me an [**email**](mailto:dromaguirre@gmail.com) or a [**tweet**](http://twitter.com/Dromaguirre) and make my day :)
+Also, I'd really love to know you're using it in any of your projects, so send me an [__email__](mailto:dromaguirre@gmail.com) or a [__tweet__](http://twitter.com/Dromaguirre) and make my day :)

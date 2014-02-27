@@ -12,8 +12,8 @@
 
 @interface MainViewController : UIViewController <UITableViewDataSource>
 
-@property (strong, nonatomic) NSMutableArray * strings;
+@property (strong, nonatomic) NSMutableArray *strings;
 
-@property (strong, nonatomic) PDGestureTableView * gestureTableView;
+@property (strong, nonatomic) PDGestureTableView *gestureTableView;
 
 @end

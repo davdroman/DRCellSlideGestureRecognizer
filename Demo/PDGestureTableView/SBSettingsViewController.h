@@ -11,10 +11,10 @@
 @class PDGestureTableView;
 
 @interface SBSettingsViewController : UITableViewController {
-    UIColor * greenColor;
+    UIColor *greenColor;
 }
 
-@property (strong, nonatomic) NSArray * options;
+@property (strong, nonatomic) NSArray *options;
 
 - (IBAction)dismissViewController:(id)sender;
 

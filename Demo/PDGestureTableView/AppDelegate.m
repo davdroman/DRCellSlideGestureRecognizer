@@ -22,7 +22,7 @@
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    NSDictionary * defaults = @{@"option1": @YES,
+    NSDictionary *defaults = @{@"option1": @YES,
                                 @"option2": @YES,
                                 @"option3": @YES,
                                 @"option4": @NO,

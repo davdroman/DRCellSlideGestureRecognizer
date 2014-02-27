@@ -11,11 +11,11 @@
 @class PDGestureTableView;
 
 @interface SettingsViewController : UIViewController <UITableViewDataSource> {
-    UIColor * greenColor;
+    UIColor *greenColor;
 }
 
-@property (strong, nonatomic) NSArray * options;
+@property (strong, nonatomic) NSArray *options;
 
-@property (strong, nonatomic) PDGestureTableView * gestureTableView;
+@property (strong, nonatomic) PDGestureTableView *gestureTableView;
 
 @end
