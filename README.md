@@ -83,7 +83,7 @@ The first method will push it to the edge of the table view, and the second one 
 							actionWithIcon:[UIImage imageNamed:@"icon"]
 							color:[UIColor greenColor]
 							fraction:0.25
-							didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath*indexPath) {
+							didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath *indexPath) {
 								NSManagedObject *object = [weakSelf.fetchedResultsController objectAtIndexPath:indexPath];
 
 								[weakSelf.fetchedResultsController deleteObject:object];
@@ -112,7 +112,7 @@ This method is composed by the two above. You call it when you just want to dele
 ```objective-c
 [...]
 
-didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath*indexPath) {
+didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath *indexPath) {
 	[dataArray removeObjectAtIndex:indexPath.row];
 
 	[gestureTableView beginUpdates];
