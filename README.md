@@ -109,35 +109,35 @@ The first method will push it to the edge of the table view, and the second one 
 
 This method is composed by the two above. You call it when you just want to delete a cell from a table view not being managed by a `NSFetchedResultsController`. Before calling it you must remove any pertinent data from the data source.
 
-	```objective-c
-	[...]
+```objective-c
+[...]
 
-	didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath*indexPath) {
-		[dataArray removeObjectAtIndex:indexPath.row];
+didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath*indexPath) {
+	[dataArray removeObjectAtIndex:indexPath.row];
 
-		[gestureTableView beginUpdates];
+	[gestureTableView beginUpdates];
 
-	    [gestureTableView pushAndDeleteCellForIndexPath:indexPath completion:^{
-	        // Cell deleted.
-	    }];
+    [gestureTableView pushAndDeleteCellForIndexPath:indexPath completion:^{
+        // Cell deleted.
+    }];
 
-		[gestureTableView endUpdates];
-	}];
-	```
+	[gestureTableView endUpdates];
+}];
+```
 
-	Notice you __must__ use `beginUpdates` and `endUpdates` methods before and after calling this method, respectively.
+Notice you __must__ use `beginUpdates` and `endUpdates` methods before and after calling this method, respectively.
 
 ##### `replaceCellForIndexPath:completion:`
 
 Replaces the cell to its original position.
 
-	```objective-c
-	[...]
+```objective-c
+[...]
 
-	didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath *indexPath) {
-	    [gestureTableView replaceCellForIndexPath:indexPath completion:nil];
-	}];
-	```
+didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath *indexPath) {
+    [gestureTableView replaceCellForIndexPath:indexPath completion:nil];
+}];
+```
 
 If you don't want the cell to bounce when replacing, set `cellBouncesWhenReplacing` to `NO`.
 
