@@ -63,7 +63,7 @@ This is how actions should be set:
 - `fraction` specifies the fraction of the entire cell width where the action __will be highlighted__. For instance, if you specify 0.5 the action will highlight when the cell gets to the middle of the table width.
 - `didTriggerBlock` is the block that will execute when the user __releases the cell__.
 
-#### Actions for `didTriggerBlock`.
+#### Actions for `didTriggerBlock`
 
 `didTriggerBlock` can contain any action you want, but besides the ones you use, you must use one of the following:
 
