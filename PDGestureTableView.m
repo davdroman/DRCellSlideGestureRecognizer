@@ -210,17 +210,29 @@
     if (actionForCurrentPosition) {
         if (self.frame.origin.x > 0) {
             [self.leftSideView setBackgroundColor:actionForCurrentPosition.color];
+            if ([self.leftSideView.iconImageView respondsToSelector:@selector(setTintColor:)) {
+                [self.leftSideView.iconImageView setTintColor:actionForCurrentPosition.tintColor];
+            }
             [self.leftSideView.iconImageView setImage:actionForCurrentPosition.icon];
         } else if (self.frame.origin.x < 0) {
             [self.rightSideView setBackgroundColor:actionForCurrentPosition.color];
+            if ([self.rightSideView.iconImageView respondsToSelector:@selector(setTintColor:)) {
+                [self.rightSideView.iconImageView setTintColor:actionForCurrentPosition.tintColor];
+            }
             [self.rightSideView.iconImageView setImage:actionForCurrentPosition.icon];
         }
     } else {
         if (self.frame.origin.x > 0) {
             [self.leftSideView setBackgroundColor:[UIColor clearColor]];
+            if ([self.leftSideView.iconImageView respondsToSelector:@selector(setTintColor:)) {
+                [self.leftSideView.iconImageView setTintColor:firstLeftAction.tintColor];
+            }
             [self.leftSideView.iconImageView setImage:self.firstLeftAction.icon];
         } else if (self.frame.origin.x < 0) {
             [self.rightSideView setBackgroundColor:[UIColor clearColor]];
+            if ([self.rightSideView.iconImageView respondsToSelector:@selector(setTintColor:)) {
+                [self.rightSideView.iconImageView setTintColor:firstRightAction.tintColor];
+            }
             [self.rightSideView.iconImageView setImage:self.firstRightAction.icon];
         }
     }

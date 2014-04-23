@@ -17,6 +17,7 @@
 
 @property (strong, nonatomic) UIImage *icon;
 @property (strong, nonatomic) UIColor *color;
+@property (strong, nonatomic) UIColor *iconTintColor;
 @property (nonatomic) CGFloat fraction;
 // @property (nonatomic) CGFloat elasticity;
 
