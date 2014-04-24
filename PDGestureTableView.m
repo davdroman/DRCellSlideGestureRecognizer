@@ -474,8 +474,12 @@
 }
 
 - (void)setup {
-    [self setBackgroundView:[UIView new]];
-    [self setTableFooterView:[UIView new]];
+    if (!self.backgroundView) {
+        [self setBackgroundView:[UIView new]];        
+    }
+    if (!self.tableFooterView) {
+        [self setTableFooterView:[UIView new]];
+    }
     [self setSeparatorInset:UIEdgeInsetsZero];
     
     [self setEnabled:YES];
