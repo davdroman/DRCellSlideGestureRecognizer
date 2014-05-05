@@ -133,6 +133,12 @@
     [self setGestureTableView:(PDGestureTableView *)self.superview.superview];
 }
 
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
+    [self setCenter:CGPointMake(self.frame.size.width/2, self.center.y)];
+}
+
 #pragma mark -
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
