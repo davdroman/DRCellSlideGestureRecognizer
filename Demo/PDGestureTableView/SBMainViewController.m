@@ -76,20 +76,29 @@
         
         [gestureTableView pushAndDeleteCellForIndexPath:indexPath completion:nil];
     };
-    
+
     UIColor *greenColor = [UIColor colorWithRed:85.0/255.0 green:213.0/255.0 blue:80.0/255.0 alpha:1];
     UIColor *redColor = [UIColor colorWithRed:213.0/255.0 green:70.0/255.0 blue:70.0/255.0 alpha:1];
-    UIColor *yellowColor = [UIColor colorWithRed:236.0/255.0 green:223.0/255 blue:60.0/255 alpha:1];
-    UIColor *brownColor = [UIColor colorWithRed:182.0/255.0 green:127.0/255 blue:78.0/255 alpha:1];
-    
-    cell.firstLeftAction = [PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"square"] color:greenColor fraction:0.25 didTriggerBlock:pushAndDeleteCellBlock];
-    
-    cell.secondLeftAction = [PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"circle"] color:redColor fraction:0.7 didTriggerBlock:pushAndDeleteCellBlock];
-    
-    cell.firstRightAction = [PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"circle"] color:yellowColor fraction:0.25 didTriggerBlock:pushAndDeleteCellBlock];
-    
-    cell.secondRightAction = [PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"square"] color:brownColor fraction:0.7 didTriggerBlock:pushAndDeleteCellBlock];
-    
+    UIColor *yellow1 = [UIColor colorWithRed:250.0/255.0 green:255.0/255 blue:94.0/255 alpha:1];
+    UIColor *yellow2 = [UIColor colorWithRed:255.0/255.0 green:249.0/255 blue:94.0/255 alpha:1];
+    UIColor *yellow3 = [UIColor colorWithRed:255.0/255.0 green:242.0/255 blue:94.0/255 alpha:1];
+    UIColor *yellow4 = [UIColor colorWithRed:255.0/255.0 green:229.0/255 blue:94.0/255 alpha:1];
+    UIColor *yellow5 = [UIColor colorWithRed:255.0/255.0 green:216.0/255 blue:94.0/255 alpha:1];
+
+
+    cell.leftActions = @[
+            [PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"star_icon"] color:yellow1 fraction:0.2 didTriggerBlock:pushAndDeleteCellBlock],
+            [PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"star_icon2"] color:yellow2 fraction:0.32 didTriggerBlock:pushAndDeleteCellBlock],
+            [PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"star_icon3"] color:yellow3 fraction:0.44 didTriggerBlock:pushAndDeleteCellBlock],
+            [PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"star_icon4"] color:yellow4 fraction:0.56 didTriggerBlock:pushAndDeleteCellBlock],
+            [PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"star_icon5"] color:yellow5 fraction:0.68 didTriggerBlock:pushAndDeleteCellBlock]
+    ];
+
+    cell.rightActions = @[
+            [PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"circle"] color:greenColor fraction:0.25 didTriggerBlock:pushAndDeleteCellBlock],
+            [PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"square"] color:redColor fraction:0.7 didTriggerBlock:pushAndDeleteCellBlock]
+    ];
+
     [cell.textLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
     [cell.textLabel setText:self.strings[indexPath.row]];
     
