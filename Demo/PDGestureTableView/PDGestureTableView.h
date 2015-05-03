@@ -35,11 +35,8 @@
 // @property (nonatomic) BOOL movesFreely;
 // @property (nonatomic) BOOL bounces;
 
-@property (strong, nonatomic) PDGestureTableViewCellAction *firstLeftAction;
-@property (strong, nonatomic) PDGestureTableViewCellAction *secondLeftAction;
-
-@property (strong, nonatomic) PDGestureTableViewCellAction *firstRightAction;
-@property (strong, nonatomic) PDGestureTableViewCellAction *secondRightAction;
+@property (strong, nonatomic) NSArray *leftActions;
+@property (strong, nonatomic) NSArray *rightActions;
 
 - (void)setup;
 

@@ -185,11 +185,11 @@
 }
 
 - (BOOL)hasAnyLeftAction {
-    return self.firstLeftAction || self.secondLeftAction;
+    return self.leftActions.count > 0;
 }
 
 - (BOOL)hasAnyRightAction {
-    return self.firstRightAction || self.secondRightAction;
+    return self.rightActions.count > 0;
 }
 
 - (void)setupSideViews {
@@ -217,11 +217,13 @@
         }
     } else {
         if (self.frame.origin.x > 0) {
+            PDGestureTableViewCellAction *firstLeftAction = self.leftActions.firstObject;
             [self.leftSideView setBackgroundColor:[UIColor clearColor]];
-            [self.leftSideView.iconImageView setImage:self.firstLeftAction.icon];
+            [self.leftSideView.iconImageView setImage:firstLeftAction.icon];
         } else if (self.frame.origin.x < 0) {
+            PDGestureTableViewCellAction *firstRightAction = self.rightActions.firstObject;
             [self.rightSideView setBackgroundColor:[UIColor clearColor]];
-            [self.rightSideView.iconImageView setImage:self.firstRightAction.icon];
+            [self.rightSideView.iconImageView setImage:firstRightAction.icon];
         }
     }
     
@@ -239,19 +241,22 @@
     CGFloat fraction = fabsf(self.frame.origin.x/self.frame.size.width);
     
     if (self.frame.origin.x > 0) {
-        if (self.secondLeftAction && fraction > self.secondLeftAction.fraction) {
-            return self.secondLeftAction;
-        } else if (self.firstLeftAction && fraction > self.firstLeftAction.fraction) {
-            return self.firstLeftAction;
+        for(NSUInteger i = 0; i < self.leftActions.count; i++) {
+            PDGestureTableViewCellAction *action = self.leftActions[i];
+            PDGestureTableViewCellAction *nextAction = self.leftActions.count-1 == i ? nil : self.leftActions[i+1];
+            if(fraction > action.fraction && (nextAction == nil || fraction <= nextAction.fraction)) {
+                return action;
+            }
         }
     } else if (self.frame.origin.x < 0) {
-        if (self.secondRightAction && fraction > self.secondRightAction.fraction) {
-            return self.secondRightAction;
-        } else if (self.firstRightAction && fraction > self.firstRightAction.fraction) {
-            return self.firstRightAction;
+        for (NSUInteger i = 0; i < self.rightActions.count; i++) {
+            PDGestureTableViewCellAction *action = self.rightActions[i];
+            PDGestureTableViewCellAction *nextAction = self.rightActions.count-1 == i ? nil : self.rightActions[i + 1];
+            if (fraction > action.fraction && (nextAction == nil || fraction <= nextAction.fraction)) {
+                return action;
+            }
         }
     }
-    
     return nil;
 }
 
@@ -387,24 +392,24 @@
 
 #pragma mark -
 
-- (void)setFirstLeftAction:(PDGestureTableViewCellAction *)firstLeftAction {
-    if (firstLeftAction.fraction == 0) [firstLeftAction setFraction:0.3];
-    _firstLeftAction = firstLeftAction;
+- (void)setDefaultFractionForActions:(NSArray *)actions {
+    [actions enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        PDGestureTableViewCellAction *action = obj;
+        CGFloat fraction = ((idx + 1) * (1.0f / (actions.count + 2)));
+        if(action.fraction == 0) [action setFraction:fraction];
+    }];
 }
 
-- (void)setSecondLeftAction:(PDGestureTableViewCellAction *)secondLeftAction {
-    if (secondLeftAction.fraction == 0) [secondLeftAction setFraction:0.7];
-    _secondLeftAction = secondLeftAction;
+- (void)setLeftActions:(NSArray *)leftActions {
+    [self setDefaultFractionForActions:leftActions];
+
+    _leftActions = leftActions;
 }
 
-- (void)setFirstRightAction:(PDGestureTableViewCellAction *)firstRightAction {
-    if (firstRightAction.fraction == 0) [firstRightAction setFraction:0.3];
-    _firstRightAction = firstRightAction;
-}
+- (void)setRightActions:(NSArray *)rightActions {
+    [self setDefaultFractionForActions:rightActions];
 
-- (void)setSecondRightAction:(PDGestureTableViewCellAction *)secondRightAction {
-    if (secondRightAction.fraction == 0) [secondRightAction setFraction:0.7];
-    _secondRightAction = secondRightAction;
+    _rightActions = rightActions;
 }
 
 - (void)updateSideViews {

@@ -95,21 +95,22 @@
         __unsafe_unretained typeof(self) _self = self;
         
         cell = [[PDGestureTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        
-        [cell setFirstLeftAction:[PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"green-circle"] color:[UIColor clearColor] fraction:0.25 didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath *indexPath) {
+
+        // TODO: Update
+        [cell setLeftActions:@[[PDGestureTableViewCellAction actionWithIcon:[UIImage imageNamed:@"green-circle"] color:[UIColor clearColor] fraction:0.25 didTriggerBlock:^(PDGestureTableView *gestureTableView, NSIndexPath *indexPath) {
             NSString *optionKey = [[NSString alloc] initWithFormat:@"option%i", indexPath.row+1];
             BOOL optionEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:optionKey];
-            
+
             [[NSUserDefaults standardUserDefaults] setBool:!optionEnabled forKey:optionKey];
 
             [gestureTableView replaceCellForIndexPath:indexPath completion:nil];
-        }]];
-        
-        [cell.firstLeftAction setDidHighlightBlock:^(PDGestureTableView *gestureTableView, PDGestureTableViewCell *cell) {
+        }]]];
+
+        [cell.leftActions.firstObject setDidHighlightBlock:^(PDGestureTableView *gestureTableView, PDGestureTableViewCell *cell) {
             [_self changeCellColors:cell];
         }];
-        
-        [cell.firstLeftAction setDidUnhighlightBlock:cell.firstLeftAction.didHighlightBlock];
+
+        [cell.leftActions.firstObject setDidUnhighlightBlock:[cell.leftActions.firstObject didHighlightBlock]];
     }
     
     [cell.textLabel setText:self.options[indexPath.row][@"title"]];
