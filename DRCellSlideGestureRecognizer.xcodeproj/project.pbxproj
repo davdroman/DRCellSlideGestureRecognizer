@@ -1,0 +1,310 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		75DEC87A1B0184CB007BED6A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DEC8791B0184CB007BED6A /* main.m */; };
+		75DEC87D1B0184CB007BED6A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DEC87C1B0184CB007BED6A /* AppDelegate.m */; };
+		75DEC8851B0184CB007BED6A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75DEC8841B0184CB007BED6A /* Images.xcassets */; };
+		75DEC89D1B018533007BED6A /* DRCellSlideGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DEC89C1B018533007BED6A /* DRCellSlideGestureRecognizer.m */; };
+		75DEC8A11B0185CA007BED6A /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DEC8A01B0185CA007BED6A /* TableViewController.m */; };
+		75DEC8A41B0240BE007BED6A /* DRCellSlideAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DEC8A31B0240BE007BED6A /* DRCellSlideAction.m */; };
+		75E7C0781B08045200A9BFD6 /* DRCellSlideActionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E7C0771B08045200A9BFD6 /* DRCellSlideActionView.m */; };
+		75F30F671B1519110061BBA9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 75F30F661B1519110061BBA9 /* LaunchScreen.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		75DEC8741B0184CA007BED6A /* DRCellSlideGestureRecognizerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DRCellSlideGestureRecognizerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		75DEC8781B0184CB007BED6A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		75DEC8791B0184CB007BED6A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		75DEC87B1B0184CB007BED6A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		75DEC87C1B0184CB007BED6A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		75DEC8841B0184CB007BED6A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		75DEC89B1B018533007BED6A /* DRCellSlideGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DRCellSlideGestureRecognizer.h; path = DRCellSlideGestureRecognizer/DRCellSlideGestureRecognizer.h; sourceTree = SOURCE_ROOT; };
+		75DEC89C1B018533007BED6A /* DRCellSlideGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DRCellSlideGestureRecognizer.m; path = DRCellSlideGestureRecognizer/DRCellSlideGestureRecognizer.m; sourceTree = SOURCE_ROOT; };
+		75DEC89F1B0185CA007BED6A /* TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
+		75DEC8A01B0185CA007BED6A /* TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
+		75DEC8A21B0240BE007BED6A /* DRCellSlideAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DRCellSlideAction.h; path = DRCellSlideGestureRecognizer/DRCellSlideAction.h; sourceTree = SOURCE_ROOT; };
+		75DEC8A31B0240BE007BED6A /* DRCellSlideAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DRCellSlideAction.m; path = DRCellSlideGestureRecognizer/DRCellSlideAction.m; sourceTree = SOURCE_ROOT; };
+		75E7C0761B08045200A9BFD6 /* DRCellSlideActionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DRCellSlideActionView.h; path = DRCellSlideGestureRecognizer/DRCellSlideActionView.h; sourceTree = SOURCE_ROOT; };
+		75E7C0771B08045200A9BFD6 /* DRCellSlideActionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DRCellSlideActionView.m; path = DRCellSlideGestureRecognizer/DRCellSlideActionView.m; sourceTree = SOURCE_ROOT; };
+		75F30F661B1519110061BBA9 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		75DEC8711B0184CA007BED6A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		75DEC8691AFF8C1F007BED6A = {
+			isa = PBXGroup;
+			children = (
+				75DEC8761B0184CB007BED6A /* DRCellSlideGestureRecognizerDemo */,
+				75DEC8751B0184CA007BED6A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		75DEC8751B0184CA007BED6A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				75DEC8741B0184CA007BED6A /* DRCellSlideGestureRecognizerDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		75DEC8761B0184CB007BED6A /* DRCellSlideGestureRecognizerDemo */ = {
+			isa = PBXGroup;
+			children = (
+				75DEC87B1B0184CB007BED6A /* AppDelegate.h */,
+				75DEC87C1B0184CB007BED6A /* AppDelegate.m */,
+				75DEC89F1B0185CA007BED6A /* TableViewController.h */,
+				75DEC8A01B0185CA007BED6A /* TableViewController.m */,
+				75DEC89E1B01853A007BED6A /* DRCellSlideGestureRecognizer */,
+				75DEC8771B0184CB007BED6A /* Supporting Files */,
+			);
+			path = DRCellSlideGestureRecognizerDemo;
+			sourceTree = "<group>";
+		};
+		75DEC8771B0184CB007BED6A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				75DEC8841B0184CB007BED6A /* Images.xcassets */,
+				75F30F661B1519110061BBA9 /* LaunchScreen.xib */,
+				75DEC8781B0184CB007BED6A /* Info.plist */,
+				75DEC8791B0184CB007BED6A /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		75DEC89E1B01853A007BED6A /* DRCellSlideGestureRecognizer */ = {
+			isa = PBXGroup;
+			children = (
+				75DEC89B1B018533007BED6A /* DRCellSlideGestureRecognizer.h */,
+				75DEC89C1B018533007BED6A /* DRCellSlideGestureRecognizer.m */,
+				75DEC8A21B0240BE007BED6A /* DRCellSlideAction.h */,
+				75DEC8A31B0240BE007BED6A /* DRCellSlideAction.m */,
+				75E7C0761B08045200A9BFD6 /* DRCellSlideActionView.h */,
+				75E7C0771B08045200A9BFD6 /* DRCellSlideActionView.m */,
+			);
+			name = DRCellSlideGestureRecognizer;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		75DEC8731B0184CA007BED6A /* DRCellSlideGestureRecognizerDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75DEC8951B0184CB007BED6A /* Build configuration list for PBXNativeTarget "DRCellSlideGestureRecognizerDemo" */;
+			buildPhases = (
+				75DEC8701B0184CA007BED6A /* Sources */,
+				75DEC8711B0184CA007BED6A /* Frameworks */,
+				75DEC8721B0184CA007BED6A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DRCellSlideGestureRecognizerDemo;
+			productName = DRCellSlideGestureRecognizerDemo;
+			productReference = 75DEC8741B0184CA007BED6A /* DRCellSlideGestureRecognizerDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		75DEC86A1AFF8C1F007BED6A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				TargetAttributes = {
+					75DEC8731B0184CA007BED6A = {
+						CreatedOnToolsVersion = 6.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 75DEC86D1AFF8C1F007BED6A /* Build configuration list for PBXProject "DRCellSlideGestureRecognizer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 75DEC8691AFF8C1F007BED6A;
+			productRefGroup = 75DEC8751B0184CA007BED6A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				75DEC8731B0184CA007BED6A /* DRCellSlideGestureRecognizerDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		75DEC8721B0184CA007BED6A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75F30F671B1519110061BBA9 /* LaunchScreen.xib in Resources */,
+				75DEC8851B0184CB007BED6A /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		75DEC8701B0184CA007BED6A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75E7C0781B08045200A9BFD6 /* DRCellSlideActionView.m in Sources */,
+				75DEC87D1B0184CB007BED6A /* AppDelegate.m in Sources */,
+				75DEC8A41B0240BE007BED6A /* DRCellSlideAction.m in Sources */,
+				75DEC87A1B0184CB007BED6A /* main.m in Sources */,
+				75DEC89D1B018533007BED6A /* DRCellSlideGestureRecognizer.m in Sources */,
+				75DEC8A11B0185CA007BED6A /* TableViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		75DEC86E1AFF8C1F007BED6A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		75DEC86F1AFF8C1F007BED6A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
+		75DEC8961B0184CB007BED6A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = DRCellSlideGestureRecognizerDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		75DEC8971B0184CB007BED6A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = DRCellSlideGestureRecognizerDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		75DEC86D1AFF8C1F007BED6A /* Build configuration list for PBXProject "DRCellSlideGestureRecognizer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75DEC86E1AFF8C1F007BED6A /* Debug */,
+				75DEC86F1AFF8C1F007BED6A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		75DEC8951B0184CB007BED6A /* Build configuration list for PBXNativeTarget "DRCellSlideGestureRecognizerDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75DEC8961B0184CB007BED6A /* Debug */,
+				75DEC8971B0184CB007BED6A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 75DEC86A1AFF8C1F007BED6A /* Project object */;
+}
