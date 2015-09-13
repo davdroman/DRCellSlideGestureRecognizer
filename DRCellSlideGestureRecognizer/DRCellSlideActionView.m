@@ -27,6 +27,11 @@
 	return self;
 }
 
+- (void)removeFromSuperview{
+    [self resetView];
+    [super removeFromSuperview];
+}
+
 - (void)updateIconImageViewFrame {
 	self.iconImageView.frame = CGRectMake(0, 0, self.frame.size.width-self.action.iconMargin*2, self.frame.size.height);
 	self.iconImageView.center = CGPointMake(self.center.x, self.iconImageView.frame.size.height/2);
@@ -39,8 +44,19 @@
 }
 
 - (void)tint {
-	self.iconImageView.tintColor = self.active ? self.action.activeColor : self.action.inactiveColor;
-	self.backgroundColor = self.active ? self.action.activeBackgroundColor : self.action.inactiveBackgroundColor;
+    [UIView animateWithDuration:0.3 animations:^{
+        
+        self.iconImageView.tintColor = self.active ? self.action.activeColor : self.action.inactiveColor;
+        self.backgroundColor = self.active ? self.action.activeBackgroundColor : self.action.inactiveBackgroundColor;
+
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+- (void)resetView {
+    self.iconImageView.tintColor = self.action.inactiveColor;
+    self.backgroundColor = self.action.inactiveBackgroundColor;
 }
 
 - (void)setAction:(DRCellSlideAction *)action {
