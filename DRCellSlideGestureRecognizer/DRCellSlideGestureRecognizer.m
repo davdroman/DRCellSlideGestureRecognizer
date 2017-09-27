@@ -42,6 +42,10 @@
 }
 
 - (UITableView *)tableView {
+    if ([self.cell.superview isKindOfClass:[UITableView class]]) {
+        return (UITableView*) self.cell.superview;
+    }
+    
 	return (UITableView *)self.cell.superview.superview;
 }
 
