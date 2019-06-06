@@ -1,3 +1,11 @@
+> **THIS PROJECT IS NO LONGER MAINTAINED. HERE ARE SOME SUITABLE ALTERNATIVES:**
+>
+> - https://developer.apple.com/documentation/uikit/uiswipeactionsconfiguration
+> - https://github.com/SwipeCellKit/SwipeCellKit
+> - https://github.com/moritzsternemann/SwipyCell
+
+---
+
 DRCellSlideGestureRecognizer
 ============================
 
